@@ -1,70 +1,6 @@
-<!DOCTYPE html>
-<html lang="id">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perpustakaan Modern - Tempat Ilmu Berkembang</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- AOS -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <!-- Flowbite -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
-    <!-- Box Icons -->
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</head>
-
-<body class="bg-emerald-50 font-sans">
-    <header class="sticky top-0 z-50 bg-white shadow-sm">
-        <nav class="container mx-auto px-4 py-3">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-2">
-                    <i class='bx bx-book-open text-3xl text-emerald-600'></i>
-                    <span class="text-xl font-bold text-emerald-800">Perpustakaan Hijau</span>
-                </div>
-
-                <!-- Desktop Navigation -->
-                <div class="md:flex items-center space-x-8">
-                    <a href="#" class="text-emerald-700 hover:text-emerald-500 font-medium">Beranda</a>
-                    <a href="#" class="text-gray-600 hover:text-emerald-500 font-medium">Koleksi</a>
-                    <a href="#" class="text-gray-600 hover:text-emerald-500 font-medium">Layanan</a>
-                    <a href="#" class="text-gray-600 hover:text-emerald-500 font-medium">Tentang</a>
-                    <a href="#" class="text-gray-600 hover:text-emerald-500 font-medium">Kontak</a>
-                </div>
-
-                <!-- Auth Buttons -->
-                <div class="md:flex items-center space-x-4">
-                    <button class="px-4 py-2 text-emerald-700 font-medium hover:text-emerald-500">Masuk</button>
-                    <button
-                        class="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors">Daftar</button>
-                </div>
-
-                <!-- Mobile Menu Button -->
-                <button id="mobile-menu-button" class="md:hidden text-emerald-700">
-                    <i class='bx bx-menu text-2xl'></i>
-                </button>
-            </div>
-
-            <!-- Mobile Menu -->
-            <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4">
-                <a href="#" class="block py-2 text-emerald-700 font-medium">Beranda</a>
-                <a href="#" class="block py-2 text-gray-600 hover:text-emerald-500">Koleksi</a>
-                <a href="#" class="block py-2 text-gray-600 hover:text-emerald-500">Layanan</a>
-                <a href="#" class="block py-2 text-gray-600 hover:text-emerald-500">Tentang</a>
-                <a href="#" class="block py-2 text-gray-600 hover:text-emerald-500">Kontak</a>
-                <div class="flex space-x-4 mt-4">
-                    <button
-                        class="flex-1 py-2 text-emerald-700 font-medium border border-emerald-700 rounded-lg">Masuk</button>
-                    <button class="flex-1 py-2 bg-emerald-600 text-white rounded-lg">Daftar</button>
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    <!-- Hero Section -->
+@extends('layouts.app')
+@section('content')
+    @include('layouts.header')
     <section class="bg-gradient-to-br from-emerald-50 to-emerald-100 py-16 md:py-24">
         <div class="container mx-auto px-4">
             <div class="flex flex-col md:flex-row items-center">
@@ -288,8 +224,7 @@
                 pembaca lainnya dan nikmati akses ke koleksi buku terbaik.</p>
             <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4" data-aos="fade-up"
                 data-aos-delay="200">
-                <button
-                    class="px-6 py-3 border border-white text-white rounded-lg hover:bg-emerald-700 transition-colors">
+                <button class="px-6 py-3 border border-white text-white rounded-lg hover:bg-emerald-700 transition-colors">
                     Daftar Sekarang
                 </button>
             </div>
@@ -353,23 +288,4 @@
             </div>
         </div>
     </footer>
-
-    <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
-    <script>
-        AOS.init({
-            duration: 800,
-            once: false,
-            offset: 100,
-            miror:true,
-        });
-
-        document.getElementById('mobile-menu-button').addEventListener('click', function () {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-        });
-    </script>
-</body>
-
-</html>
+@endsection
