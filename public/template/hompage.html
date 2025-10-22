@@ -1,6 +1,66 @@
-@extends('layouts.app')
-@section('content')
-    @include('layouts.navbar')
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perpustakaan Digital Modern</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Flowbite -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
+
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class='bx bx-book-open text-2xl text-primary-600 mr-2'></i>
+                        <span class="font-bold text-xl text-gray-800">DigitalLibrary</span>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="#" class="text-gray-600 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition duration-300">Beranda</a>
+                    <a href="#" class="text-gray-600 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition duration-300">Koleksi</a>
+                    <a href="#" class="text-gray-600 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition duration-300">Tentang</a>
+                    <button type="button" class="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 transition duration-300">
+                        <i class='bx bx-log-in mr-1'></i>Login
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
     <!-- Hero Section -->
     <section class="pt-24 pb-16 bg-gradient-to-r from-primary-50 to-blue-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -99,4 +159,60 @@
             </button>
         </div>
     </section>
-@endsection
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <i class='bx bx-book-open text-2xl text-primary-400 mr-2'></i>
+                    <span class="font-bold text-xl">DigitalLibrary</span>
+                </div>
+                <div class="text-gray-400">
+                    &copy; {{ date('Y') }} DigitalLibrary. All rights reserved.
+                </div>
+                <div class="flex space-x-4 mt-4 md:mt-0">
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <i class='bx bxl-facebook text-xl'></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <i class='bx bxl-twitter text-xl'></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <i class='bx bxl-instagram text-xl'></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+
+        // SweetAlert2 for explore button
+        document.getElementById('exploreBtn').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Selamat Datang!',
+                text: 'Mari jelajahi koleksi buku digital kami yang lengkap dan menarik.',
+                icon: 'success',
+                confirmButtonText: 'Lanjutkan',
+                confirmButtonColor: '#blue-600',
+                background: '#ffffff',
+                customClass: {
+                    title: 'text-gray-800 font-bold',
+                    htmlContainer: 'text-gray-600'
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Register - Perpustakaan Digital</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Flowbite -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
+
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-primary-50 to-blue-100 min-h-screen flex items-center justify-center p-4">
+    <div class="max-w-6xl w-full mx-auto">
+        <div class="items-center">
+
+            <!-- Right Column - Auth Forms -->
+            <div class="bg-white rounded-2xl shadow-xl p-8 lg:p-12 relative overflow-hidden" data-aos="fade-left">
+
+                <!-- Login Form -->
+                <div id="loginForm" class="transition-all duration-500 ease-in-out">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Masuk ke Akun</h2>
+                    <p class="text-gray-600 mb-6">Silakan masuk dengan akun Anda</p>
+
+                    <form id="loginFormElement" class="space-y-4">
+                        <div>
+                            <label for="loginEmail" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class='bx bx-envelope text-gray-400'></i>
+                                </div>
+                                <input type="email" id="loginEmail" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5" placeholder="nama@email.com" required>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="loginPassword" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class='bx bx-lock text-gray-400'></i>
+                                </div>
+                                <input type="password" id="loginPassword" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5" placeholder="••••••••" required>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <input id="remember-me" type="checkbox" class="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500 focus:ring-2">
+                                <label for="remember-me" class="ml-2 text-sm text-gray-700">Ingat saya</label>
+                            </div>
+                            <a href="#" class="text-sm text-primary-600 hover:text-primary-700">Lupa password?</a>
+                        </div>
+
+                        <button type="submit" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center transition duration-300">
+                            Masuk
+                        </button>
+                    </form>
+
+                    <div class="mt-6 text-center">
+                        <p class="text-gray-600">
+                            Belum punya akun?
+                            <button id="showRegister" class="text-primary-600 hover:text-primary-700 font-medium ml-1 transition duration-300">
+                                Daftar di sini
+                            </button>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Register Form -->
+                <div id="registerForm" class="transition-all duration-500 ease-in-out absolute top-0 left-0 w-full h-full bg-white p-8 lg:p-12 transform translate-x-full">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Buat Akun Baru</h2>
+                    <p class="text-gray-600 mb-6">Daftar untuk menjadi anggota perpustakaan digital</p>
+
+                    <form id="registerFormElement" class="space-y-4">
+                        <div>
+                            <label for="registerName" class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class='bx bx-user text-gray-400'></i>
+                                </div>
+                                <input type="text" id="registerName" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5" placeholder="Nama lengkap Anda" required>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="registerEmail" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class='bx bx-envelope text-gray-400'></i>
+                                </div>
+                                <input type="email" id="registerEmail" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5" placeholder="nama@email.com" required>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="registerPassword" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class='bx bx-lock text-gray-400'></i>
+                                </div>
+                                <input type="password" id="registerPassword" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5" placeholder="••••••••" required>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="registerConfirmPassword" class="block text-sm font-medium text-gray-700 mb-2">Konfirmasi Password</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class='bx bx-lock-alt text-gray-400'></i>
+                                </div>
+                                <input type="password" id="registerConfirmPassword" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5" placeholder="••••••••" required>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center">
+                            <input id="agree-terms" type="checkbox" class="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500 focus:ring-2" required>
+                            <label for="agree-terms" class="ml-2 text-sm text-gray-700">
+                                Saya menyetujui <a href="#" class="text-primary-600 hover:text-primary-700">syarat dan ketentuan</a>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center transition duration-300">
+                            Daftar
+                        </button>
+                    </form>
+
+                    <div class="mt-6 text-center">
+                        <p class="text-gray-600">
+                            Sudah punya akun?
+                            <button id="showLogin" class="text-primary-600 hover:text-primary-700 font-medium ml-1 transition duration-300">
+                                Login di sini
+                            </button>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        AOS.init({
+            duration: 800,
+            once: true
+        });
+
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const showRegister = document.getElementById('showRegister');
+        const showLogin = document.getElementById('showLogin');
+
+        showRegister.addEventListener('click', function() {
+            loginForm.style.transform = 'translateX(-100%)';
+            loginForm.style.opacity = '0';
+            registerForm.style.transform = 'translateX(0)';
+            registerForm.style.opacity = '1';
+        });
+
+        showLogin.addEventListener('click', function() {
+            loginForm.style.transform = 'translateX(0)';
+            loginForm.style.opacity = '1';
+            registerForm.style.transform = 'translateX(100%)';
+            registerForm.style.opacity = '0';
+        });
+
+        // Login Form Handler
+        document.getElementById('loginFormElement').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // Simulasi validasi login
+            if (email && password) {
+                Swal.fire({
+                    title: 'Login Berhasil!',
+                    text: 'Selamat datang kembali di Perpustakaan Digital',
+                    icon: 'success',
+                    confirmButtonText: 'Lanjutkan',
+                    confirmButtonColor: '#0ea5e9',
+                    background: '#ffffff',
+                    customClass: {
+                        title: 'text-gray-800 font-bold',
+                        htmlContainer: 'text-gray-600'
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: 'Login Gagal!',
+                    text: 'Email atau password tidak valid',
+                    icon: 'error',
+                    confirmButtonText: 'Coba Lagi',
+                    confirmButtonColor: '#ef4444',
+                    background: '#ffffff',
+                    customClass: {
+                        title: 'text-gray-800 font-bold',
+                        htmlContainer: 'text-gray-600'
+                    }
+                });
+            }
+        });
+
+        // Register Form Handler
+        document.getElementById('registerFormElement').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            const agreeTerms = document.getElementById('agree-terms').checked;
+
+            // Validasi password match
+            if (password !== confirmPassword) {
+                Swal.fire({
+                    title: 'Pendaftaran Gagal!',
+                    text: 'Password dan konfirmasi password tidak cocok',
+                    icon: 'error',
+                    confirmButtonText: 'Perbaiki',
+                    confirmButtonColor: '#ef4444',
+                    background: '#ffffff',
+                    customClass: {
+                        title: 'text-gray-800 font-bold',
+                        htmlContainer: 'text-gray-600'
+                    }
+                });
+                return;
+            }
+
+            // Validasi syarat dan ketentuan
+            if (!agreeTerms) {
+                Swal.fire({
+                    title: 'Pendaftaran Gagal!',
+                    text: 'Anda harus menyetujui syarat dan ketentuan',
+                    icon: 'warning',
+                    confirmButtonText: 'Mengerti',
+                    confirmButtonColor: '#f59e0b',
+                    background: '#ffffff',
+                    customClass: {
+                        title: 'text-gray-800 font-bold',
+                        htmlContainer: 'text-gray-600'
+                    }
+                });
+                return;
+            }
+
+            // Simulasi pendaftaran sukses
+            if (name && email && password) {
+                Swal.fire({
+                    title: 'Pendaftaran Berhasil!',
+                    text: 'Akun Anda telah berhasil dibuat. Silakan login untuk melanjutkan.',
+                    icon: 'success',
+                    confirmButtonText: 'Login Sekarang',
+                    confirmButtonColor: '#0ea5e9',
+                    background: '#ffffff',
+                    customClass: {
+                        title: 'text-gray-800 font-bold',
+                        htmlContainer: 'text-gray-600'
+                    }
+                }).then(() => {
+                    // Kembali ke form login
+                    showLogin.click();
+                    // Reset form
+                    document.getElementById('registerFormElement').reset();
+                });
+            }
+        });
+
+        // Reset form when switching between login/register
+        showRegister.addEventListener('click', function() {
+            document.getElementById('loginFormElement').reset();
+        });
+
+        showLogin.addEventListener('click', function() {
+            document.getElementById('registerFormElement').reset();
+        });
+    </script>
+</body>
+</html>
