@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Peminjaman - Admin Panel</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Flowbite -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
+    <!-- Box Icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-emerald-50 font-sans">
+    <aside id="sidebar"
+        class="fixed inset-y-0 left-0 z-50 w-64 bg-emerald-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+        <div class="flex items-center justify-between p-4 border-b border-emerald-700">
+            <div class="flex items-center space-x-2">
+                <i class='bx bx-book-open text-2xl text-emerald-300'></i>
+                <span class="text-xl font-bold text-white">Admin Panel</span>
+            </div>
+            <button id="close-sidebar" class="lg:hidden text-emerald-300 hover:text-white">
+                <i class='bx bx-x text-2xl'></i>
+            </button>
+        </div>
+
+        <nav class="p-4 space-y-2 overflow-y-auto h-[calc(100vh-150px)]">
+            <a href="#" class="flex items-center space-x-3 p-3 bg-emerald-700 text-white rounded-lg">
+                <i class='bx bx-home text-xl'></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
+                <i class='bx bx-book text-xl'></i>
+                <span>Manajemen Buku</span>
+            </a>
+            <a href="#" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
+                <i class='bx bx-group text-xl'></i>
+                <span>Manajemen Anggota</span>
+            </a>
+            <a href="#" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
+                <i class='bx bx-transfer text-xl'></i>
+                <span>Peminjaman</span>
+            </a>
+            <a href="#" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
+                <i class='bx bx-chart text-xl'></i>
+                <span>Laporan</span>
+            </a>
+            <a href="#" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
+                <i class='bx bx-cog text-xl'></i>
+                <span>Pengaturan</span>
+            </a>
+        </nav>
+
+        <!-- User Section -->
+        <div class="absolute bottom-0 w-full border-t border-emerald-700 p-4">
+            <div class="flex items-center space-x-3 text-emerald-200">
+                <div class="w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center">
+                    <i class='bx bx-user text-white'></i>
+                </div>
+                <div class="flex-1">
+                    <p class="font-medium text-white">Admin User</p>
+                    <p class="text-sm text-emerald-300">Super Administrator</p>
+                </div>
+                <button id="logout-btn" class="text-emerald-300 hover:text-white">
+                    <i class='bx bx-log-out text-xl'></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="lg:ml-64">
+        <!-- Top Header -->
+        <header class="bg-white shadow-sm border-b border-gray-200">
+            <div class="flex items-center justify-between p-4">
+                <div class="flex items-center space-x-4">
+                    <button class="lg:hidden text-emerald-700" id="open-sidebar">
+                        <i class='bx bx-menu text-2xl'></i>
+                    </button>
+                    <h1 class="text-2xl font-bold text-emerald-900">Manajemen Peminjaman</h1>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <!-- New Loan Button -->
+                    <button class="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium flex items-center" id="new-loan-btn">
+                        <i class='bx bx-plus mr-2'></i>Peminjaman Baru
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="p-6">
+            <!-- Stats Overview -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Sedang Dipinjam</p>
+                            <p class="text-3xl font-bold text-emerald-900">1,245</p>
+                            <p class="text-sm text-emerald-600">Aktif sekarang</p>
+                        </div>
+                        <div class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
+                            <i class='bx bx-book-open text-2xl text-emerald-600'></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Hampir Jatuh Tempo</p>
+                            <p class="text-3xl font-bold text-amber-900">45</p>
+                            <p class="text-sm text-amber-600">Perlu peringatan</p>
+                        </div>
+                        <div class="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
+                            <i class='bx bx-time text-2xl text-amber-600'></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Terlambat</p>
+                            <p class="text-3xl font-bold text-red-900">28</p>
+                            <p class="text-sm text-red-600">Perlu penagihan</p>
+                        </div>
+                        <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                            <i class='bx bx-error text-2xl text-red-600'></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Bulan Ini</p>
+                            <p class="text-3xl font-bold text-blue-900">324</p>
+                            <p class="text-sm text-blue-600">Peminjaman baru</p>
+                        </div>
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class='bx bx-trending-up text-2xl text-blue-600'></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up">
+                    <h3 class="text-lg font-bold text-emerald-900 mb-4">Aksi Cepat</h3>
+                    <div class="space-y-3">
+                        <button class="w-full flex items-center space-x-3 p-3 text-left bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-colors">
+                            <i class='bx bx-check-circle text-emerald-600 text-xl'></i>
+                            <span class="font-medium text-emerald-900">Proses Pengembalian</span>
+                        </button>
+                        <button class="w-full flex items-center space-x-3 p-3 text-left bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors">
+                            <i class='bx bx-time text-amber-600 text-xl'></i>
+                            <span class="font-medium text-amber-900">Perpanjangan Masa</span>
+                        </button>
+                        <button class="w-full flex items-center space-x-3 p-3 text-left bg-red-50 hover:bg-red-100 rounded-lg transition-colors">
+                            <i class='bx bx-dollar-circle text-red-600 text-xl'></i>
+                            <span class="font-medium text-red-900">Kelola Denda</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up" data-aos-delay="100">
+                    <h3 class="text-lg font-bold text-emerald-900 mb-4">Pengingat</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-amber-50 rounded-lg">
+                            <div>
+                                <p class="font-medium text-amber-900">5 peminjaman</p>
+                                <p class="text-sm text-amber-700">Jatuh tempo besok</p>
+                            </div>
+                            <i class='bx bx-bell text-amber-600 text-xl'></i>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                            <div>
+                                <p class="font-medium text-red-900">3 anggota</p>
+                                <p class="text-sm text-red-700">Memiliki denda belum dibayar</p>
+                            </div>
+                            <i class='bx bx-error text-red-600 text-xl'></i>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-emerald-50 rounded-lg">
+                            <div>
+                                <p class="font-medium text-emerald-900">12 buku</p>
+                                <p class="text-sm text-emerald-700">Tersedia untuk diambil</p>
+                            </div>
+                            <i class='bx bx-package text-emerald-600 text-xl'></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up" data-aos-delay="200">
+                    <h3 class="text-lg font-bold text-emerald-900 mb-4">Statistik Cepat</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-gray-600">Rate Pengembalian Tepat Waktu</span>
+                                <span class="font-medium text-emerald-700">94.2%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-emerald-600 h-2 rounded-full" style="width: 94.2%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-gray-600">Rata-rata Durasi Peminjaman</span>
+                                <span class="font-medium text-emerald-700">9.3 hari</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-blue-600 h-2 rounded-full" style="width: 66%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-gray-600">Tingkat Kepuasan</span>
+                                <span class="font-medium text-emerald-700">4.8/5</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-amber-400 h-2 rounded-full" style="width: 96%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters and Search -->
+            <div class="bg-white rounded-2xl shadow-sm p-6 mb-6" data-aos="fade-up">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <!-- Search -->
+                    <div class="md:col-span-2">
+                        <div class="relative">
+                            <input type="text" placeholder="Cari anggota, judul buku, atau ID peminjaman..."
+                                   class="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                            <i class='bx bx-search absolute left-4 top-3 text-xl text-gray-400'></i>
+                        </div>
+                    </div>
+
+                    <!-- Status Filter -->
+                    <div>
+                        <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                            <option>Semua Status</option>
+                            <option>Sedang Dipinjam</option>
+                            <option>Dikembalikan</option>
+                            <option>Terlambat</option>
+                            <option>Hampir Jatuh Tempo</option>
+                            <option>Perpanjangan</option>
+                        </select>
+                    </div>
+
+                    <!-- Date Filter -->
+                    <div>
+                        <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                            <option>Semua Waktu</option>
+                            <option>Hari Ini</option>
+                            <option>Minggu Ini</option>
+                            <option>Bulan Ini</option>
+                            <option>3 Bulan Terakhir</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Advanced Filters -->
+                <div class="mt-4 flex flex-wrap gap-4">
+                    <button class="px-4 py-2 border border-emerald-600 text-emerald-700 rounded-lg hover:bg-emerald-50 transition-colors text-sm">
+                        <i class='bx bx-filter-alt mr-2'></i>Filter Lanjutan
+                    </button>
+                    <button class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm">
+                        <i class='bx bx-export mr-2'></i>Export Laporan
+                    </button>
+                    <button class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm">
+                        <i class='bx bx-envelope mr-2'></i>Kirim Pengingat
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loans Table -->
+            <div class="bg-white rounded-2xl shadow-sm overflow-hidden" data-aos="fade-up">
+                <!-- Table Header -->
+                <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-emerald-900">Daftar Peminjaman</h3>
+                        <p class="text-sm text-gray-600">Menampilkan 1-8 dari 1,245 peminjaman aktif</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <select class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500">
+                            <option>10 per halaman</option>
+                            <option>25 per halaman</option>
+                            <option>50 per halaman</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    ID
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Anggota</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Buku</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Pinjam</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jatuh Tempo</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Denda</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <!-- Loan 1 - Active -->
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-emerald-900">
+                                    LOAN-2301
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center mr-3">
+                                            <i class='bx bx-user text-emerald-600 text-sm'></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-medium text-emerald-900">Ahmad Rizki</div>
+                                            <div class="text-xs text-gray-500">MEM-8542</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">Sustainable Future</div>
+                                    <div class="text-xs text-gray-500">Dr. Michael Green</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    15 Des 2023
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">29 Des 2023</div>
+                                    <div class="text-xs text-emerald-600">4 hari lagi</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 py-1 bg-emerald-100 text-emerald-800 text-xs rounded-full">Aktif</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    Rp 0
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <div class="flex items-center space-x-2">
+                                        <button class="text-emerald-600 hover:text-emerald-900 process-return" data-id="1">
+                                            <i class='bx bx-check-circle text-lg'></i>
+                                        </button>
+                                        <button class="text-amber-600 hover:text-amber-900 extend-loan" data-id="1">
+                                            <i class='bx bx-time text-lg'></i>
+                                        </button>
+                                        <button class="text-blue-600 hover:text-blue-900 view-details" data-id="1">
+                                            <i class='bx bx-show text-lg'></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- Loan 2 - Almost Due -->
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-emerald-900">
+                                    LOAN-2302
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center mr-3">
+                                            <i class='bx bx-user text-emerald-600 text-sm'></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-medium text-emerald-900">Sari Dewi</div>
+                                            <div class="text-xs text-gray-500">MEM-8541</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">Digital Transformation</div>
+                                    <div class="text-xs text-gray-500">Sarah Johnson</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    10 Des 2023
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">24 Des 2023</div>
+                                    <div class="text-xs text-amber-600">Besok</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 py-1 bg-amber-100 text-amber-800 text-xs rounded-full">Hampir Jatuh Tempo</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    Rp 0
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <div class="flex items-center space-x-2">
+                                        <button class="text-emerald-600 hover:text-emerald-900 process-return" data-id="2">
+                                            <i class='bx bx-check-circle text-lg'></i>
+                                        </button>
+                                        <button class="text-amber-600 hover:text-amber-900 extend-loan" data-id="2">
+                                            <i class='bx bx-time text-lg'></i>
+                                        </button>
+                                        <button class="text-blue-600 hover:text-blue-900 view-details" data-id="2">
+                                            <i class='bx bx-show text-lg'></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- Loan 3 - Late -->
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-emerald-900">
+                                    LOAN-2303
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center mr-3">
+                                            <i class='bx bx-user text-emerald-600 text-sm'></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-medium text-emerald-900">Budi Santoso</div>
+                                            <div class="text-xs text-gray-500">MEM-8540</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">Mindful Living</div>
+                                    <div class="text-xs text-gray-500">Emma Wilson</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    01 Des 2023
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">15 Des 2023</div>
+                                    <div class="text-xs text-red-600">8 hari terlambat</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">Terlambat</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600 font-medium">
+                                    Rp 16,000
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <div class="flex items-center space-x-2">
+                                        <button class="text-emerald-600 hover:text-emerald-900 process-return" data-id="3">
+                                            <i class='bx bx-check-circle text-lg'></i>
+                                        </button>
+                                        <button class="text-amber-600 hover:text-amber-900 extend-loan" data-id="3">
+                                            <i class='bx bx-time text-lg'></i>
+                                        </button>
+                                        <button class="text-red-600 hover:text-red-900 manage-fine" data-id="3">
+                                            <i class='bx bx-dollar-circle text-lg'></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- Loan 4 - Extended -->
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-emerald-900">
+                                    LOAN-2304
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center mr-3">
+                                            <i class='bx bx-user text-emerald-600 text-sm'></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-medium text-emerald-900">Citra Lestari</div>
+                                            <div class="text-xs text-gray-500">MEM-8539</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">The Art of Programming</div>
+                                    <div class="text-xs text-gray-500">Robert Martin</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    05 Des 2023
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">02 Jan 2024</div>
+                                    <div class="text-xs text-blue-600">Diperpanjang</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Diperpanjang</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    Rp 0
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <div class="flex items-center space-x-2">
+                                        <button class="text-emerald-600 hover:text-emerald-900 process-return" data-id="4">
+                                            <i class='bx bx-check-circle text-lg'></i>
+                                        </button>
+                                        <button class="text-blue-600 hover:text-blue-900 view-details" data-id="4">
+                                            <i class='bx bx-show text-lg'></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Table Footer -->
+                <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+                    <div class="text-sm text-gray-700">
+                        Menampilkan <span class="font-medium">1</span> sampai <span class="font-medium">4</span> dari <span class="font-medium">1,245</span> hasil
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button class="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors">
+                            Sebelumnya
+                        </button>
+                        <button class="px-3 py-1 bg-emerald-600 text-white rounded-lg text-sm hover:bg-emerald-700 transition-colors">
+                            1
+                        </button>
+                        <button class="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors">
+                            2
+                        </button>
+                        <button class="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors">
+                            3
+                        </button>
+                        <button class="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors">
+                            Selanjutnya
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+
+        // Sidebar functionality
+        const sidebar = document.getElementById('sidebar');
+        const openSidebar = document.getElementById('open-sidebar');
+        const closeSidebar = document.getElementById('close-sidebar');
+
+        openSidebar.addEventListener('click', () => {
+            sidebar.classList.remove('-translate-x-full');
+        });
+
+        closeSidebar.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+        });
+
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            Swal.fire({
+                title: 'Konfirmasi Logout',
+                text: 'Apakah Anda yakin ingin keluar dari panel admin?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Logout',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#10b981'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'login.html';
+                }
+            });
+        });
+
+        // New Loan Modal
+        document.getElementById('new-loan-btn').addEventListener('click', () => {
+            Swal.fire({
+                title: 'Peminjaman Baru',
+                html: `
+                    <div class="text-left space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Anggota</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
+                                <option>Pilih anggota...</option>
+                                <option>Ahmad Rizki (MEM-8542)</option>
+                                <option>Sari Dewi (MEM-8541)</option>
+                                <option>Budi Santoso (MEM-8540)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Buku</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
+                                <option>Pilih buku...</option>
+                                <option>Sustainable Future - Dr. Michael Green</option>
+                                <option>Digital Transformation - Sarah Johnson</option>
+                                <option>Mindful Living - Emma Wilson</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Pinjam</label>
+                                <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500" value="${new Date().toISOString().split('T')[0]}">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Jatuh Tempo</label>
+                                <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500" value="${new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]}">
+                            </div>
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Proses Peminjaman',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#10b981',
+                preConfirm: () => {
+                    // Validation logic here
+                    return true;
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire('Berhasil!', 'Peminjaman baru telah diproses.', 'success');
+                }
+            });
+        });
+
+        // Process Return
+        document.querySelectorAll('.process-return').forEach(button => {
+            button.addEventListener('click', function() {
+                const loanId = this.getAttribute('data-id');
+                Swal.fire({
+                    title: 'Proses Pengembalian?',
+                    html: `
+                        <div class="text-left space-y-3">
+                            <p>Konfirmasi pengembalian buku untuk peminjaman <strong>LOAN-${loanId}</strong></p>
+                            <div class="bg-emerald-50 p-3 rounded-lg">
+                                <p class="text-sm text-emerald-700">Buku akan tersedia kembali untuk dipinjam</p>
+                            </div>
+                        </div>
+                    `,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, Proses',
+                    cancelButtonText: 'Batal',
+                    confirmButtonColor: '#10b981'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire('Berhasil!', 'Pengembalian buku telah diproses.', 'success');
+                    }
+                });
+            });
+        });
+
+        // Extend Loan
+        document.querySelectorAll('.extend-loan').forEach(button => {
+            button.addEventListener('click', function() {
+                const loanId = this.getAttribute('data-id');
+                Swal.fire({
+                    title: 'Perpanjang Masa Peminjaman',
+                    html: `
+                        <div class="text-left space-y-4">
+                            <p>Perpanjang masa peminjaman untuk <strong>LOAN-${loanId}</strong></p>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Jatuh Tempo Baru</label>
+                                <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500" value="${new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]}">
+                            </div>
+                            <div class="bg-amber-50 p-3 rounded-lg">
+                                <p class="text-sm text-amber-700">Maksimal perpanjangan: 7 hari</p>
+                            </div>
+                        </div>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: 'Perpanjang',
+                    cancelButtonText: 'Batal',
+                    confirmButtonColor: '#10b981'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire('Berhasil!', 'Masa peminjaman telah diperpanjang.', 'success');
+                    }
+                });
+            });
+        });
+
+        // Manage Fine
+        document.querySelectorAll('.manage-fine').forEach(button => {
+            button.addEventListener('click', function() {
+                const loanId = this.getAttribute('data-id');
+                Swal.fire({
+                    title: 'Kelola Denda',
+                    html: `
+                        <div class="text-left space-y-4">
+                            <div class="bg-red-50 p-4 rounded-lg">
+                                <p class="font-medium text-red-900">Peminjaman LOAN-${loanId}</p>
+                                <p class="text-sm text-red-700">Denda saat ini: <strong>Rp 16,000</strong></p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah Pembayaran</label>
+                                <input type="number" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500" placeholder="Masukkan jumlah pembayaran" value="16000">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Metode Pembayaran</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
+                                    <option>Tunai</option>
+                                    <option>Transfer Bank</option>
+                                    <option>E-Wallet</option>
+                                </select>
+                            </div>
+                        </div>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: 'Proses Pembayaran',
+                    cancelButtonText: 'Batal',
+                    confirmButtonColor: '#10b981'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire('Berhasil!', 'Pembayaran denda telah diproses.', 'success');
+                    }
+                });
+            });
+        });
+
+        // View Details
+        document.querySelectorAll('.view-details').forEach(button => {
+            button.addEventListener('click', function() {
+                const loanId = this.getAttribute('data-id');
+                Swal.fire({
+                    title: 'Detail Peminjaman',
+                    html: `
+                        <div class="text-left space-y-4">
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <p class="font-medium text-gray-700">ID Peminjaman</p>
+                                    <p class="text-gray-900">LOAN-${loanId}</p>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-700">Status</p>
+                                    <span class="px-2 py-1 bg-emerald-100 text-emerald-800 text-xs rounded-full">Aktif</span>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-700">Anggota</p>
+                                    <p class="text-gray-900">Ahmad Rizki (MEM-8542)</p>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-700">Buku</p>
+                                    <p class="text-gray-900">Sustainable Future</p>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-700">Tanggal Pinjam</p>
+                                    <p class="text-gray-900">15 Des 2023</p>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-700">Jatuh Tempo</p>
+                                    <p class="text-gray-900">29 Des 2023</p>
+                                </div>
+                            </div>
+                            <div class="border-t pt-4">
+                                <h4 class="font-medium text-gray-700 mb-2">Riwayat</h4>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex justify-between">
+                                        <span>Tanggal peminjaman</span>
+                                        <span class="text-gray-900">15 Des 2023</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Durasi</span>
+                                        <span class="text-gray-900">14 hari</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Perpanjangan</span>
+                                        <span class="text-gray-900">Tidak ada</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `,
+                    confirmButtonText: 'Tutup',
+                    confirmButtonColor: '#10b981'
+                });
+            });
+        });
+
+        // Quick Actions
+        document.querySelectorAll('.bg-emerald-50 button, .bg-amber-50 button, .bg-red-50 button').forEach(button => {
+            button.addEventListener('click', function() {
+                const action = this.querySelector('.font-medium').textContent;
+                Swal.fire({
+                    title: 'Membuka Form',
+                    text: `Membuka form untuk: ${action}`,
+                    icon: 'info',
+                    confirmButtonText: 'Lanjutkan',
+                    confirmButtonColor: '#10b981'
+                });
+            });
+        });
+
+        // Search functionality
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                Swal.fire({
+                    title: 'Mencari...',
+                    text: `Menampilkan hasil untuk "${this.value}"`,
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            }
+        });
+    </script>
+</body>
+</html>

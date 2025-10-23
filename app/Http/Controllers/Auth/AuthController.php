@@ -8,9 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return view('Auth.login');
@@ -20,60 +17,26 @@ class AuthController extends Controller
         return view('Auth.register');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function login(Request $request)
     {
         $cek = $request->validate([
-            'email' => 'required',
-            'password' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|string|min:8',
         ]);
         if (Auth::attempt($cek)) {
-            session()->regenerate();
-            return redirect()->route('buku.index');
+            $request->session()->regenerate();
+            return redirect()->route('dashboard.index')->with('success', 'Login berhasil');
         } else {
             return redirect()->back()->with('error', 'Email atau Password salah');
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function logout(Request $request)
     {
-        //
-    }
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('auth.login')->with('success', 'Berhasil logout');
     }
 }

@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layanan - Perpustakaan Modern</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Flowbite -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
+    <!-- Box Icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .service-card {
+            transition: all 0.3s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-8px);
+        }
+        .step-indicator {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #10b981;
+            color: #10b981;
+        }
+        .step-indicator.active {
+            background-color: #10b981;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .floating-help {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body class="bg-emerald-50 font-sans">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white shadow-sm">
+        <nav class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class='bx bx-book-open text-3xl text-emerald-600'></i>
+                    <span class="text-xl font-bold text-emerald-800">Perpustakaan Hijau</span>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-600 hover:text-emerald-500 font-medium">Beranda</a>
+                    <a href="koleksi.html" class="text-gray-600 hover:text-emerald-500 font-medium">Koleksi</a>
+                    <a href="layanan.html" class="text-emerald-700 hover:text-emerald-500 font-medium">Layanan</a>
+                    <a href="#" class="text-gray-600 hover:text-emerald-500 font-medium">Tentang</a>
+                    <a href="#" class="text-gray-600 hover:text-emerald-500 font-medium">Kontak</a>
+                </div>
+
+                <!-- User Menu -->
+                <div class="flex items-center space-x-4">
+                    <div class="hidden md:flex items-center space-x-2 text-emerald-700">
+                        <i class='bx bx-user-circle text-2xl'></i>
+                        <span class="font-medium">Hai, Pembaca!</span>
+                    </div>
+                    <button class="p-2 text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors">
+                        <i class='bx bx-bell text-xl'></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Page Header -->
+        <section class="mb-16 text-center" data-aos="fade-up">
+            <h1 class="text-4xl font-bold text-emerald-900 mb-4">Layanan Perpustakaan</h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Temukan berbagai layanan unggulan yang kami sediakan untuk mendukung kebutuhan literasi dan penelitian Anda</p>
+        </section>
+
+        <!-- Services Overview -->
+        <section class="mb-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Service 1 -->
+                <div class="service-card bg-white rounded-2xl shadow-sm p-6 text-center" data-aos="fade-up">
+                    <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class='bx bx-book-bookmark text-2xl text-emerald-700'></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-emerald-900 mb-3">Peminjaman Buku</h3>
+                    <p class="text-gray-600 mb-4">Akses ribuan buku fisik dengan sistem peminjaman yang mudah dan fleksibel</p>
+                    <button class="text-emerald-600 hover:text-emerald-500 font-medium text-sm">
+                        Pelajari Selengkapnya →
+                    </button>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="service-card bg-white rounded-2xl shadow-sm p-6 text-center" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class='bx bx-laptop text-2xl text-emerald-700'></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-emerald-900 mb-3">Perpustakaan Digital</h3>
+                    <p class="text-gray-600 mb-4">Akses e-book, jurnal online, dan database penelitian kapan saja</p>
+                    <button class="text-emerald-600 hover:text-emerald-500 font-medium text-sm">
+                        Pelajari Selengkapnya →
+                    </button>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="service-card bg-white rounded-2xl shadow-sm p-6 text-center" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class='bx bx-group text-2xl text-emerald-700'></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-emerald-900 mb-3">Ruang Belajar</h3>
+                    <p class="text-gray-600 mb-4">Fasilitas ruang belajar nyaman untuk individu dan kelompok</p>
+                    <button class="text-emerald-600 hover:text-emerald-500 font-medium text-sm">
+                        Pelajari Selengkapnya →
+                    </button>
+                </div>
+
+                <!-- Service 4 -->
+                <div class="service-card bg-white rounded-2xl shadow-sm p-6 text-center" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class='bx bx-chalkboard text-2xl text-emerald-700'></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-emerald-900 mb-3">Program Literasi</h3>
+                    <p class="text-gray-600 mb-4">Workshop, seminar, dan program pengembangan minat baca</p>
+                    <button class="text-emerald-600 hover:text-emerald-500 font-medium text-sm">
+                        Pelajari Selengkapnya →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Detailed Services Section -->
+        <section class="mb-16">
+            <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+                <!-- Tabs Navigation -->
+                <div class="border-b border-gray-200">
+                    <div class="flex overflow-x-auto scrollbar-hide">
+                        <button class="tab-btn flex-1 px-6 py-4 text-center border-b-2 border-emerald-600 text-emerald-600 font-medium whitespace-nowrap" data-tab="peminjaman">
+                            <i class='bx bx-book-bookmark mr-2'></i>
+                            Peminjaman Buku
+                        </button>
+                        <button class="tab-btn flex-1 px-6 py-4 text-center border-b-2 border-transparent text-gray-600 hover:text-emerald-500 font-medium whitespace-nowrap" data-tab="digital">
+                            <i class='bx bx-laptop mr-2'></i>
+                            Perpustakaan Digital
+                        </button>
+                        <button class="tab-btn flex-1 px-6 py-4 text-center border-b-2 border-transparent text-gray-600 hover:text-emerald-500 font-medium whitespace-nowrap" data-tab="ruang-belajar">
+                            <i class='bx bx-group mr-2'></i>
+                            Ruang Belajar
+                        </button>
+                        <button class="tab-btn flex-1 px-6 py-4 text-center border-b-2 border-transparent text-gray-600 hover:text-emerald-500 font-medium whitespace-nowrap" data-tab="literasi">
+                            <i class='bx bx-chalkboard mr-2'></i>
+                            Program Literasi
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tab Contents -->
+                <div class="p-8">
+                    <!-- Peminjaman Buku Tab -->
+                    <div id="peminjaman" class="tab-content active">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <div>
+                                <h3 class="text-2xl font-bold text-emerald-900 mb-4">Layanan Peminjaman Buku</h3>
+                                <p class="text-gray-600 mb-6">Nikmati kemudahan akses ke ribuan koleksi buku fisik kami dengan sistem peminjaman yang terintegrasi.</p>
+
+                                <div class="space-y-4 mb-6">
+                                    <div class="flex items-start space-x-3">
+                                        <i class='bx bx-check-circle text-emerald-600 text-xl mt-1'></i>
+                                        <div>
+                                            <h4 class="font-semibold text-emerald-900">Masa Peminjaman</h4>
+                                            <p class="text-gray-600">14 hari dengan opsi perpanjangan online</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <i class='bx bx-check-circle text-emerald-600 text-xl mt-1'></i>
+                                        <div>
+                                            <h4 class="font-semibold text-emerald-900">Kuota Peminjaman</h4>
+                                            <p class="text-gray-600">Maksimal 5 buku per anggota</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <i class='bx bx-check-circle text-emerald-600 text-xl mt-1'></i>
+                                        <div>
+                                            <h4 class="font-semibold text-emerald-900">Reservasi Online</h4>
+                                            <p class="text-gray-600">Booking buku melalui website atau aplikasi</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button class="bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 transition-colors font-medium">
+                                    Ajukan Peminjaman
+                                </button>
+                            </div>
+                            <div class="bg-emerald-50 rounded-2xl p-6">
+                                <h4 class="font-bold text-emerald-900 mb-4">Cara Meminjam Buku</h4>
+                                <div class="space-y-4">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="step-indicator rounded-full flex items-center justify-center font-bold">1</div>
+                                        <div>
+                                            <h5 class="font-semibold text-emerald-900">Cari Buku</h5>
+                                            <p class="text-sm text-gray-600">Gunakan fitur pencarian di website</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-4">
+                                        <div class="step-indicator rounded-full flex items-center justify-center font-bold">2</div>
+                                        <div>
+                                            <h5 class="font-semibold text-emerald-900">Reservasi</h5>
+                                            <p class="text-sm text-gray-600">Klik tombol pinjam pada buku yang diinginkan</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-4">
+                                        <div class="step-indicator rounded-full flex items-center justify-center font-bold">3</div>
+                                        <div>
+                                            <h5 class="font-semibold text-emerald-900">Ambil Buku</h5>
+                                            <p class="text-sm text-gray-600">Datang ke perpustakaan dengan bukti reservasi</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Perpustakaan Digital Tab -->
+                    <div id="digital" class="tab-content">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <div>
+                                <h3 class="text-2xl font-bold text-emerald-900 mb-4">Perpustakaan Digital</h3>
+                                <p class="text-gray-600 mb-6">Akses ribuan e-book, jurnal ilmiah, dan database penelitian dari mana saja dan kapan saja.</p>
+
+                                <div class="space-y-4 mb-6">
+                                    <div class="flex items-start space-x-3">
+                                        <i class='bx bx-check-circle text-emerald-600 text-xl mt-1'></i>
+                                        <div>
+                                            <h4 class="font-semibold text-emerald-900">E-Book Collection</h4>
+                                            <p class="text-gray-600">15,000+ e-book dari berbagai penerbit ternama</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <i class='bx bx-check-circle text-emerald-600 text-xl mt-1'></i>
+                                        <div>
+                                            <h4 class="font-semibold text-emerald-900">Jurnal Online</h4>
+                                            <p class="text-gray-600">Akses ke 50+ database jurnal internasional</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <i class='bx bx-check-circle text-emerald-600 text-xl mt-1'></i>
+                                        <div>
+                                            <h4 class="font-semibold text-emerald-900">Audiobook</h4>
+                                            <p class="text-gray-600">Koleksi audiobook untuk pengalaman mendengarkan</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex space-x-4">
+                                    <button class="bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 transition-colors font-medium">
+                                        Akses Digital Library
+                                    </button>
+                                    <button class="border border-emerald-600 text-emerald-700 px-6 py-3 rounded-lg hover:bg-emerald-50 transition-colors font-medium">
+                                        Panduan Penggunaan
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-2xl p-8 flex items-center justify-center">
+                                <div class="text-center">
+                                    <i class='bx bx-laptop text-6xl text-emerald-600 mb-4'></i>
+                                    <h4 class="font-bold text-emerald-900 mb-2">Akses 24/7</h4>
+                                    <p class="text-emerald-700">Buka kapan saja melalui website kami</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ruang Belajar Tab -->
+                    <div id="ruang-belajar" class="tab-content">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <div>
+                                <h3 class="text-2xl font-bold text-emerald-900 mb-4">Ruang Belajar & Kolaborasi</h3>
+                                <p class="text-gray-600 mb-6">Fasilitas ruang belajar yang nyaman dan lengkap untuk mendukung aktivitas belajar dan penelitian.</p>
+
+                                <div class="grid grid-cols-2 gap-4 mb-6">
+                                    <div class="bg-emerald-50 p-4 rounded-lg">
+                                        <i class='bx bx-wifi text-emerald-600 text-xl mb-2'></i>
+                                        <h5 class="font-semibold text-emerald-900">WiFi Gratis</h5>
+                                        <p class="text-sm text-gray-600">Akses internet cepat</p>
+                                    </div>
+                                    <div class="bg-emerald-50 p-4 rounded-lg">
+                                        <i class='bx bx-coffee text-emerald-600 text-xl mb-2'></i>
+                                        <h5 class="font-semibold text-emerald-900">Coffee Corner</h5>
+                                        <p class="text-sm text-gray-600">Minuman hangat tersedia</p>
+                                    </div>
+                                    <div class="bg-emerald-50 p-4 rounded-lg">
+                                        <i class='bx bx-printer text-emerald-600 text-xl mb-2'></i>
+                                        <h5 class="font-semibold text-emerald-900">Print & Scan</h5>
+                                        <p class="text-sm text-gray-600">Fasilitas cetak dan scan</p>
+                                    </div>
+                                    <div class="bg-emerald-50 p-4 rounded-lg">
+                                        <i class='bx bx-group text-emerald-600 text-xl mb-2'></i>
+                                        <h5 class="font-semibold text-emerald-900">Ruang Diskusi</h5>
+                                        <p class="text-sm text-gray-600">Untuk kelompok belajar</p>
+                                    </div>
+                                </div>
+
+                                <button class="bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 transition-colors font-medium">
+                                    Reservasi Ruang
+                                </button>
+                            </div>
+                            <div class="bg-emerald-50 rounded-2xl p-6">
+                                <h4 class="font-bold text-emerald-900 mb-4">Jadwal Operasional</h4>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-700">Senin - Jumat</span>
+                                        <span class="font-semibold text-emerald-900">08:00 - 21:00</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-700">Sabtu</span>
+                                        <span class="font-semibold text-emerald-900">09:00 - 17:00</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-700">Minggu</span>
+                                        <span class="font-semibold text-emerald-900">10:00 - 16:00</span>
+                                    </div>
+                                </div>
+                                <div class="mt-6 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                                    <div class="flex items-center">
+                                        <i class='bx bx-info-circle text-yellow-600 text-xl mr-2'></i>
+                                        <span class="text-yellow-800 text-sm">Reservasi ruang diskusi maksimal H-1</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Program Literasi Tab -->
+                    <div id="literasi" class="tab-content">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <div>
+                                <h3 class="text-2xl font-bold text-emerald-900 mb-4">Program Literasi & Edukasi</h3>
+                                <p class="text-gray-600 mb-6">Tingkatkan kemampuan dan pengetahuan melalui berbagai program literasi dan workshop yang kami selenggarakan.</p>
+
+                                <div class="space-y-4 mb-6">
+                                    <div class="flex items-start space-x-3 p-4 bg-emerald-50 rounded-lg">
+                                        <i class='bx bx-calendar-event text-emerald-600 text-xl mt-1'></i>
+                                        <div>
+                                            <h4 class="font-semibold text-emerald-900">Book Club Mingguan</h4>
+                                            <p class="text-gray-600">Setiap Sabtu pukul 10:00 - 12:00</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-3 p-4 bg-emerald-50 rounded-lg">
+                                        <i class='bx bx-microphone text-emerald-600 text-xl mt-1'></i>
+                                        <div>
+                                            <h4 class="font-semibold text-emerald-900">Author Talk</h4>
+                                            <p class="text-gray-600">Diskusi langsung dengan penulis ternama</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-3 p-4 bg-emerald-50 rounded-lg">
+                                        <i class='bx bx-book-reader text-emerald-600 text-xl mt-1'></i>
+                                        <div>
+                                            <h4 class="font-semibold text-emerald-900">Writing Workshop</h4>
+                                            <p class="text-gray-600">Kelas menulis untuk pemula hingga mahir</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button class="bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 transition-colors font-medium">
+                                    Lihat Jadwal Program
+                                </button>
+                            </div>
+                            <div class="bg-gradient-to-br from-emerald-100 to-emerald-200 rounded-2xl p-8">
+                                <div class="text-center mb-6">
+                                    <h4 class="font-bold text-emerald-900 mb-2">Program Mendatang</h4>
+                                    <p class="text-emerald-700">Daftar sekarang sebelum kehabisan kuota!</p>
+                                </div>
+                                <div class="space-y-4">
+                                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <h5 class="font-semibold text-emerald-900">Digital Literacy Workshop</h5>
+                                            <span class="px-2 py-1 bg-emerald-100 text-emerald-800 text-xs rounded-full">25 Mei</span>
+                                        </div>
+                                        <p class="text-sm text-gray-600">Belajar menggunakan tools penelitian digital</p>
+                                        <div class="flex justify-between items-center mt-3">
+                                            <span class="text-xs text-gray-500">Kuota: 15/30</span>
+                                            <button class="text-xs bg-emerald-600 text-white px-3 py-1 rounded hover:bg-emerald-700">Daftar</button>
+                                        </div>
+                                    </div>
+                                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <h5 class="font-semibold text-emerald-900">Children Reading Hour</h5>
+                                            <span class="px-2 py-1 bg-emerald-100 text-emerald-800 text-xs rounded-full">28 Mei</span>
+                                        </div>
+                                        <p class="text-sm text-gray-600">Program membaca untuk anak usia 5-10 tahun</p>
+                                        <div class="flex justify-between items-center mt-3">
+                                            <span class="text-xs text-gray-500">Kuota: 8/20</span>
+                                            <button class="text-xs bg-emerald-600 text-white px-3 py-1 rounded hover:bg-emerald-700">Daftar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="mb-16" data-aos="fade-up">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-emerald-900 mb-4">Pertanyaan Umum</h2>
+                <p class="text-lg text-gray-600">Temukan jawaban untuk pertanyaan yang sering diajukan</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="space-y-4">
+                    <div class="bg-white rounded-2xl shadow-sm p-6">
+                        <button class="faq-question w-full text-left flex justify-between items-center font-semibold text-emerald-900">
+                            <span>Bagaimana cara menjadi anggota perpustakaan?</span>
+                            <i class='bx bx-chevron-down text-emerald-600'></i>
+                        </button>
+                        <div class="faq-answer mt-3 text-gray-600 hidden">
+                            Anda dapat mendaftar secara online melalui website kami atau datang langsung ke perpustakaan dengan membawa KTP dan mengisi formulir pendaftaran.
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-sm p-6">
+                        <button class="faq-question w-full text-left flex justify-between items-center font-semibold text-emerald-900">
+                            <span>Berapa lama masa peminjaman buku?</span>
+                            <i class='bx bx-chevron-down text-emerald-600'></i>
+                        </button>
+                        <div class="faq-answer mt-3 text-gray-600 hidden">
+                            Masa peminjaman standar adalah 14 hari dengan opsi perpanjangan online maksimal 2 kali jika tidak ada waiting list.
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-sm p-6">
+                        <button class="faq-question w-full text-left flex justify-between items-center font-semibold text-emerald-900">
+                            <span>Apakah ada denda keterlambatan?</span>
+                            <i class='bx bx-chevron-down text-emerald-600'></i>
+                        </button>
+                        <div class="faq-answer mt-3 text-gray-600 hidden">
+                            Ya, denda keterlambatan adalah Rp 2.000 per buku per hari. Kami menyarankan untuk memperpanjang peminjaman sebelum jatuh tempo.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="bg-white rounded-2xl shadow-sm p-6">
+                        <button class="faq-question w-full text-left flex justify-between items-center font-semibold text-emerald-900">
+                            <span>Bagaimana cara mengakses e-book?</span>
+                            <i class='bx bx-chevron-down text-emerald-600'></i>
+                        </button>
+                        <div class="faq-answer mt-3 text-gray-600 hidden">
+                            Setelah login ke akun anggota, Anda dapat mengakses e-book melalui menu "Perpustakaan Digital". Beberapa e-book memerlukan aplikasi reader khusus.
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-sm p-6">
+                        <button class="faq-question w-full text-left flex justify-between items-center font-semibold text-emerald-900">
+                            <span>Apakah bisa memesan ruang belajar online?</span>
+                            <i class='bx bx-chevron-down text-emerald-600'></i>
+                        </button>
+                        <div class="faq-answer mt-3 text-gray-600 hidden">
+                            Ya, Anda dapat memesan ruang belajar melalui website dengan login terlebih dahulu. Reservasi maksimal H-1 dan konfirmasi akan dikirim via email.
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-sm p-6">
+                        <button class="faq-question w-full text-left flex justify-between items-center font-semibold text-emerald-900">
+                            <span>Bagaimana cara mengikuti program literasi?</span>
+                            <i class='bx bx-chevron-down text-emerald-600'></i>
+                        </button>
+                        <div class="faq-answer mt-3 text-gray-600 hidden">
+                            Daftar melalui website di menu "Program Literasi" atau hubungi front desk. Beberapa program memerlukan pendaftaran sebelumnya karena kuota terbatas.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="bg-emerald-800 text-white rounded-2xl p-8 text-center" data-aos="fade-up">
+            <h2 class="text-3xl font-bold mb-4">Butuh Bantuan Lebih Lanjut?</h2>
+            <p class="text-lg mb-6 max-w-2xl mx-auto">Tim layanan pelanggan kami siap membantu Anda dalam menggunakan fasilitas perpustakaan</p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <button class="bg-white text-emerald-800 px-6 py-3 rounded-lg hover:bg-emerald-100 transition-colors font-medium">
+                    <i class='bx bx-phone mr-2'></i>Hubungi Kami
+                </button>
+                <button class="border border-white text-white px-6 py-3 rounded-lg hover:bg-emerald-700 transition-colors font-medium">
+                    <i class='bx bx-envelope mr-2'></i>Kirim Email
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Floating Help Button -->
+    <div class="fixed bottom-6 right-6 z-40">
+        <button class="floating-help w-14 h-14 bg-emerald-600 text-white rounded-full shadow-lg hover:bg-emerald-700 transition-colors flex items-center justify-center">
+            <i class='bx bx-support text-2xl'></i>
+        </button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-emerald-900 text-white py-12 mt-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class='bx bx-book-open text-2xl text-emerald-300'></i>
+                        <span class="text-xl font-bold">Perpustakaan Hijau</span>
+                    </div>
+                    <p class="text-emerald-200">Membangun masyarakat pembelajar melalui akses pengetahuan yang luas dan mudah.</p>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Tautan Cepat</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-emerald-200 hover:text-white">Beranda</a></li>
+                        <li><a href="koleksi.html" class="text-emerald-200 hover:text-white">Koleksi</a></li>
+                        <li><a href="layanan.html" class="text-emerald-200 hover:text-white">Layanan</a></li>
+                        <li><a href="#" class="text-emerald-200 hover:text-white">Tentang Kami</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Layanan</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-emerald-200 hover:text-white">Peminjaman Buku</a></li>
+                        <li><a href="#" class="text-emerald-200 hover:text-white">Akses Digital</a></li>
+                        <li><a href="#" class="text-emerald-200 hover:text-white">Ruang Baca</a></li>
+                        <li><a href="#" class="text-emerald-200 hover:text-white">Program Literasi</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Kontak</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <i class='bx bx-map mr-2 text-emerald-300'></i>
+                            <span class="text-emerald-200">Jl. Pengetahuan No. 123, Jakarta</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class='bx bx-phone mr-2 text-emerald-300'></i>
+                            <span class="text-emerald-200">(021) 1234-5678</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class='bx bx-envelope mr-2 text-emerald-300'></i>
+                            <span class="text-emerald-200">info@perpustakaanhijau.id</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-emerald-800 mt-8 pt-8 text-center text-emerald-300">
+                <p>&copy; 2023 Perpustakaan Hijau. Semua hak dilindungi.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+
+        // Tab functionality
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+
+                // Remove active class from all buttons and contents
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('border-emerald-600', 'text-emerald-600');
+                    btn.classList.add('border-transparent', 'text-gray-600');
+                });
+                tabContents.forEach(content => content.classList.remove('active'));
+
+                // Add active class to clicked button and corresponding content
+                button.classList.add('border-emerald-600', 'text-emerald-600');
+                button.classList.remove('border-transparent', 'text-gray-600');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // FAQ functionality
+        const faqQuestions = document.querySelectorAll('.faq-question');
+
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const icon = question.querySelector('i');
+
+                // Toggle answer visibility
+                answer.classList.toggle('hidden');
+
+                // Rotate icon
+                icon.classList.toggle('bx-chevron-down');
+                icon.classList.toggle('bx-chevron-up');
+            });
+        });
+
+        // Service card click functionality
+        const serviceCards = document.querySelectorAll('.service-card');
+
+        serviceCards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (e.target.tagName !== 'BUTTON') {
+                    const serviceTitle = card.querySelector('h3').textContent;
+                    const tabId = getTabIdFromService(serviceTitle);
+
+                    if (tabId) {
+                        // Find and click the corresponding tab button
+                        const tabButton = document.querySelector(`[data-tab="${tabId}"]`);
+                        if (tabButton) {
+                            tabButton.click();
+
+                            // Scroll to the tab section
+                            document.querySelector('.bg-white.rounded-2xl').scrollIntoView({
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                }
+            });
+        });
+
+        function getTabIdFromService(title) {
+            const serviceMap = {
+                'Peminjaman Buku': 'peminjaman',
+                'Perpustakaan Digital': 'digital',
+                'Ruang Belajar': 'ruang-belajar',
+                'Program Literasi': 'literasi'
+            };
+            return serviceMap[title];
+        }
+
+        // Floating help button
+        const floatingHelp = document.querySelector('.floating-help');
+        floatingHelp.addEventListener('click', () => {
+            Swal.fire({
+                title: 'Butuh Bantuan?',
+                html: `
+                    <div class="text-left space-y-3">
+                        <div class="flex items-center space-x-3">
+                            <i class='bx bx-phone text-emerald-600 text-xl'></i>
+                            <div>
+                                <p class="font-semibold">Telepon</p>
+                                <p class="text-gray-600">(021) 1234-5678</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <i class='bx bx-envelope text-emerald-600 text-xl'></i>
+                            <div>
+                                <p class="font-semibold">Email</p>
+                                <p class="text-gray-600">help@perpustakaanhijau.id</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <i class='bx bx-time text-emerald-600 text-xl'></i>
+                            <div>
+                                <p class="font-semibold">Jam Operasional</p>
+                                <p class="text-gray-600">Senin - Minggu, 08:00 - 21:00</p>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                confirmButtonText: 'Mengerti',
+                confirmButtonColor: '#10b981'
+            });
+        });
+
+        // Action buttons functionality
+        document.addEventListener('click', (e) => {
+            if (e.target.textContent.includes('Ajukan Peminjaman') ||
+                e.target.textContent.includes('Akses Digital Library') ||
+                e.target.textContent.includes('Reservasi Ruang') ||
+                e.target.textContent.includes('Lihat Jadwal Program')) {
+
+                Swal.fire({
+                    title: 'Login Diperlukan',
+                    text: 'Silakan login terlebih dahulu untuk mengakses layanan ini',
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonText: 'Login Sekarang',
+                    cancelButtonText: 'Nanti Saja',
+                    confirmButtonColor: '#10b981'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'login.html';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
