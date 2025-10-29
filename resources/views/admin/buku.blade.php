@@ -1,80 +1,5 @@
-<!DOCTYPE html>
-<html lang="id">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manajemen Buku - Admin Panel</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- AOS -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <!-- Flowbite -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
-    <!-- Box Icons -->
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</head>
-
-<body class="bg-emerald-50 font-sans">
-    <!-- ===== SIDEBAR ===== -->
-    <aside id="sidebar"
-        class="fixed inset-y-0 left-0 z-50 w-64 bg-emerald-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
-        <div class="flex items-center justify-between p-4 border-b border-emerald-700">
-            <div class="flex items-center space-x-2">
-                <i class='bx bx-book-open text-2xl text-emerald-300'></i>
-                <span class="text-xl font-bold text-white">Admin Panel</span>
-            </div>
-            <button id="close-sidebar" class="lg:hidden text-emerald-300 hover:text-white">
-                <i class='bx bx-x text-2xl'></i>
-            </button>
-        </div>
-
-        <nav class="p-4 space-y-2 overflow-y-auto h-[calc(100vh-150px)]">
-            <a href="#" class="flex items-center space-x-3 p-3 bg-emerald-700 text-white rounded-lg">
-                <i class='bx bx-home text-xl'></i>
-                <span>Dashboard</span>
-            </a>
-            <a href="#" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
-                <i class='bx bx-book text-xl'></i>
-                <span>Manajemen Buku</span>
-            </a>
-            <a href="#" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
-                <i class='bx bx-group text-xl'></i>
-                <span>Manajemen Anggota</span>
-            </a>
-            <a href="#" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
-                <i class='bx bx-transfer text-xl'></i>
-                <span>Peminjaman</span>
-            </a>
-            <a href="#" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
-                <i class='bx bx-chart text-xl'></i>
-                <span>Laporan</span>
-            </a>
-            <a href="#" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
-                <i class='bx bx-cog text-xl'></i>
-                <span>Pengaturan</span>
-            </a>
-        </nav>
-
-        <!-- User Section -->
-        <div class="absolute bottom-0 w-full border-t border-emerald-700 p-4">
-            <div class="flex items-center space-x-3 text-emerald-200">
-                <div class="w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center">
-                    <i class='bx bx-user text-white'></i>
-                </div>
-                <div class="flex-1">
-                    <p class="font-medium text-white">Admin User</p>
-                    <p class="text-sm text-emerald-300">Super Administrator</p>
-                </div>
-                <button id="logout-btn" class="text-emerald-300 hover:text-white">
-                    <i class='bx bx-log-out text-xl'></i>
-                </button>
-            </div>
-        </div>
-    </aside>
-
+@extends('layouts.app')
+@section('content')
     <!-- Main Content -->
     <div class="lg:ml-64">
         <!-- Top Header -->
@@ -103,11 +28,9 @@
                         <select
                             class="flex-1 px-4 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
                             <option>Semua Kategori</option>
-                            <option>Sains & Teknologi</option>
-                            <option>Sastra</option>
-                            <option>Bisnis & Ekonomi</option>
-                            <option>Sejarah</option>
-                            <option>Filsafat</option>
+                            @foreach ($kategori as $k)
+                                <option value="{{ $k->id }}">{{ $k->kategori }}</option>
+                            @endforeach
                         </select>
 
                         <!-- Status Filter -->
@@ -123,12 +46,12 @@
 
                     <!-- ➕ Kanan: Tombol Aksi -->
                     <div class="flex flex-wrap gap-2 justify-start md:justify-end">
-                        <button
+                        <button data-modal-target="modalTambahBuku" data-modal-toggle="modalTambahBuku"
                             class="px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 active:scale-[.97] transition-all text-sm flex items-center shadow-sm">
                             <i class='bx bx-plus mr-2 text-base'></i>Tambah Buku
                         </button>
 
-                        <button
+                        <button data-modal-target="modalTambahKategori" data-modal-toggle="modalTambahKategori"
                             class="px-4 py-2 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-100 active:scale-[.97] transition-all text-sm flex items-center shadow-sm">
                             <i class='bx bx-category mr-2 text-base'></i>Kategori
                         </button>
@@ -172,30 +95,22 @@
                     <table class="w-full">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 
                                 </th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Buku</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Penulis</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Kategori</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     ISBN</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Status</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Lokasi</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Aksi</th>
                             </tr>
                         </thead>
@@ -207,8 +122,7 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
-                                        <div
-                                            class="w-10 h-12 bg-emerald-100 rounded flex items-center justify-center mr-3">
+                                        <div class="w-10 h-12 bg-emerald-100 rounded flex items-center justify-center mr-3">
                                             <i class='bx bx-book text-emerald-600'></i>
                                         </div>
                                         <div>
@@ -226,8 +140,7 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">978-1234567890</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Tersedia</span>
+                                    <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Tersedia</span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Rak A-12</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -252,8 +165,7 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
-                                        <div
-                                            class="w-10 h-12 bg-emerald-100 rounded flex items-center justify-center mr-3">
+                                        <div class="w-10 h-12 bg-emerald-100 rounded flex items-center justify-center mr-3">
                                             <i class='bx bx-book text-emerald-600'></i>
                                         </div>
                                         <div>
@@ -272,8 +184,7 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">978-1234567891</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="px-2 py-1 bg-amber-100 text-amber-800 text-xs rounded-full">Dipinjam</span>
+                                    <span class="px-2 py-1 bg-amber-100 text-amber-800 text-xs rounded-full">Dipinjam</span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Rak B-05</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -373,182 +284,66 @@
             </div>
         </main>
     </div>
+    <div id="modalTambahBuku" tabindex="-1" aria-hidden="true"
+        class="hidden fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto h-[calc(100%)] max-h-full flex justify-center items-center bg-black/40">
 
-    <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
-    <script>
-        // Initialize AOS
-        AOS.init({
-            duration: 800,
-            once: true,
-            offset: 100
-        });
+        <div class="relative bg-white rounded-2xl shadow-lg w-full max-w-md p-6">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">Tambah Buku</h3>
+                <button type="button" data-modal-hide="modalTambahBuku"
+                    class="text-gray-400 hover:text-gray-600 text-xl">
+                    &times;
+                </button>
+            </div>
 
-        // Sidebar functionality
-        const sidebar = document.getElementById('sidebar');
-        const openSidebar = document.getElementById('open-sidebar');
-        const closeSidebar = document.getElementById('close-sidebar');
+            <!-- Form -->
+            <form action="{{ route('kategori.store') }}" method="POST">
+                @csrf
+                <div class="mb-4">
+                    <label for="nama_kategori" class="block text-sm font-medium text-gray-700 mb-1">Nama Kategori</label>
+                    <input type="text" id="kategori" name="kategori" required
+                        class="w-full px-4 py-2.5 border border-gray-200 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
+                </div>
 
-        openSidebar.addEventListener('click', () => {
-            sidebar.classList.remove('-translate-x-full');
-        });
+                <div class="flex justify-end gap-2">
+                    <button type="button" data-modal-hide="modalTambahBuku"
+                        class="px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-100 transition-all">Batal</button>
+                    <button type="submit"
+                        class="px-4 py-2 text-sm bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-all">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="modalTambahKategori" tabindex="-1" aria-hidden="true"
+        class="hidden fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto h-[calc(100%)] max-h-full flex justify-center items-center bg-black/40">
 
-        closeSidebar.addEventListener('click', () => {
-            sidebar.classList.add('-translate-x-full');
-        });
+        <div class="relative bg-white rounded-2xl shadow-lg w-full max-w-md p-6">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">Tambah Kategori</h3>
+                <button type="button" data-modal-hide="modalTambahKategori"
+                    class="text-gray-400 hover:text-gray-600 text-xl">
+                    &times;
+                </button>
+            </div>
 
-        // Logout functionality
-        document.getElementById('logout-btn').addEventListener('click', () => {
-            Swal.fire({
-                title: 'Konfirmasi Logout',
-                text: 'Apakah Anda yakin ingin keluar dari panel admin?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, Logout',
-                cancelButtonText: 'Batal',
-                confirmButtonColor: '#10b981'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = 'login.html';
-                }
-            });
-        });
+            <!-- Form -->
+            <form action="{{ route('kategori.store') }}" method="POST">
+                @csrf
+                <div class="mb-4">
+                    <label for="nama_kategori" class="block text-sm font-medium text-gray-700 mb-1">Nama Kategori</label>
+                    <input type="text" id="kategori" name="kategori" required
+                        class="w-full px-4 py-2.5 border border-gray-200 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
+                </div>
 
-        // Add Book Modal
-        document.getElementById('add-book-btn').addEventListener('click', () => {
-            Swal.fire({
-                title: 'Tambah Buku Baru',
-                html: `
-                    <div class="text-left space-y-4">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Judul Buku</label>
-                                <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500" placeholder="Judul buku">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Penulis</label>
-                                <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500" placeholder="Nama penulis">
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">ISBN</label>
-                                <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500" placeholder="Nomor ISBN">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
-                                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
-                                    <option>Pilih Kategori</option>
-                                    <option>Sains & Teknologi</option>
-                                    <option>Sastra</option>
-                                    <option>Bisnis & Ekonomi</option>
-                                    <option>Sejarah</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi</label>
-                            <textarea class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500" rows="3" placeholder="Deskripsi buku"></textarea>
-                        </div>
-                    </div>
-                `,
-                showCancelButton: true,
-                confirmButtonText: 'Simpan Buku',
-                cancelButtonText: 'Batal',
-                confirmButtonColor: '#10b981',
-                preConfirm: () => {
-                    // Validation logic here
-                    return true;
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire('Berhasil!', 'Buku baru telah ditambahkan.', 'success');
-                }
-            });
-        });
-
-        // Edit Book
-        document.querySelectorAll('.edit-book').forEach(button => {
-            button.addEventListener('click', function () {
-                const bookId = this.getAttribute('data-id');
-                Swal.fire({
-                    title: 'Edit Data Buku',
-                    html: `
-                        <div class="text-left space-y-4">
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Judul Buku</label>
-                                    <input type="text" value="Sustainable Future" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Penulis</label>
-                                    <input type="text" value="Dr. Michael Green" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                                    <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
-                                        <option>Tersedia</option>
-                                        <option>Dipinjam</option>
-                                        <option>Dalam Perbaikan</option>
-                                        <option>Hilang</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Lokasi</label>
-                                    <input type="text" value="Rak A-12" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
-                                </div>
-                            </div>
-                        </div>
-                    `,
-                    showCancelButton: true,
-                    confirmButtonText: 'Update Buku',
-                    cancelButtonText: 'Batal',
-                    confirmButtonColor: '#10b981'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        Swal.fire('Berhasil!', 'Data buku telah diperbarui.', 'success');
-                    }
-                });
-            });
-        });
-
-        // Delete Book
-        document.querySelectorAll('.delete-book').forEach(button => {
-            button.addEventListener('click', function () {
-                const bookId = this.getAttribute('data-id');
-                Swal.fire({
-                    title: 'Hapus Buku?',
-                    text: "Data buku akan dihapus permanen dari sistem.",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Ya, Hapus!',
-                    cancelButtonText: 'Batal',
-                    confirmButtonColor: '#d33',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        Swal.fire('Terhapus!', 'Buku telah berhasil dihapus.', 'success');
-                    }
-                });
-            });
-        });
-
-        // Search functionality
-        const searchInput = document.querySelector('input[type="text"]');
-        searchInput.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                Swal.fire({
-                    title: 'Mencari...',
-                    text: `Menampilkan hasil untuk "${this.value}"`,
-                    timer: 1500,
-                    showConfirmButton: false
-                });
-            }
-        });
-    </script>
-</body>
-
-</html>
+                <div class="flex justify-end gap-2">
+                    <button type="button" data-modal-hide="modalTambahKategori"
+                        class="px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-100 transition-all">Batal</button>
+                    <button type="submit"
+                        class="px-4 py-2 text-sm bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-all">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+@endsection

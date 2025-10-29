@@ -11,31 +11,57 @@
     </div>
 
     <nav class="p-4 space-y-2 overflow-y-auto h-[calc(100vh-150px)]">
-        <a href="#" class="flex items-center space-x-3 p-3 bg-emerald-700 text-white rounded-lg">
+
+        <a href="{{ route('dashboard.index') }}"
+            class="flex items-center space-x-3 p-3 rounded-lg transition-all
+    {{ Request::routeIs('dashboard.*') ? 'bg-emerald-700 text-white' : 'text-emerald-200 hover:bg-emerald-700 hover:text-white' }}">
             <i class='bx bx-home text-xl'></i>
             <span>Dashboard</span>
         </a>
-        <a href="#" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
+
+
+        <!-- Buku -->
+        <a href="{{ route('buku.index') }}"
+            class="flex items-center space-x-3 p-3 rounded-lg transition-all
+        {{ Request::routeIs('buku.*') ? 'bg-emerald-700 text-white' : 'text-emerald-200 hover:bg-emerald-700 hover:text-white' }}">
             <i class='bx bx-book text-xl'></i>
             <span>Manajemen Buku</span>
         </a>
-        <a href="#" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
+
+        <!-- Anggota -->
+        <a href="#"
+            class="flex items-center space-x-3 p-3 rounded-lg transition-all
+        {{ Request::routeIs('anggota.*') ? 'bg-emerald-700 text-white' : 'text-emerald-200 hover:bg-emerald-700 hover:text-white' }}">
             <i class='bx bx-group text-xl'></i>
             <span>Manajemen Anggota</span>
         </a>
-        <a href="#" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
+
+        <!-- Peminjaman -->
+        <a href="#"
+            class="flex items-center space-x-3 p-3 rounded-lg transition-all
+        {{ Request::routeIs('peminjaman.*') ? 'bg-emerald-700 text-white' : 'text-emerald-200 hover:bg-emerald-700 hover:text-white' }}">
             <i class='bx bx-transfer text-xl'></i>
             <span>Peminjaman</span>
         </a>
-        <a href="#" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
+
+        <!-- Laporan -->
+        <a href="#"
+            class="flex items-center space-x-3 p-3 rounded-lg transition-all
+        {{ Request::routeIs('laporan.*') ? 'bg-emerald-700 text-white' : 'text-emerald-200 hover:bg-emerald-700 hover:text-white' }}">
             <i class='bx bx-chart text-xl'></i>
             <span>Laporan</span>
         </a>
-        <a href="#" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
+
+        <!-- Pengaturan -->
+        <a href="#"
+            class="flex items-center space-x-3 p-3 rounded-lg transition-all
+        {{ Request::routeIs('pengaturan.*') ? 'bg-emerald-700 text-white' : 'text-emerald-200 hover:bg-emerald-700 hover:text-white' }}">
             <i class='bx bx-cog text-xl'></i>
             <span>Pengaturan</span>
         </a>
+
     </nav>
+
 
     <!-- User Section -->
     <div class="absolute bottom-0 w-full border-t border-emerald-700 p-4">

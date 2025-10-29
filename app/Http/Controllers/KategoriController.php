@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kategori;
+use GuzzleHttp\Promise\Create;
 use Illuminate\Http\Request;
 
 class KategoriController extends Controller
@@ -28,7 +29,12 @@ class KategoriController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'kategori' => 'required',
+        ]);
+
+        Kategori::create($request->all());
+        return redirect()->back()->with('success', 'Kategori berhasil di tambahkan');
     }
 
     /**

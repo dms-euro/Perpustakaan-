@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Buku;
+use App\Models\Kategori;
 use Illuminate\Http\Request;
 
 class BukuController extends Controller
@@ -12,7 +13,8 @@ class BukuController extends Controller
      */
     public function index()
     {
-        return view('Buku.index');
+        $kategori = Kategori::all();
+        return view('admin.buku', compact('kategori'));
     }
 
     /**
@@ -28,7 +30,16 @@ class BukuController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'judul' => 'required|string',
+            'pengarang' => 'required|string',
+            'penerbit' => 'required|string',
+            'tahun_terbit' => 'required|integer',
+            'kategori_id' => 'required|exists:kategori,id',
+        ]);
+
+        Buku::create($request->all());
+        return redirect()->back()->with('success', 'Buku berhasil ditambahkan.');
     }
 
     /**
