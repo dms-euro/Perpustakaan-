@@ -5,20 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'Perpustakaan' }}</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- AOS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <!-- Flowbite -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
-    <!-- Box Icons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
     <style>
-        /* --- Fix tombol SweetAlert2 ketimpa Tailwind/Flowbite --- */
         .swal2-popup {
             font-size: 1rem !important;
         }
@@ -36,12 +30,10 @@
 
         .swal2-confirm {
             background-color: #10b981 !important;
-            /* hijau emerald */
         }
 
         .swal2-cancel {
             background-color: #6b7280 !important;
-            /* abu-abu */
         }
 
         .swal2-confirm:hover {
@@ -166,31 +158,6 @@
             });
         });
 
-        // Notifications
-        document.getElementById('notifications-btn').addEventListener('click', () => {
-            Swal.fire({
-                title: 'Notifikasi',
-                html: `
-                    <div class="text-left space-y-3">
-                        <div class="p-3 bg-emerald-50 rounded-lg">
-                            <p class="font-medium text-emerald-900">Peminjaman Baru</p>
-                            <p class="text-sm text-gray-600">Ahmad meminjam 2 buku</p>
-                        </div>
-                        <div class="p-3 bg-amber-50 rounded-lg">
-                            <p class="font-medium text-amber-900">Jatuh Tempo</p>
-                            <p class="text-sm text-gray-600">3 buku akan jatuh tempo besok</p>
-                        </div>
-                        <div class="p-3 bg-red-50 rounded-lg">
-                            <p class="font-medium text-red-900">Buku Hilang</p>
-                            <p class="text-sm text-gray-600">Laporan buku hilang diterima</p>
-                        </div>
-                    </div>
-                `,
-                confirmButtonText: 'Tutup',
-                confirmButtonColor: '#10b981'
-            });
-        });
-
         // Charts initialization
         const loansChart = new Chart(
             document.getElementById('loansChart'), {
@@ -260,21 +227,6 @@
             }
         );
 
-        // Quick actions
-        document.querySelectorAll('.bg-emerald-50 button').forEach(button => {
-            button.addEventListener('click', function() {
-                const action = this.querySelector('.font-medium').textContent;
-                Swal.fire({
-                    title: 'Aksi Cepat',
-                    text: `Membuka form untuk: ${action}`,
-                    icon: 'info',
-                    confirmButtonText: 'Lanjutkan',
-                    confirmButtonColor: '#10b981'
-                });
-            });
-        });
-
-        // Auto refresh stats every 30 seconds (simulated)
         setInterval(() => {
             const stats = document.querySelectorAll('.text-3xl.font-bold');
             stats.forEach(stat => {

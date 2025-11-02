@@ -17,7 +17,7 @@ class BukuController extends Controller
         $kategori = Kategori::all();
         return view('admin.buku', compact('kategori','buku'));
     }
-
+    
     /**
      * Show the form for creating a new resource.
      */

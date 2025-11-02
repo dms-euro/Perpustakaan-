@@ -29,7 +29,7 @@
         </a>
 
         <!-- Anggota -->
-        <a href="#"
+        <a href="{{ route('anggota.index') }}"
             class="flex items-center space-x-3 p-3 rounded-lg transition-all
         {{ Request::routeIs('anggota.*') ? 'bg-emerald-700 text-white' : 'text-emerald-200 hover:bg-emerald-700 hover:text-white' }}">
             <i class='bx bx-group text-xl'></i>

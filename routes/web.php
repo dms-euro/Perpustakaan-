@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\DashboardController;
@@ -23,11 +24,12 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('Admin/Buku', [BukuController::class, 'index'])->name('buku.index');
     Route::post('Admin/Buku', [BukuController::class, 'store'])->name('buku.store');
-    Route::delete('Admin/Buku/{id}', [BukuController::class, 'destroy'])->name('buku.destroy');
     Route::get('Admin/Buku/{id}', [BukuController::class, 'edit'])->name('buku.edit');
+    Route::delete('Admin/Buku/{id}', [BukuController::class, 'destroy'])->name('buku.destroy');
 
     Route::post('Admin/Kategori',[KategoriController::class, 'store'])->name('kategori.store');
-    
+
+    Route::get('Admin/Manajemen Anggota', [AnggotaController::class, 'index'])->name('anggota.index');
 
     Route::post('Auth/Logout', [AuthController::class, 'logout'])->name('auth.logout');
 });

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tombol Simpan Buku Keren</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+    <div class="max-w-md w-full space-y-6">
+        <h1 class="text-2xl font-bold text-center text-gray-800">Tombol Simpan Buku</h1>
+
+        <!-- Varian 1: Modern dengan Gradien -->
+        <button type="submit"
+                class="w-full px-6 py-3 bg-gradient-to-r from-emerald-500 to-green-600 text-white rounded-xl hover:from-emerald-600 hover:to-green-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center">
+            <i class='bx bx-save text-xl mr-2'></i>Simpan Buku
+        </button>
+
+        <!-- Varian 2: Elegant dengan Glow Effect -->
+        <button type="submit"
+                class="w-full px-6 py-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-all duration-300 font-medium shadow-lg hover:shadow-emerald-200 hover:shadow-2xl flex items-center justify-center group">
+            <i class='bx bx-save mr-2 group-hover:animate-bounce'></i>Simpan Buku
+        </button>
+
+        <!-- Varian 3: Minimal dengan Outline -->
+        <button type="submit"
+                class="w-full px-6 py-3 bg-white text-emerald-600 border-2 border-emerald-500 rounded-xl hover:bg-emerald-50 transition-all duration-300 font-medium shadow-sm hover:shadow flex items-center justify-center">
+            <i class='bx bx-book-add mr-2'></i>Simpan Buku
+        </button>
+
+        <!-- Varian 4: Premium dengan Animasi -->
+        <button type="submit"
+                class="w-full px-6 py-3 bg-gradient-to-r from-emerald-600 via-green-500 to-emerald-600 text-white rounded-xl transition-all duration-500 font-semibold shadow-lg hover:shadow-xl flex items-center justify-center bg-size-200 bg-pos-0 hover:bg-pos-100 group">
+            <i class='bx bx-cloud-upload mr-2 group-hover:rotate-12 transition-transform'></i>Simpan Buku
+        </button>
+
+        <!-- Varian 5: Loading State -->
+        <button type="submit" id="loadingBtn"
+                class="w-full px-6 py-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-all duration-300 font-medium shadow-lg flex items-center justify-center group">
+            <i class='bx bx-loader-alt mr-2 hidden group-hover:block animate-spin'></i>
+            <i class='bx bx-save mr-2 group-hover:hidden'></i>
+            <span class="group-hover:hidden">Simpan Buku</span>
+            <span class="hidden group-hover:block">Menyimpan...</span>
+        </button>
+    </div>
+
+    <style>
+        .bg-size-200 {
+            background-size: 200% 100%;
+        }
+        .bg-pos-0 {
+            background-position: 0% 0;
+        }
+        .bg-pos-100 {
+            background-position: 100% 0;
+        }
+    </style>
+
+    <script>
+        // Demo untuk tombol loading
+        document.getElementById('loadingBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            const btn = this;
+            const originalText = btn.innerHTML;
+
+            // Simulasi proses penyimpanan
+            btn.disabled = true;
+            setTimeout(() => {
+                btn.disabled = false;
+                alert('Buku berhasil disimpan!');
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
