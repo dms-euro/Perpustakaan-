@@ -19,11 +19,11 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $cek = $request->validate([
+        $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required|string|min:8',
         ]);
-        if (Auth::attempt($cek)) {
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             return redirect()->route('dashboard.index')->with('success', 'Login berhasil');
         } else {

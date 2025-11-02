@@ -11,6 +11,10 @@ Route::get('/', function () {
 });
 
 Route::get('Auth/Login', [AuthController::class, 'index'])->name('auth.index');
+Route::get('/login', function () {
+    return redirect()->route('auth.index');
+})->name('login');
+
 Route::post('Auth/Login', [AuthController::class, 'login'])->name('auth.login');
 Route::get('Auth/Register', [AuthController::class, 'register'])->name('auth.register');
 
@@ -18,8 +22,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Dashboard/Admin', [DashboardController::class, 'index'])->name('dashboard.index');
 
     Route::get('Admin/Buku', [BukuController::class, 'index'])->name('buku.index');
+    Route::post('Admin/Buku', [BukuController::class, 'store'])->name('buku.store');
+    Route::delete('Admin/Buku/{id}', [BukuController::class, 'destroy'])->name('buku.destroy');
+    Route::get('Admin/Buku/{id}', [BukuController::class, 'edit'])->name('buku.edit');
 
     Route::post('Admin/Kategori',[KategoriController::class, 'store'])->name('kategori.store');
+    
 
     Route::post('Auth/Logout', [AuthController::class, 'logout'])->name('auth.logout');
 });

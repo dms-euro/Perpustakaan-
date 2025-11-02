@@ -13,10 +13,45 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
     <!-- Box Icons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        /* --- Fix tombol SweetAlert2 ketimpa Tailwind/Flowbite --- */
+        .swal2-popup {
+            font-size: 1rem !important;
+        }
+
+        .swal2-confirm,
+        .swal2-cancel {
+            display: inline-block !important;
+            padding: 0.5rem 1.25rem !important;
+            font-weight: 600 !important;
+            border-radius: 0.5rem !important;
+            color: #fff !important;
+            margin: 0 0.5rem !important;
+            cursor: pointer !important;
+        }
+
+        .swal2-confirm {
+            background-color: #10b981 !important;
+            /* hijau emerald */
+        }
+
+        .swal2-cancel {
+            background-color: #6b7280 !important;
+            /* abu-abu */
+        }
+
+        .swal2-confirm:hover {
+            background-color: #059669 !important;
+        }
+
+        .swal2-cancel:hover {
+            background-color: #4b5563 !important;
+        }
+    </style>
 </head>
 
 <body class="bg-emerald-50 font-sans">
@@ -33,59 +68,64 @@
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
-        // ✅ Success Message
-        @if (session('success'))
+        function hapus(id) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('form-delete-' + id).submit();
+                }
+            });
+        }
+    </script>
+
+    @if (session('success'))
+        <script>
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil!',
                 text: '{{ session('success') }}',
                 showConfirmButton: false,
-                timer: 2000,
-                background: '#ecfdf5',
-                color: '#065f46',
-                iconColor: '#10b981',
+                timer: 2000
             });
-        @endif
+        </script>
+    @endif
 
-        // ❌ Error Message
-        @if (session('error'))
+    @if (session('error'))
+        <script>
             Swal.fire({
                 icon: 'error',
-                title: 'Terjadi Kesalahan!',
+                title: 'Gagal!',
                 text: '{{ session('error') }}',
-                showConfirmButton: true,
-                confirmButtonColor: '#dc2626',
-                background: '#fef2f2',
-                color: '#7f1d1d',
-                iconColor: '#ef4444',
+                showConfirmButton: false,
+                timer: 2000
             });
-        @endif
+        </script>
+    @endif
 
-        // ⚠️ Konfirmasi Hapus
-        function confirmDelete(event, formId) {
-            event.preventDefault();
+    @if (session('info'))
+        <script>
             Swal.fire({
-                title: 'Apakah kamu yakin?',
-                text: "Data yang dihapus tidak bisa dikembalikan!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#10b981',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, Hapus!',
-                cancelButtonText: 'Batal',
-                background: '#fefce8',
-                color: '#78350f',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById(formId).submit();
-                }
+                icon: 'info',
+                title: 'Informasi',
+                text: '{{ session('info') }}',
+                showConfirmButton: false,
+                timer: 2000
             });
-        }
-    </script>
+        </script>
+    @endif
+    @auth
+        @if (Auth::user() && Auth::user()->role === 'admin')
+            @include('layouts.sidebar')
+        @endif
+    @endauth
 
     <script>
         // Initialize AOS

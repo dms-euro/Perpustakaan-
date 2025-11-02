@@ -13,8 +13,9 @@ class BukuController extends Controller
      */
     public function index()
     {
+        $buku = Buku::with('kategori')->get();
         $kategori = Kategori::all();
-        return view('admin.buku', compact('kategori'));
+        return view('admin.buku', compact('kategori','buku'));
     }
 
     /**
@@ -32,9 +33,8 @@ class BukuController extends Controller
     {
         $request->validate([
             'judul' => 'required|string',
-            'pengarang' => 'required|string',
-            'penerbit' => 'required|string',
-            'tahun_terbit' => 'required|integer',
+            'penulis' => 'required|string',
+            'isbn' => 'required|string',
             'kategori_id' => 'required|exists:kategori,id',
         ]);
 
@@ -53,9 +53,10 @@ class BukuController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Buku $buku)
+    public function edit(Buku $id)
     {
-        //
+        $buku = Buku::all();
+        return view('admin.edit-buku',compact($buku));
     }
 
     /**
@@ -69,8 +70,9 @@ class BukuController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Buku $buku)
+    public function destroy(Buku $id)
     {
-        //
+        $id->delete();
+        return redirect()->back()->with('success', 'Buku berhasil dihapus.');
     }
 }
