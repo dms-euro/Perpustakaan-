@@ -85,8 +85,7 @@
                 <div class="lg:col-span-2">
                     <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-left">
                         <h3 class="text-lg font-bold text-emerald-900 mb-4">Tambah Buku Baru</h3>
-                        <form action="{{ route('buku.store') }}" method="POST" id="add-book-form"
-                            class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <form action="{{ route('buku.store') }}" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             @csrf
                             <div class="space-y-4">
                                 <div>

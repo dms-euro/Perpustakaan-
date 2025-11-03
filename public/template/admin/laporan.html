@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan - Admin Panel</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Flowbite -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
+    <!-- Box Icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-emerald-50 font-sans">
+    <aside id="sidebar"
+    class="fixed inset-y-0 left-0 z-50 w-64 bg-emerald-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+    <div class="flex items-center justify-between p-4 border-b border-emerald-700">
+        <div class="flex items-center space-x-2">
+            <i class='bx bx-book-open text-2xl text-emerald-300'></i>
+            <span class="text-xl font-bold text-white">Admin Panel</span>
+        </div>
+        <button id="close-sidebar" class="lg:hidden text-emerald-300 hover:text-white">
+            <i class='bx bx-x text-2xl'></i>
+        </button>
+    </div>
+
+    <nav class="p-4 space-y-2 overflow-y-auto h-[calc(100vh-150px)]">
+        <a href="dashboard.html" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
+            <i class='bx bx-home text-xl'></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="books.html" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
+            <i class='bx bx-book text-xl'></i>
+            <span>Manajemen Buku</span>
+        </a>
+        <a href="members.html" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
+            <i class='bx bx-group text-xl'></i>
+            <span>Manajemen Anggota</span>
+        </a>
+        <a href="borrowing.html" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
+            <i class='bx bx-transfer text-xl'></i>
+            <span>Peminjaman</span>
+        </a>
+        <a href="reports.html" class="flex items-center space-x-3 p-3 bg-emerald-700 text-white rounded-lg">
+            <i class='bx bx-chart text-xl'></i>
+            <span>Laporan</span>
+        </a>
+        <a href="settings.html" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
+            <i class='bx bx-cog text-xl'></i>
+            <span>Pengaturan</span>
+        </a>
+    </nav>
+
+    <!-- User Section -->
+    <div class="absolute bottom-0 w-full border-t border-emerald-700 p-4">
+        <div class="flex items-center space-x-3 text-emerald-200">
+            <div class="w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center">
+                <i class='bx bx-user text-white'></i>
+            </div>
+            <div class="flex-1">
+                <p class="font-medium text-white">Admin User</p>
+                <p class="text-sm text-emerald-300">Super Administrator</p>
+            </div>
+            <button id="logout-btn" class="text-emerald-300 hover:text-white">
+                <i class='bx bx-log-out text-xl'></i>
+            </button>
+        </div>
+    </div>
+</aside>
+
+    <!-- Main Content -->
+    <div class="lg:ml-64">
+        <!-- Top Header -->
+        <header class="bg-white shadow-sm border-b border-gray-200">
+            <div class="flex items-center justify-between p-4">
+                <div class="flex items-center space-x-4">
+                    <button class="lg:hidden text-emerald-700" id="open-sidebar">
+                        <i class='bx bx-menu text-2xl'></i>
+                    </button>
+                    <h1 class="text-2xl font-bold text-emerald-900">Laporan & Analitik</h1>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <!-- Export Button -->
+                    <button class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-green-600 text-white rounded-xl hover:from-emerald-600 hover:to-green-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center group" id="export-report-btn">
+                        <i class='bx bx-download text-xl mr-2 group-hover:animate-bounce-fast'></i>Export Laporan
+                    </button>
+
+                    <!-- Print Button -->
+                    <button class="px-4 py-2 bg-white border border-emerald-600 text-emerald-700 rounded-xl hover:bg-emerald-50 transition-all duration-300 font-medium shadow-sm flex items-center group" id="print-report-btn">
+                        <i class='bx bx-printer text-xl mr-2'></i>Print
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="p-6">
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Total Peminjaman</p>
+                            <p class="text-3xl font-bold text-emerald-900">2,847</p>
+                            <p class="text-sm text-emerald-600 flex items-center">
+                                <i class='bx bx-up-arrow-alt mr-1'></i>+12% vs bulan lalu
+                            </p>
+                        </div>
+                        <div class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
+                            <i class='bx bx-book-open text-2xl text-emerald-600'></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Buku Terpopuler</p>
+                            <p class="text-3xl font-bold text-blue-900">48x</p>
+                            <p class="text-sm text-blue-600">"Seni Berpikir Jernih"</p>
+                        </div>
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class='bx bx-star text-2xl text-blue-600'></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Keterlambatan</p>
+                            <p class="text-3xl font-bold text-amber-900">23</p>
+                            <p class="text-sm text-amber-600">-5% vs bulan lalu</p>
+                        </div>
+                        <div class="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
+                            <i class='bx bx-time text-2xl text-amber-600'></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Pendapatan Denda</p>
+                            <p class="text-3xl font-bold text-purple-900">Rp 1.2JT</p>
+                            <p class="text-sm text-purple-600">+8% vs bulan lalu</p>
+                        </div>
+                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <i class='bx bx-money text-2xl text-purple-600'></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Date Range Filter -->
+            <div class="bg-white rounded-2xl shadow-sm p-6 mb-6" data-aos="fade-up">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <h3 class="text-lg font-bold text-emerald-900">Filter Periode Laporan</h3>
+
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="flex items-center space-x-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Dari Tanggal</label>
+                                <input type="date" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" value="2024-01-01">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Sampai Tanggal</label>
+                                <input type="date" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" value="2024-12-31">
+                            </div>
+                        </div>
+
+                        <div class="flex items-end space-x-2">
+                            <button class="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium">
+                                Terapkan
+                            </button>
+                            <button class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+                                Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <!-- Peminjaman per Bulan -->
+                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-bold text-emerald-900">Peminjaman per Bulan</h3>
+                        <select class="px-3 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500">
+                            <option>2024</option>
+                            <option>2023</option>
+                            <option>2022</option>
+                        </select>
+                    </div>
+                    <div class="h-80">
+                        <canvas id="borrowingChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Kategori Buku Terpopuler -->
+                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-bold text-emerald-900">Kategori Buku Terpopuler</h3>
+                        <select class="px-3 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500">
+                            <option>Tahun Ini</option>
+                            <option>Bulan Ini</option>
+                            <option>Minggu Ini</option>
+                        </select>
+                    </div>
+                    <div class="h-80">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Status Anggota -->
+                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-bold text-emerald-900">Distribusi Status Anggota</h3>
+                        <select class="px-3 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500">
+                            <option>Semua Waktu</option>
+                            <option>Tahun Ini</option>
+                            <option>Bulan Ini</option>
+                        </select>
+                    </div>
+                    <div class="h-80">
+                        <canvas id="memberStatusChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Tren Keterlambatan -->
+                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-bold text-emerald-900">Tren Keterlambatan</h3>
+                        <select class="px-3 py-1 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500">
+                            <option>6 Bulan Terakhir</option>
+                            <option>1 Tahun Terakhir</option>
+                            <option>2 Tahun Terakhir</option>
+                        </select>
+                    </div>
+                    <div class="h-80">
+                        <canvas id="lateTrendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Reports -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                <!-- Laporan Cepat -->
+                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up">
+                    <h3 class="text-lg font-bold text-emerald-900 mb-6">Laporan Cepat</h3>
+                    <div class="space-y-4">
+                        <button class="w-full text-left p-4 border border-gray-200 rounded-lg hover:border-emerald-500 hover:bg-emerald-50 transition-all duration-300 group">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="font-medium text-gray-900 group-hover:text-emerald-900">Laporan Peminjaman Harian</p>
+                                    <p class="text-sm text-gray-500">Ringkasan aktivitas hari ini</p>
+                                </div>
+                                <i class='bx bx-chevron-right text-xl text-gray-400 group-hover:text-emerald-600'></i>
+                            </div>
+                        </button>
+
+                        <button class="w-full text-left p-4 border border-gray-200 rounded-lg hover:border-emerald-500 hover:bg-emerald-50 transition-all duration-300 group">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="font-medium text-gray-900 group-hover:text-emerald-900">Laporan Buku Hilang</p>
+                                    <p class="text-sm text-gray-500">Buku yang belum dikembalikan >30 hari</p>
+                                </div>
+                                <i class='bx bx-chevron-right text-xl text-gray-400 group-hover:text-emerald-600'></i>
+                            </div>
+                        </button>
+
+                        <button class="w-full text-left p-4 border border-gray-200 rounded-lg hover:border-emerald-500 hover:bg-emerald-50 transition-all duration-300 group">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="font-medium text-gray-900 group-hover:text-emerald-900">Laporan Anggota Aktif</p>
+                                    <p class="text-sm text-gray-500">Anggota dengan peminjaman terbanyak</p>
+                                </div>
+                                <i class='bx bx-chevron-right text-xl text-gray-400 group-hover:text-emerald-600'></i>
+                            </div>
+                        </button>
+
+                        <button class="w-full text-left p-4 border border-gray-200 rounded-lg hover:border-emerald-500 hover:bg-emerald-50 transition-all duration-300 group">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="font-medium text-gray-900 group-hover:text-emerald-900">Laporan Denda</p>
+                                    <p class="text-sm text-gray-500">Rekapitulasi pendapatan denda</p>
+                                </div>
+                                <i class='bx bx-chevron-right text-xl text-gray-400 group-hover:text-emerald-600'></i>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Top Performers -->
+                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up" data-aos-delay="100">
+                    <h3 class="text-lg font-bold text-emerald-900 mb-6">Buku Terpopuler</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-3 bg-emerald-50 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center">
+                                    <span class="text-white text-sm font-bold">1</span>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-emerald-900">Seni Berpikir Jernih</p>
+                                    <p class="text-sm text-gray-500">Rolf Dobelli</p>
+                                </div>
+                            </div>
+                            <span class="px-2 py-1 bg-emerald-100 text-emerald-800 text-xs rounded-full">48x</span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                                    <span class="text-white text-sm font-bold">2</span>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-900">Atomic Habits</p>
+                                    <p class="text-sm text-gray-500">James Clear</p>
+                                </div>
+                            </div>
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">42x</span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
+                                    <span class="text-white text-sm font-bold">3</span>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-900">The Psychology of Money</p>
+                                    <p class="text-sm text-gray-500">Morgan Housel</p>
+                                </div>
+                            </div>
+                            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">38x</span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center">
+                                    <span class="text-white text-sm font-bold">4</span>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-900">Deep Work</p>
+                                    <p class="text-sm text-gray-500">Cal Newport</p>
+                                </div>
+                            </div>
+                            <span class="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">35x</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Anggota Teraktif -->
+                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up" data-aos-delay="200">
+                    <h3 class="text-lg font-bold text-emerald-900 mb-6">Anggota Teraktif</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-3 bg-emerald-50 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center">
+                                    <i class='bx bx-user text-emerald-600'></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-emerald-900">Ahmad Rizki</p>
+                                    <p class="text-sm text-gray-500">24 buku dipinjam</p>
+                                </div>
+                            </div>
+                            <span class="px-2 py-1 bg-emerald-100 text-emerald-800 text-xs rounded-full">Top</span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <i class='bx bx-user text-blue-600'></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-900">Sari Dewi</p>
+                                    <p class="text-sm text-gray-500">18 buku dipinjam</p>
+                                </div>
+                            </div>
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Aktif</span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                    <i class='bx bx-user text-green-600'></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-900">Budi Santoso</p>
+                                    <p class="text-sm text-gray-500">15 buku dipinjam</p>
+                                </div>
+                            </div>
+                            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Aktif</span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                                    <i class='bx bx-user text-purple-600'></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-900">Citra Lestari</p>
+                                    <p class="text-sm text-gray-500">12 buku dipinjam</p>
+                                </div>
+                            </div>
+                            <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">Aktif</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Export Options -->
+            <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up">
+                <h3 class="text-lg font-bold text-emerald-900 mb-6">Ekspor Laporan</h3>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <button class="p-4 border-2 border-dashed border-gray-300 rounded-xl hover:border-emerald-500 hover:bg-emerald-50 transition-all duration-300 group text-center">
+                        <i class='bx bx-file-pdf text-3xl text-red-500 mb-2'></i>
+                        <p class="font-medium text-gray-900 group-hover:text-emerald-900">PDF Report</p>
+                        <p class="text-sm text-gray-500">Format dokumen</p>
+                    </button>
+
+                    <button class="p-4 border-2 border-dashed border-gray-300 rounded-xl hover:border-emerald-500 hover:bg-emerald-50 transition-all duration-300 group text-center">
+                        <i class='bx bx-table text-3xl text-green-500 mb-2'></i>
+                        <p class="font-medium text-gray-900 group-hover:text-emerald-900">Excel</p>
+                        <p class="text-sm text-gray-500">Format spreadsheet</p>
+                    </button>
+
+                    <button class="p-4 border-2 border-dashed border-gray-300 rounded-xl hover:border-emerald-500 hover:bg-emerald-50 transition-all duration-300 group text-center">
+                        <i class='bx bx-bar-chart-alt-2 text-3xl text-blue-500 mb-2'></i>
+                        <p class="font-medium text-gray-900 group-hover:text-emerald-900">Grafik</p>
+                        <p class="text-sm text-gray-500">Visual data</p>
+                    </button>
+
+                    <button class="p-4 border-2 border-dashed border-gray-300 rounded-xl hover:border-emerald-500 hover:bg-emerald-50 transition-all duration-300 group text-center">
+                        <i class='bx bx-data text-3xl text-purple-500 mb-2'></i>
+                        <p class="font-medium text-gray-900 group-hover:text-emerald-900">CSV</p>
+                        <p class="text-sm text-gray-500">Raw data</p>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+
+        // Sidebar functionality
+        const sidebar = document.getElementById('sidebar');
+        const openSidebar = document.getElementById('open-sidebar');
+        const closeSidebar = document.getElementById('close-sidebar');
+
+        openSidebar.addEventListener('click', () => {
+            sidebar.classList.remove('-translate-x-full');
+        });
+
+        closeSidebar.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+        });
+
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            Swal.fire({
+                title: 'Konfirmasi Logout',
+                text: 'Apakah Anda yakin ingin keluar dari panel admin?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Logout',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#10b981'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'login.html';
+                }
+            });
+        });
+
+        // Export Report
+        document.getElementById('export-report-btn').addEventListener('click', () => {
+            Swal.fire({
+                title: 'Ekspor Laporan',
+                text: 'Pilih format untuk mengekspor laporan',
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Export PDF',
+                cancelButtonText: 'Export Excel',
+                showDenyButton: true,
+                denyButtonText: 'Export CSV',
+                confirmButtonColor: '#10b981',
+                cancelButtonColor: '#059669',
+                denyButtonColor: '#047857'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire('Berhasil!', 'Laporan PDF berhasil diexport.', 'success');
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    Swal.fire('Berhasil!', 'Laporan Excel berhasil diexport.', 'success');
+                } else if (result.isDenied) {
+                    Swal.fire('Berhasil!', 'Laporan CSV berhasil diexport.', 'success');
+                }
+            });
+        });
+
+        // Print Report
+        document.getElementById('print-report-btn').addEventListener('click', () => {
+            Swal.fire({
+                title: 'Print Laporan',
+                text: 'Siap untuk mencetak laporan?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Print',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#10b981'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.print();
+                }
+            });
+        });
+
+        // Charts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Borrowing Chart
+            const borrowingCtx = document.getElementById('borrowingChart').getContext('2d');
+            new Chart(borrowingCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+                    datasets: [{
+                        label: 'Peminjaman',
+                        data: [320, 280, 350, 410, 380, 450, 420, 480, 460, 520, 510, 580],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Category Chart
+            const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+            new Chart(categoryCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Fiksi', 'Non-Fiksi', 'Sains', 'Teknologi', 'Sejarah', 'Bisnis'],
+                    datasets: [{
+                        data: [25, 20, 15, 18, 12, 10],
+                        backgroundColor: [
+                            '#10b981',
+                            '#3b82f6',
+                            '#f59e0b',
+                            '#8b5cf6',
+                            '#ef4444',
+                            '#06b6d4'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Member Status Chart
+            const memberStatusCtx = document.getElementById('memberStatusChart').getContext('2d');
+            new Chart(memberStatusCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Aktif', 'Tidak Aktif', 'Diblokir', 'Menunggu'],
+                    datasets: [{
+                        data: [72, 15, 2, 11],
+                        backgroundColor: [
+                            '#10b981',
+                            '#f59e0b',
+                            '#ef4444',
+                            '#6b7280'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Late Trend Chart
+            const lateTrendCtx = document.getElementById('lateTrendChart').getContext('2d');
+            new Chart(lateTrendCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+                    datasets: [{
+                        label: 'Keterlambatan',
+                        data: [18, 22, 15, 25, 20, 23],
+                        backgroundColor: '#f59e0b',
+                        borderColor: '#d97706',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+        // Quick Report Buttons
+        document.querySelectorAll('.bg-white.rounded-2xl button').forEach(button => {
+            button.addEventListener('click', function() {
+                const reportTitle = this.querySelector('.font-medium').textContent;
+                Swal.fire({
+                    title: 'Generating Report',
+                    text: `Membuat laporan: ${reportTitle}`,
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                }).then(() => {
+                    Swal.fire('Berhasil!', `Laporan "${reportTitle}" telah dibuat.`, 'success');
+                });
+            });
+        });
+
+        // Animasi bounce lebih cepat
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes bounce-fast {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-8px); }
+            }
+            .animate-bounce-fast {
+                animation: bounce-fast 0.3s ease-in-out infinite;
+            }
+
+            @media print {
+                .no-print {
+                    display: none !important;
+                }
+
+                body {
+                    background: white !important;
+                }
+
+                .bg-emerald-50 {
+                    background: white !important;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Add no-print class to non-printable elements
+        document.querySelectorAll('button, aside, header button').forEach(el => {
+            el.classList.add('no-print');
+        });
+    </script>
+</body>
+</html>

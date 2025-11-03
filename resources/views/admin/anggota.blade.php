@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="lg:ml-64">
+    <div class="lg:ml-64">
         <!-- Top Header -->
         <header class="bg-white shadow-sm border-b border-gray-200">
             <div class="flex items-center justify-between p-4">
@@ -76,10 +76,12 @@
             </div>
 
             <!-- Add Member Form (Hidden by Default) -->
-            <div class="bg-white rounded-2xl shadow-sm p-6 mb-3" data-aos="fade-up"">
-                        <h3 class=" text-lg font-bold text-emerald-900 mb-4">Tambah Anggota</h3>
-                <form action="#" method="POST" id="add-book-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white rounded-2xl shadow-sm p-6 mb-3" data-aos="fade-up">
+                <h3 class=" text-lg font-bold text-emerald-900 mb-4">Tambah Anggota</h3>
+                <form action="{{ route('anggota.store') }}" method="POST" id="add-book-form"
+                    class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="space-y-4">
+                        @csrf
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Nama</label>
                             <input type="text" name="nama" required
@@ -88,9 +90,9 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Telephone</label>
-                            <input type="text" name="telepone" required
+                            <input type="text" name="telepon" required
                                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                placeholder="Contoh: +62 123-123-123">
+                                placeholder="Contoh: 0882 0000 0000">
                         </div>
 
                     </div>
@@ -103,7 +105,6 @@
                         </div>
                     </div>
                     <div class="md:col-span-2 flex items-center space-x-4 mt-4">
-
                         <button type="button" onclick="history.back()"
                             class="w-full px-6 py-3 bg-gray-800 text-white rounded-xl hover:bg-gray-900 transition-all duration-300 font-medium shadow-lg hover:shadow-xl flex items-center justify-center group">
                             <i
@@ -151,139 +152,79 @@
                     <table class="w-full">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     <input type="checkbox"
                                         class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
                                 </th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Anggota</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Kontak</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Bergabung</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Status</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Tipe</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Buku Dipinjam</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <!-- Member rows remain the same as before -->
-                            <!-- Member 1 -->
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <input type="checkbox"
-                                        class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div
-                                            class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center mr-3">
-                                            <i class='bx bx-user text-emerald-600'></i>
+                            @foreach ($anggota as $a)
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <input type="checkbox"
+                                            class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div
+                                                class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center mr-3">
+                                                <i class='bx bx-user text-emerald-600'></i>
+                                            </div>
+                                            <div>
+                                                <div class="text-sm font-medium text-emerald-900">{{ $a->nama }}</div>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <div class="text-sm font-medium text-emerald-900">Ahmad Rizki</div>
-                                            <div class="text-sm text-gray-500">ID: MEM-8542</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-500">{{ $a->telepone }}</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        15 Jan 2023
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span
+                                            class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Aktif</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span
+                                            class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Premium</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">3 buku</div>
+                                        <div class="text-xs text-amber-600">1 hampir jatuh tempo</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <div class="flex items-center space-x-2">
+                                            <button class="text-emerald-600 hover:text-emerald-900 edit-member"
+                                                data-id="1">
+                                                <i class='bx bx-edit text-lg'></i>
+                                            </button>
+                                            <button class="text-amber-600 hover:text-amber-900 view-member"
+                                                data-id="1">
+                                                <i class='bx bx-show text-lg'></i>
+                                            </button>
+                                            <button class="text-red-600 hover:text-red-900 delete-member" data-id="1">
+                                                <i class='bx bx-trash text-lg'></i>
+                                            </button>
                                         </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">ahmad.rizki@email.com</div>
-                                    <div class="text-sm text-gray-500">+62 812-3456-7890</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    15 Jan 2023
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Aktif</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Premium</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">3 buku</div>
-                                    <div class="text-xs text-amber-600">1 hampir jatuh tempo</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <div class="flex items-center space-x-2">
-                                        <button class="text-emerald-600 hover:text-emerald-900 edit-member" data-id="1">
-                                            <i class='bx bx-edit text-lg'></i>
-                                        </button>
-                                        <button class="text-amber-600 hover:text-amber-900 view-member" data-id="1">
-                                            <i class='bx bx-show text-lg'></i>
-                                        </button>
-                                        <button class="text-red-600 hover:text-red-900 delete-member" data-id="1">
-                                            <i class='bx bx-trash text-lg'></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <!-- Member 2 -->
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <input type="checkbox"
-                                        class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div
-                                            class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center mr-3">
-                                            <i class='bx bx-user text-emerald-600'></i>
-                                        </div>
-                                        <div>
-                                            <div class="text-sm font-medium text-emerald-900">Sari Dewi</div>
-                                            <div class="text-sm text-gray-500">ID: MEM-8541</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">sari.dewi@email.com</div>
-                                    <div class="text-sm text-gray-500">+62 813-9876-5432</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    20 Mar 2023
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Aktif</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="px-2 py-1 bg-emerald-100 text-emerald-800 text-xs rounded-full">Reguler</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">0 buku</div>
-                                    <div class="text-xs text-gray-500">Tidak ada peminjaman</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <div class="flex items-center space-x-2">
-                                        <button class="text-emerald-600 hover:text-emerald-900 edit-member" data-id="2">
-                                            <i class='bx bx-edit text-lg'></i>
-                                        </button>
-                                        <button class="text-amber-600 hover:text-amber-900 view-member" data-id="2">
-                                            <i class='bx bx-show text-lg'></i>
-                                        </button>
-                                        <button class="text-red-600 hover:text-red-900 delete-member" data-id="2">
-                                            <i class='bx bx-trash text-lg'></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

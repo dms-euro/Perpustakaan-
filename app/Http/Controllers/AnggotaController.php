@@ -12,7 +12,8 @@ class AnggotaController extends Controller
      */
     public function index()
     {
-        return view('admin.anggota');
+        $anggota = Anggota::all();
+        return view('admin.anggota',compact('anggota'));
     }
 
     /**
@@ -28,7 +29,14 @@ class AnggotaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nama' => 'required|string',
+            'telepon' => 'required|string',
+            'alamat' => 'required|string',
+        ]);
+
+        Anggota::create($request->all());
+        return redirect()->back()->with('success','Berhasil Tambah Anggota');
     }
 
     /**

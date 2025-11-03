@@ -29,7 +29,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('Admin/Kategori',[KategoriController::class, 'store'])->name('kategori.store');
 
-    Route::get('Admin/Manajemen Anggota', [AnggotaController::class, 'index'])->name('anggota.index');
+    Route::get('Admin/ManajemenAnggota', [AnggotaController::class, 'index'])->name('anggota.index');
+    Route::post('Admin/TambahAnggota', [AnggotaController::class, 'store'])->name('anggota.store');
 
     Route::post('Auth/Logout', [AuthController::class, 'logout'])->name('auth.logout');
 });
