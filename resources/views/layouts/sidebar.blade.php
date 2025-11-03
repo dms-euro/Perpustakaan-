@@ -37,7 +37,7 @@
         </a>
 
         <!-- Peminjaman -->
-        <a href="#"
+        <a href="{{ route('peminjaman.index') }}"
             class="flex items-center space-x-3 p-3 rounded-lg transition-all
         {{ Request::routeIs('peminjaman.*') ? 'bg-emerald-700 text-white' : 'text-emerald-200 hover:bg-emerald-700 hover:text-white' }}">
             <i class='bx bx-transfer text-xl'></i>

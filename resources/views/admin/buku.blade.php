@@ -1,7 +1,6 @@
 @extends('layouts.app')
 @section('content')
     <div class="lg:ml-64">
-        <!-- Top Header -->
         <header class="bg-white shadow-sm border-b border-gray-200">
             <div class="flex items-center justify-between p-4">
                 <div class="flex items-center space-x-4">
@@ -16,14 +15,41 @@
             </div>
         </header>
 
-        <!-- Main Content Area -->
         <main class="p-6">
-            <!-- Section 1: Kiri - Tabel Kategori, Kanan - Form Tambah Buku -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Total Kategori</p>
+                            <p class="text-3xl font-bold text-emerald-900" id="total-categories">{{ $kategori->count() }}
+                            </p>
+                            <p class="text-sm text-emerald-600 flex items-center">
+                                <i class='bx bx-category mr-1'></i>Kategori aktif
+                            </p>
+                        </div>
+                        <div class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
+                            <i class='bx bx-bookmark text-2xl text-emerald-600'></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Total Buku</p>
+                            <p class="text-3xl font-bold text-emerald-900" id="total-books">{{ $buku->count() }}</p>
+                            <p class="text-sm text-emerald-600 flex items-center">
+                                <i class='bx bx-book mr-1'></i>Dalam koleksi
+                            </p>
+                        </div>
+                        <div class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
+                            <i class='bx bx-library text-2xl text-emerald-600'></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                <!-- Kiri: Tabel Kategori -->
                 <div class="lg:col-span-1">
                     <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-right">
-                        <!-- Header -->
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-lg font-bold text-emerald-900"><i class="bx bx-category"></i> Daftar Kategori
                             </h3>
@@ -32,8 +58,6 @@
                                 <i class='bx bx-plus mr-1'></i> Tambah
                             </button>
                         </div>
-
-                        <!-- Tabel Scrollable -->
                         <div class="overflow-hidden rounded-2xl shadow-sm border border-gray-100 bg-white">
                             <div
                                 class="max-h-[240px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-emerald-400 transition-all">
@@ -55,11 +79,13 @@
                                                     <span class="font-medium text-emerald-900">{{ $k->kategori }}</span>
                                                 </td>
                                                 <td class="px-6 py-4">
-                                                    <form action="#" method="POST">
+                                                    <form id="form-delete-{{ $k->id }}"
+                                                        action="{{ route('kategori.destroy', $k->id) }}" method="POST"
+                                                        class="inline">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit"
-                                                            class="inline-flex items-center px-2 py-1 text-red-600 rounded-md transition">
+                                                        <button type="button" onclick="hapus({{ $k->id }})"
+                                                            class="inline-flex items-center px-2 py-1 text-red-600 rounded-md transition hover:bg-red-100">
                                                             <i class='bx bx-trash text-base'></i>
                                                         </button>
                                                     </form>
@@ -79,13 +105,11 @@
                         </div>
                     </div>
                 </div>
-
-
-                <!-- Kanan: Form Tambah Buku -->
                 <div class="lg:col-span-2">
                     <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-left">
                         <h3 class="text-lg font-bold text-emerald-900 mb-4">Tambah Buku Baru</h3>
-                        <form action="{{ route('buku.store') }}" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <form action="{{ route('buku.store') }}" method="POST"
+                            class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             @csrf
                             <div class="space-y-4">
                                 <div>
@@ -137,57 +161,21 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Section 2: 2 Card di atas tabel buku -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up" data-aos-delay="100">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-600">Total Kategori</p>
-                            <p class="text-3xl font-bold text-emerald-900" id="total-categories">{{ $kategori->count() }}
-                            </p>
-                            <p class="text-sm text-emerald-600 flex items-center">
-                                <i class='bx bx-category mr-1'></i>Kategori aktif
-                            </p>
-                        </div>
-                        <div class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
-                            <i class='bx bx-bookmark text-2xl text-emerald-600'></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-600">Total Buku</p>
-                            <p class="text-3xl font-bold text-emerald-900" id="total-books">{{ $buku->count() }}</p>
-                            <p class="text-sm text-emerald-600 flex items-center">
-                                <i class='bx bx-book mr-1'></i>Dalam koleksi
-                            </p>
-                        </div>
-                        <div class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
-                            <i class='bx bx-library text-2xl text-emerald-600'></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section 3: Tabel Buku dengan Search -->
             <div class="bg-white rounded-2xl shadow-sm overflow-hidden" data-aos="fade-up">
-                <!-- Search and Filters -->
                 <div class="px-6 py-4 border-b border-gray-200">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
-                        <div class="flex-1">
-                            <div class="relative max-w-md mb-4">
-                                <input type="text" id="search-books" placeholder="Cari judul, penulis, atau ISBN..."
-                                    class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
-                                <i class='bx bx-search absolute left-3 top-2.5 text-gray-400'></i>
-                            </div>
+                        <div class="relative max-w-md mb-4">
+                            <input type="text" id="search-books" placeholder="Cari judul, penulis, atau ISBN..."
+                                class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                            <i class='bx bx-search absolute left-3 top-2.5 text-gray-400'></i>
                         </div>
                         <div class="flex items-center space-x-4">
                             <select id="category-filter"
                                 class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500">
-                                <option value="">Semua Kategori</option>
-                                <!-- Categories will be dynamically populated -->
+                                <option value="" disabled selected>Semua Kategori</option>
+                                @foreach ($kategori as $k)
+                                    <option value="{{ $k->kategori }}">{{ $k->kategori }}</option>
+                                @endforeach
                             </select>
                             <select id="status-filter"
                                 class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500">
@@ -202,54 +190,41 @@
 
                 <!-- Table -->
                 <div class="overflow-x-auto rounded-2xl shadow-lg border border-gray-100 bg-white">
-                    <table class="w-full text-sm text-gray-700">
-                        <thead class="bg-gray-50 text-xs text-gray-500 uppercase tracking-wide">
+                    <table class="w-full border border-gray-200 rounded-lg overflow-hidden">
+                        <thead class="bg-emerald-600 text-white text-sm uppercase">
                             <tr>
-                                <th class="px-6 py-3 text-left font-semibold">Buku</th>
-                                <th class="px-6 py-3 text-left font-semibold">Penulis</th>
-                                <th class="px-6 py-3 text-left font-semibold">Kategori</th>
-                                <th class="px-6 py-3 text-left font-semibold">ISBN</th>
-                                <th class="px-6 py-3 text-left font-semibold w-36">Aksi</th>
+                                <th class="px-4 py-2 text-left">Judul</th>
+                                <th class="px-4 py-2 text-left">Penulis</th>
+                                <th class="px-4 py-2 text-left">Kategori</th>
+                                <th class="px-4 py-2 text-left">ISBN</th>
+                                <th class="px-4 py-2 text-center">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-200">
-                            @forelse ($buku as $b)
-                                <tr class="hover:bg-emerald-50 transition-colors cursor-pointer">
-                                    <td class="px-6 py-4 font-medium text-gray-800">{{ $b->judul }}</td>
-                                    <td class="px-6 py-4">{{ $b->penulis }}</td>
-                                    <td class="px-6 py-4">{{ $b->kategori->kategori }}</td>
-                                    <td class="px-6 py-4">{{ $b->isbn }}</td>
-                                    <td class="px-6 py-4 flex gap-2">
-                                        <!-- Lihat Detail -->
-                                        <a href="#" class="text-blue-600 hover:text-blue-900 view-member"
-                                            title="Lihat Detail Buku">
-                                            <i class='bx bx-show text-lg'></i>
-                                        </a>
-                                        <!-- Edit -->
+                        <tbody id="books-table-body">
+                            @foreach ($buku as $b)
+                                <tr class="hover:bg-emerald-50 transition">
+                                    <td class="px-4 py-2">{{ $b->judul }}</td>
+                                    <td class="px-4 py-2">{{ $b->penulis }}</td>
+                                    <td class="px-4 py-2">{{ $b->kategori->kategori }}</td>
+                                    <td class="px-4 py-2">{{ $b->isbn }}</td>
+                                    <td class="px-4 py-2 text-center">
+                                        <a href="{{ route('buku.show', $b->id) }}"
+                                            class="text-blue-500 hover:text-blue-700 mx-1"><i class='bx bx-show'></i></a>
                                         <a href="{{ route('buku.edit', $b->id) }}"
-                                            class="text-emerald-600 hover:text-emerald-900 edit-member" title="Edit Buku">
-                                            <i class='bx bx-edit text-lg'></i>
-                                        </a>
-                                        <!-- Hapus -->
+                                            class="text-emerald-500 hover:text-emerald-700 mx-1"><i
+                                                class='bx bx-edit'></i></a>
                                         <form action="{{ route('buku.destroy', $b->id) }}" method="POST"
-                                            onsubmit="return confirm('Hapus buku ini?');">
+                                            class="inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:text-red-900 delete-member"
-                                                title="Hapus Buku">
-                                                <i class='bx bx-trash text-lg'></i>
+                                            <button onclick="return confirm('Yakin hapus buku ini?')"
+                                                class="text-red-500 hover:text-red-700 mx-1">
+                                                <i class='bx bx-trash'></i>
                                             </button>
                                         </form>
                                     </td>
                                 </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="text-center py-8 text-gray-400">
-                                        <i class='bx bx-book-alt text-4xl mb-2'></i>
-                                        <p>Belum ada data buku tersedia</p>
-                                    </td>
-                                </tr>
-                            @endforelse
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

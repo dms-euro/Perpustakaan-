@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Kategori;
-use GuzzleHttp\Promise\Create;
+use App\Models\Peminjaman;
 use Illuminate\Http\Request;
 
-class KategoriController extends Controller
+class PeminjamanController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return view('admin.peminjaman');
     }
 
     /**
@@ -29,18 +28,13 @@ class KategoriController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'kategori' => 'required',
-        ]);
-
-        Kategori::create($request->all());
-        return redirect()->back()->with('success', 'Kategori berhasil di tambahkan');
+        //
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Kategori $kategori)
+    public function show(Peminjaman $peminjaman)
     {
         //
     }
@@ -48,7 +42,7 @@ class KategoriController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Kategori $kategori)
+    public function edit(Peminjaman $peminjaman)
     {
         //
     }
@@ -56,7 +50,7 @@ class KategoriController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Kategori $kategori)
+    public function update(Request $request, Peminjaman $peminjaman)
     {
         //
     }
@@ -64,9 +58,8 @@ class KategoriController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Kategori $id)
+    public function destroy(Peminjaman $peminjaman)
     {
-        $id -> delete();
-        return redirect()->back()->with('success','Berhasil Hapus');
+        //
     }
 }

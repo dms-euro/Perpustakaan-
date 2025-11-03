@@ -45,14 +45,6 @@
                 <i class='bx bx-transfer text-xl'></i>
                 <span class="font-medium">Peminjaman</span>
             </a>
-            <a href="reports.html" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg transition-colors">
-                <i class='bx bx-chart text-xl'></i>
-                <span class="font-medium">Laporan</span>
-            </a>
-            <a href="settings.html" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg transition-colors">
-                <i class='bx bx-cog text-xl'></i>
-                <span class="font-medium">Pengaturan</span>
-            </a>
         </nav>
 
         <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-emerald-700">
@@ -87,8 +79,8 @@
                 </div>
 
                 <div class="flex items-center space-x-4">
-                    <!-- Back to Books -->
-                    <a href="books.html" class="px-4 py-2 border border-emerald-600 text-emerald-700 rounded-lg hover:bg-emerald-50 transition-colors font-medium flex items-center">
+                    <!-- Back to Detail -->
+                    <a href="book-detail.html" class="px-4 py-2 border border-emerald-600 text-emerald-700 rounded-lg hover:bg-emerald-50 transition-colors font-medium flex items-center">
                         <i class='bx bx-arrow-back mr-2'></i>Kembali
                     </a>
                     <!-- Save Button -->
@@ -157,13 +149,8 @@
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Sub Kategori</label>
-                                <select id="book-subcategory" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
-                                    <option value="">Pilih Sub Kategori</option>
-                                    <option value="lingkungan" selected>Lingkungan & Ekologi</option>
-                                    <option value="teknologi">Teknologi Hijau</option>
-                                    <option value="energi">Energi Terbarukan</option>
-                                </select>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">ID Kategori</label>
+                                <input type="text" id="book-category-id" value="CAT-001" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" placeholder="ID Kategori" readonly>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Bahasa</label>
@@ -223,7 +210,7 @@
                             <div class="w-32 h-40 bg-emerald-100 rounded-lg flex items-center justify-center mx-auto mb-4">
                                 <i class='bx bx-book text-4xl text-emerald-600'></i>
                             </div>
-                            <button class="w-full px-4 py-2 border border-emerald-600 text-emerald-700 rounded-lg hover:bg-emerald-50 transition-colors text-sm">
+                            <button class="w-full px-4 py-2 border border-emerald-600 text-emerald-700 rounded-lg hover:bg-emerald-50 transition-colors text-sm" id="change-cover-btn">
                                 <i class='bx bx-upload mr-2'></i>Unggah Sampul Baru
                             </button>
                             <p class="text-xs text-gray-500 mt-2">Format: JPG, PNG. Maks: 2MB</p>
@@ -293,13 +280,13 @@
                     <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-left" data-aos-delay="300">
                         <h3 class="text-lg font-bold text-emerald-900 mb-4">Aksi Cepat</h3>
                         <div class="space-y-2">
-                            <button class="w-full flex items-center space-x-3 p-3 text-left bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
+                            <button class="w-full flex items-center space-x-3 p-3 text-left bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors" id="preview-btn">
                                 <i class='bx bx-show text-blue-600 text-xl'></i>
-                                <span class="font-medium text-blue-900">Pratinjau Buku</span>
+                                <span class="font-medium text-blue-900">Pratinjau Perubahan</span>
                             </button>
-                            <button class="w-full flex items-center space-x-3 p-3 text-left bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors">
+                            <button class="w-full flex items-center space-x-3 p-3 text-left bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors" id="history-btn">
                                 <i class='bx bx-history text-amber-600 text-xl'></i>
-                                <span class="font-medium text-amber-900">Riwayat Peminjaman</span>
+                                <span class="font-medium text-amber-900">Riwayat Perubahan</span>
                             </button>
                             <button class="w-full flex items-center space-x-3 p-3 text-left bg-red-50 hover:bg-red-100 rounded-lg transition-colors" id="delete-book-btn">
                                 <i class='bx bx-trash text-red-600 text-xl'></i>
@@ -312,7 +299,7 @@
 
             <!-- Action Buttons -->
             <div class="mt-6 flex justify-end space-x-4">
-                <a href="books.html" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+                <a href="book-detail.html" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium">
                     Batal
                 </a>
                 <button class="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium flex items-center" id="update-book-btn">
@@ -376,7 +363,7 @@
                 year: document.getElementById('book-year').value,
                 edition: document.getElementById('book-edition').value,
                 category: document.getElementById('book-category').value,
-                subcategory: document.getElementById('book-subcategory').value,
+                category_id: document.getElementById('book-category-id').value,
                 language: document.getElementById('book-language').value,
                 difficulty: document.getElementById('book-difficulty').value,
                 synopsis: document.getElementById('book-synopsis').value,
@@ -414,8 +401,8 @@
                     confirmButtonColor: '#10b981'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // Redirect back to books page or stay on page
-                        window.location.href = 'books.html';
+                        // Redirect back to detail page
+                        window.location.href = 'book-detail.html';
                     }
                 });
             }, 1500);
@@ -484,6 +471,67 @@
             });
         });
 
+        // Change Cover Functionality
+        document.getElementById('change-cover-btn').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Ubah Sampul Buku',
+                html: `
+                    <div class="text-center">
+                        <div class="w-32 h-40 bg-emerald-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                            <i class='bx bx-book text-4xl text-emerald-600'></i>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-4">Pilih gambar baru untuk sampul buku</p>
+                        <input type="file" id="cover-upload" class="w-full px-3 py-2 border border-gray-300 rounded-lg" accept="image/*">
+                        <div class="mt-4 text-left">
+                            <p class="text-xs text-gray-500">• Format yang didukung: JPG, PNG, WebP</p>
+                            <p class="text-xs text-gray-500">• Ukuran maksimal: 2MB</p>
+                            <p class="text-xs text-gray-500">• Rasio disarankan: 3:4</p>
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Unggah',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#10b981',
+                preConfirm: () => {
+                    const fileInput = document.getElementById('cover-upload');
+                    if (!fileInput.files[0]) {
+                        Swal.showValidationMessage('Harap pilih file gambar');
+                        return false;
+                    }
+
+                    const file = fileInput.files[0];
+                    if (file.size > 2 * 1024 * 1024) {
+                        Swal.showValidationMessage('Ukuran file maksimal 2MB');
+                        return false;
+                    }
+
+                    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+                        Swal.showValidationMessage('Format file harus JPG, PNG, atau WebP');
+                        return false;
+                    }
+
+                    return file;
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Simulate upload process
+                    Swal.fire({
+                        title: 'Mengunggah...',
+                        text: 'Sedang mengunggah gambar sampul',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    setTimeout(() => {
+                        Swal.fire('Berhasil!', 'Sampul buku berhasil diubah.', 'success');
+                    }, 1000);
+                }
+            });
+        });
+
         // Auto-calculate available copies based on status
         document.getElementById('book-copies').addEventListener('input', updateAvailableCopies);
         document.getElementById('book-status').addEventListener('change', updateAvailableCopies);
@@ -508,17 +556,89 @@
         // Initialize available copies on page load
         updateAvailableCopies();
 
-        // Quick Actions
-        document.querySelectorAll('.bg-blue-50 button, .bg-amber-50 button').forEach(button => {
-            button.addEventListener('click', function() {
-                const action = this.querySelector('.font-medium').textContent;
-                Swal.fire({
-                    title: 'Membuka Detail',
-                    text: `Membuka halaman: ${action}`,
-                    icon: 'info',
-                    confirmButtonText: 'Lanjutkan',
-                    confirmButtonColor: '#10b981'
-                });
+        // Preview Changes
+        document.getElementById('preview-btn').addEventListener('click', function() {
+            const bookData = {
+                title: document.getElementById('book-title').value,
+                author: document.getElementById('book-author').value,
+                category: document.getElementById('book-category').options[document.getElementById('book-category').selectedIndex].text,
+                status: document.getElementById('book-status').options[document.getElementById('book-status').selectedIndex].text
+            };
+
+            Swal.fire({
+                title: 'Pratinjau Perubahan',
+                html: `
+                    <div class="text-left space-y-3">
+                        <div class="bg-emerald-50 p-4 rounded-lg">
+                            <h4 class="font-bold text-emerald-900 mb-2">Perubahan yang akan disimpan:</h4>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Judul:</span>
+                                    <span class="font-medium">${bookData.title}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Penulis:</span>
+                                    <span class="font-medium">${bookData.author}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Kategori:</span>
+                                    <span class="font-medium">${bookData.category}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Status:</span>
+                                    <span class="font-medium">${bookData.status}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-600">Pastikan semua informasi sudah benar sebelum menyimpan.</p>
+                    </div>
+                `,
+                icon: 'info',
+                confirmButtonText: 'Lanjutkan Edit',
+                confirmButtonColor: '#10b981',
+                showCancelButton: true,
+                cancelButtonText: 'Simpan Sekarang'
+            }).then((result) => {
+                if (!result.isConfirmed) {
+                    updateBook();
+                }
+            });
+        });
+
+        // History Button
+        document.getElementById('history-btn').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Riwayat Perubahan',
+                html: `
+                    <div class="text-left">
+                        <div class="space-y-3 max-h-60 overflow-y-auto">
+                            <div class="p-3 bg-gray-50 rounded-lg">
+                                <div class="flex justify-between items-start mb-1">
+                                    <span class="font-medium text-sm">Diperbarui oleh Admin</span>
+                                    <span class="text-xs text-gray-500">20 Des 2023, 14:30</span>
+                                </div>
+                                <p class="text-xs text-gray-600">Mengubah jumlah eksemplar dari 3 menjadi 5</p>
+                            </div>
+                            <div class="p-3 bg-gray-50 rounded-lg">
+                                <div class="flex justify-between items-start mb-1">
+                                    <span class="font-medium text-sm">Diperbarui oleh Admin</span>
+                                    <span class="text-xs text-gray-500">15 Nov 2023, 10:15</span>
+                                </div>
+                                <p class="text-xs text-gray-600">Memperbarui lokasi rak ke A-12</p>
+                            </div>
+                            <div class="p-3 bg-gray-50 rounded-lg">
+                                <div class="flex justify-between items-start mb-1">
+                                    <span class="font-medium text-sm">Dibuat oleh Admin</span>
+                                    <span class="text-xs text-gray-500">15 Jan 2023, 09:00</span>
+                                </div>
+                                <p class="text-xs text-gray-600">Buku ditambahkan ke sistem</p>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                confirmButtonText: 'Tutup',
+                confirmButtonColor: '#10b981',
+                width: 500
             });
         });
 
@@ -540,8 +660,8 @@
             }
         });
 
-        // Handle back to books link
-        document.querySelector('a[href="books.html"]').addEventListener('click', (e) => {
+        // Handle back to detail link
+        document.querySelector('a[href="book-detail.html"]').addEventListener('click', (e) => {
             if (formChanged) {
                 e.preventDefault();
                 Swal.fire({
@@ -554,7 +674,7 @@
                     confirmButtonColor: '#d33'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = 'books.html';
+                        window.location.href = 'book-detail.html';
                     }
                 });
             }

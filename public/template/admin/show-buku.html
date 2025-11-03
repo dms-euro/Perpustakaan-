@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Buku - Admin Panel</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Flowbite -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
+    <!-- Box Icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-emerald-50 font-sans">
+    <!-- Sidebar -->
+    <div class="fixed inset-y-0 left-0 z-50 w-64 bg-emerald-800 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0" id="sidebar">
+        <div class="flex items-center justify-between p-4 border-b border-emerald-700">
+            <div class="flex items-center space-x-2">
+                <i class='bx bx-book-open text-2xl text-emerald-300'></i>
+                <span class="text-xl font-bold text-white">Admin Panel</span>
+            </div>
+            <button class="lg:hidden text-emerald-300" id="close-sidebar">
+                <i class='bx bx-x text-2xl'></i>
+            </button>
+        </div>
+
+        <nav class="p-4 space-y-2">
+            <a href="dashboard.html" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg transition-colors">
+                <i class='bx bx-home text-xl'></i>
+                <span class="font-medium">Dashboard</span>
+            </a>
+            <a href="books.html" class="flex items-center space-x-3 p-3 bg-emerald-700 text-white rounded-lg">
+                <i class='bx bx-book text-xl'></i>
+                <span class="font-medium">Manajemen Buku</span>
+            </a>
+            <a href="members.html" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg transition-colors">
+                <i class='bx bx-group text-xl'></i>
+                <span class="font-medium">Manajemen Anggota</span>
+            </a>
+            <a href="loans.html" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg transition-colors">
+                <i class='bx bx-transfer text-xl'></i>
+                <span class="font-medium">Peminjaman</span>
+            </a>
+        </nav>
+
+        <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-emerald-700">
+            <div class="flex items-center space-x-3 p-3 text-emerald-200">
+                <div class="w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center">
+                    <i class='bx bx-user text-white'></i>
+                </div>
+                <div class="flex-1">
+                    <p class="font-medium text-white">Admin User</p>
+                    <p class="text-sm text-emerald-300">Super Administrator</p>
+                </div>
+                <button class="text-emerald-300 hover:text-white transition-colors" id="logout-btn">
+                    <i class='bx bx-log-out text-xl'></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="lg:ml-64">
+        <!-- Top Header -->
+        <header class="bg-white shadow-sm border-b border-gray-200">
+            <div class="flex items-center justify-between p-4">
+                <div class="flex items-center space-x-4">
+                    <button class="lg:hidden text-emerald-700" id="open-sidebar">
+                        <i class='bx bx-menu text-2xl'></i>
+                    </button>
+                    <div>
+                        <h1 class="text-2xl font-bold text-emerald-900">Detail Buku</h1>
+                        <p class="text-sm text-gray-600">Informasi lengkap tentang buku</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <!-- Back to Books -->
+                    <a href="books.html" class="px-4 py-2 border border-emerald-600 text-emerald-700 rounded-lg hover:bg-emerald-50 transition-colors font-medium flex items-center">
+                        <i class='bx bx-arrow-back mr-2'></i>Kembali
+                    </a>
+                    <!-- Edit Button -->
+                    <a href="edit-book.html" class="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium flex items-center">
+                        <i class='bx bx-edit mr-2'></i>Edit Buku
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="p-6">
+            <!-- Book Information -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Left Column - Book Cover & Basic Info -->
+                <div class="lg:col-span-1">
+                    <!-- Book Cover -->
+                    <div class="bg-white rounded-2xl shadow-sm p-6 mb-6" data-aos="fade-right">
+                        <div class="text-center">
+                            <div class="w-48 h-64 bg-emerald-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                                <i class='bx bx-book text-6xl text-emerald-600'></i>
+                            </div>
+                            <button class="w-full px-4 py-2 border border-emerald-600 text-emerald-700 rounded-lg hover:bg-emerald-50 transition-colors text-sm mb-2">
+                                <i class='bx bx-upload mr-2'></i>Ubah Sampul
+                            </button>
+                            <p class="text-xs text-gray-500">Format: JPG, PNG. Maks: 2MB</p>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-right" data-aos-delay="100">
+                        <h3 class="text-lg font-bold text-emerald-900 mb-4">Statistik</h3>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">Total Peminjaman</span>
+                                <span class="font-bold text-emerald-900">24 kali</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">Rating</span>
+                                <div class="flex items-center">
+                                    <i class='bx bxs-star text-amber-400 mr-1'></i>
+                                    <span class="font-bold text-emerald-900">4.8/5</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">Ditambahkan</span>
+                                <span class="font-bold text-emerald-900">15 Jan 2023</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">Terakhir Diupdate</span>
+                                <span class="font-bold text-emerald-900">20 Des 2023</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column - Detailed Information -->
+                <div class="lg:col-span-2">
+                    <!-- Basic Information -->
+                    <div class="bg-white rounded-2xl shadow-sm p-6 mb-6" data-aos="fade-left">
+                        <h3 class="text-lg font-bold text-emerald-900 mb-4 flex items-center">
+                            <i class='bx bx-info-circle mr-2'></i>Informasi Dasar
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Judul Buku</label>
+                                    <div class="text-lg font-bold text-emerald-900" id="book-title">Sustainable Future</div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Penulis</label>
+                                    <div class="text-lg text-gray-900" id="book-author">Dr. Michael Green</div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">ISBN</label>
+                                    <div class="text-lg text-gray-900" id="book-isbn">978-1234567890</div>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
+                                    <div class="flex items-center">
+                                        <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-sm font-medium" id="book-category">Sains & Teknologi</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">ID Kategori</label>
+                                    <div class="text-lg text-gray-900" id="book-category-id">CAT-001</div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium" id="book-status">Tersedia</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Details -->
+                    <div class="bg-white rounded-2xl shadow-sm p-6 mb-6" data-aos="fade-left" data-aos-delay="100">
+                        <h3 class="text-lg font-bold text-emerald-900 mb-4 flex items-center">
+                            <i class='bx bx-detail mr-2'></i>Detail Tambahan
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Penerbit</label>
+                                    <div class="text-gray-900" id="book-publisher">Green Publishing</div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Tahun Terbit</label>
+                                    <div class="text-gray-900" id="book-year">2023</div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Edisi</label>
+                                    <div class="text-gray-900" id="book-edition">1st Edition</div>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Bahasa</label>
+                                    <div class="text-gray-900" id="book-language">Indonesia</div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah Halaman</label>
+                                    <div class="text-gray-900" id="book-pages">320 halaman</div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Lokasi Rak</label>
+                                    <div class="text-gray-900" id="book-location">Rak A-12</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="bg-white rounded-2xl shadow-sm p-6 mb-6" data-aos="fade-left" data-aos-delay="200">
+                        <h3 class="text-lg font-bold text-emerald-900 mb-4 flex items-center">
+                            <i class='bx bx-file mr-2'></i>Deskripsi & Sinopsis
+                        </h3>
+                        <div class="prose max-w-none">
+                            <p class="text-gray-700 leading-relaxed" id="book-description">
+                                Buku "Sustainable Future" karya Dr. Michael Green membahas tentang masa depan berkelanjutan dengan pendekatan teknologi hijau dan solusi inovatif untuk tantangan lingkungan global. Buku ini menyajikan pandangan komprehensif tentang bagaimana kita dapat membangun dunia yang lebih baik untuk generasi mendatang melalui penerapan prinsip-prinsip keberlanjutan dalam berbagai aspek kehidupan.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Inventory Information -->
+                    <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-left" data-aos-delay="300">
+                        <h3 class="text-lg font-bold text-emerald-900 mb-4 flex items-center">
+                            <i class='bx bx-package mr-2'></i>Informasi Inventori
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-emerald-900" id="book-total-copies">5</div>
+                                <div class="text-sm text-gray-600">Total Eksemplar</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-green-600" id="book-available-copies">3</div>
+                                <div class="text-sm text-gray-600">Tersedia</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-amber-600" id="book-borrowed-copies">2</div>
+                                <div class="text-sm text-gray-600">Dipinjam</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loan History -->
+            <div class="bg-white rounded-2xl shadow-sm p-6 mt-6" data-aos="fade-up">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold text-emerald-900">Riwayat Peminjaman Terbaru</h3>
+                    <button class="px-4 py-2 border border-emerald-600 text-emerald-700 rounded-lg hover:bg-emerald-50 transition-colors text-sm">
+                        Lihat Semua Riwayat
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Peminjam</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Pinjam</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jatuh Tempo</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Kembali</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center mr-3">
+                                            <i class='bx bx-user text-emerald-600 text-sm'></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-medium text-emerald-900">Ahmad Rizki</div>
+                                            <div class="text-xs text-gray-500">MEM-8542</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">15 Des 2023</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">29 Des 2023</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">28 Des 2023</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Dikembalikan</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center mr-3">
+                                            <i class='bx bx-user text-emerald-600 text-sm'></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-medium text-emerald-900">Sari Dewi</div>
+                                            <div class="text-xs text-gray-500">MEM-8541</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">10 Des 2023</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">24 Des 2023</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">-</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 py-1 bg-amber-100 text-amber-800 text-xs rounded-full">Dipinjam</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="mt-6 flex justify-end space-x-4">
+                <a href="books.html" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+                    Kembali ke Daftar
+                </a>
+                <a href="edit-book.html" class="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium flex items-center">
+                    <i class='bx bx-edit mr-2'></i>Edit Buku
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+
+        // Sidebar functionality
+        const sidebar = document.getElementById('sidebar');
+        const openSidebar = document.getElementById('open-sidebar');
+        const closeSidebar = document.getElementById('close-sidebar');
+
+        openSidebar.addEventListener('click', () => {
+            sidebar.classList.remove('-translate-x-full');
+        });
+
+        closeSidebar.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+        });
+
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            Swal.fire({
+                title: 'Konfirmasi Logout',
+                text: 'Apakah Anda yakin ingin keluar dari panel admin?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Logout',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#10b981'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'login.html';
+                }
+            });
+        });
+
+        // Sample book data (in real app, this would come from API)
+        const bookData = {
+            id: 1,
+            title: 'Sustainable Future',
+            author: 'Dr. Michael Green',
+            isbn: '978-1234567890',
+            category: 'Sains & Teknologi',
+            category_id: 'CAT-001',
+            publisher: 'Green Publishing',
+            year: '2023',
+            edition: '1st Edition',
+            language: 'Indonesia',
+            pages: '320',
+            location: 'Rak A-12',
+            status: 'Tersedia',
+            description: 'Buku "Sustainable Future" karya Dr. Michael Green membahas tentang masa depan berkelanjutan dengan pendekatan teknologi hijau dan solusi inovatif untuk tantangan lingkungan global. Buku ini menyajikan pandangan komprehensif tentang bagaimana kita dapat membangun dunia yang lebih baik untuk generasi mendatang melalui penerapan prinsip-prinsip keberlanjutan dalam berbagai aspek kehidupan.',
+            total_copies: 5,
+            available_copies: 3,
+            borrowed_copies: 2,
+            added_date: '15 Jan 2023',
+            updated_date: '20 Des 2023',
+            total_loans: 24,
+            rating: '4.8'
+        };
+
+        // Populate book data
+        function populateBookData() {
+            document.getElementById('book-title').textContent = bookData.title;
+            document.getElementById('book-author').textContent = bookData.author;
+            document.getElementById('book-isbn').textContent = bookData.isbn;
+            document.getElementById('book-category').textContent = bookData.category;
+            document.getElementById('book-category-id').textContent = bookData.category_id;
+            document.getElementById('book-publisher').textContent = bookData.publisher;
+            document.getElementById('book-year').textContent = bookData.year;
+            document.getElementById('book-edition').textContent = bookData.edition;
+            document.getElementById('book-language').textContent = bookData.language;
+            document.getElementById('book-pages').textContent = `${bookData.pages} halaman`;
+            document.getElementById('book-location').textContent = bookData.location;
+            document.getElementById('book-status').textContent = bookData.status;
+            document.getElementById('book-description').textContent = bookData.description;
+            document.getElementById('book-total-copies').textContent = bookData.total_copies;
+            document.getElementById('book-available-copies').textContent = bookData.available_copies;
+            document.getElementById('book-borrowed-copies').textContent = bookData.borrowed_copies;
+
+            // Update status color based on availability
+            const statusElement = document.getElementById('book-status');
+            if (bookData.status === 'Tersedia') {
+                statusElement.className = 'px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium';
+            } else if (bookData.status === 'Dipinjam') {
+                statusElement.className = 'px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm font-medium';
+            } else {
+                statusElement.className = 'px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium';
+            }
+        }
+
+        // Change cover image functionality
+        document.querySelector('button').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Ubah Sampul Buku',
+                html: `
+                    <div class="text-center">
+                        <div class="w-32 h-40 bg-emerald-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                            <i class='bx bx-book text-4xl text-emerald-600'></i>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-4">Pilih gambar baru untuk sampul buku</p>
+                        <input type="file" class="w-full px-3 py-2 border border-gray-300 rounded-lg" accept="image/*">
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Unggah',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#10b981'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire('Berhasil!', 'Sampul buku berhasil diubah.', 'success');
+                }
+            });
+        });
+
+        // Initialize the page
+        populateBookData();
+
+        // Print functionality
+        const printButton = document.createElement('button');
+        printButton.className = 'px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium flex items-center';
+        printButton.innerHTML = '<i class="bx bx-printer mr-2"></i>Cetak Detail';
+        printButton.addEventListener('click', function() {
+            window.print();
+        });
+
+        // Add print button to action buttons
+        document.querySelector('.flex.justify-end.space-x-4').prepend(printButton);
+
+        // Share functionality
+        const shareButton = document.createElement('button');
+        shareButton.className = 'px-4 py-2 border border-emerald-600 text-emerald-700 rounded-lg hover:bg-emerald-50 transition-colors font-medium flex items-center';
+        shareButton.innerHTML = '<i class="bx bx-share-alt mr-2"></i>Bagikan';
+        shareButton.addEventListener('click', function() {
+            Swal.fire({
+                title: 'Bagikan Detail Buku',
+                html: `
+                    <div class="text-left space-y-4">
+                        <p class="text-sm text-gray-600">Pilih metode berbagi:</p>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button class="p-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-center">
+                                <i class='bx bx-envelope text-blue-600 text-xl mb-2'></i>
+                                <div class="text-sm font-medium">Email</div>
+                            </button>
+                            <button class="p-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-center">
+                                <i class='bx bx-copy text-emerald-600 text-xl mb-2'></i>
+                                <div class="text-sm font-medium">Salin Link</div>
+                            </button>
+                        </div>
+                    </div>
+                `,
+                showConfirmButton: false,
+                showCloseButton: true
+            });
+        });
+
+        // Add share button to action buttons
+        document.querySelector('.flex.justify-end.space-x-4').prepend(shareButton);
+    </script>
+</body>
+</html>

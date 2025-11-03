@@ -15,9 +15,9 @@ class BukuController extends Controller
     {
         $buku = Buku::with('kategori')->get();
         $kategori = Kategori::all();
-        return view('admin.buku', compact('kategori','buku'));
+        return view('admin.buku', compact('kategori', 'buku'));
     }
-    
+
     /**
      * Show the form for creating a new resource.
      */
@@ -45,27 +45,37 @@ class BukuController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Buku $buku)
+    public function show($id)
     {
-        //
+        $buku = Buku::findOrFail($id);
+        $kategori = Kategori::all();
+        return view('admin.show-buku', compact('buku', 'kategori'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Buku $id)
+    public function edit($id)
     {
-        $buku = Buku::all();
-        return view('admin.edit-buku',compact($buku));
+        $buku = Buku::findOrFail($id);
+        $kategori = Kategori::all(); // kalau kamu punya tabel kategori
+        return view('admin.edit-buku', compact('buku', 'kategori'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Buku $buku)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'judul' => 'required|string',
+            'penulis' => 'required|string',
+            'isbn' => 'required|string',
+            'kategori_id' => 'required|exists:kategori,id',
+        ]);
+
+        $buku = Buku::findOrFail($id);
+        $buku->update($request->all());
+        return redirect()->route('buku.index')->with('success', 'Buku berhasil diperbarui.');
     }
+
 
     /**
      * Remove the specified resource from storage.

@@ -74,8 +74,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Add Member Form (Hidden by Default) -->
             <div class="bg-white rounded-2xl shadow-sm p-6 mb-3" data-aos="fade-up">
                 <h3 class=" text-lg font-bold text-emerald-900 mb-4">Tambah Anggota</h3>
                 <form action="{{ route('anggota.store') }}" method="POST" id="add-book-form"
