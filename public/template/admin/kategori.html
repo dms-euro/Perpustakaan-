@@ -1,604 +1,255 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manajemen Buku & Kategori - Admin Panel</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- AOS -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <!-- Flowbite -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
-    <!-- Box Icons -->
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manajemen Kategori | Perpustakaan Digital</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: { emerald: { 600: '#10b981', 700: '#059669' } },
+          boxShadow: { 'floating': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' }
+        }
+      }
+    }
+  </script>
+
+  <!-- Boxicons -->
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+  <!-- AOS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- Inter Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-emerald-50 font-sans">
+<body class="bg-gray-50 min-h-screen font-sans">
 
-    <!-- Main Content -->
-    <div class="lg:ml-64">
-        <!-- Top Header -->
-        <header class="bg-white shadow-sm border-b border-gray-200">
-            <div class="flex items-center justify-between p-4">
-                <div class="flex items-center space-x-4">
-                    <button class="lg:hidden text-emerald-700" id="open-sidebar">
-                        <i class='bx bx-menu text-2xl'></i>
-                    </button>
-                    <h1 class="text-2xl font-bold text-emerald-900">Manajemen Buku & Kategori</h1>
-                </div>
+  <!-- FLOATING SIDEBAR -->
+  <aside class="fixed left-6 top-6 bottom-6 w-64 bg-white/90 backdrop-blur-xl rounded-3xl shadow-floating z-50 transition-all duration-300 hover:shadow-2xl"
+          data-aos="fade-right" data-aos-delay="100">
+    <div class="flex flex-col h-full p-6">
+      <!-- Logo -->
+      <div class="flex items-center space-x-3 mb-10">
+        <div class="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center shadow-lg">
+          <i class='bx bxs-book-open text-2xl text-white'></i>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold text-gray-800">Perpustakaan</h1>
+          <p class="text-xs text-gray-500">Digital</p>
+        </div>
+      </div>
 
-                <div class="flex items-center space-x-4">
-                    <button class="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium flex items-center" id="add-book-btn">
-                        <i class='bx bx-plus mr-2'></i>Tambah Buku
-                    </button>
-                </div>
-            </div>
-        </header>
+      <!-- Nav Menu -->
+      <nav class="flex-1 space-y-2">
+        <a href="/admin/dashboard" class="flex items-center space-x-3 p-3 rounded-2xl text-gray-700 hover:bg-emerald-50 transition group">
+          <i class='bx bx-home-alt text-xl group-hover:text-emerald-600'></i>
+          <span class="font-medium">Dashboard</span>
+        </a>
+        <a href="/admin/buku" class="flex items-center space-x-3 p-3 rounded-2xl text-gray-700 hover:bg-emerald-50 transition group">
+          <i class='bx bxs-book text-xl group-hover:text-emerald-600'></i>
+          <span class="font-medium">Manajemen Buku</span>
+        </a>
+        <a href="/admin/kategori" class="flex items-center space-x-3 p-3 rounded-2xl bg-emerald-600 text-white shadow-md scale-105 transform transition">
+          <i class='bx bx-category text-xl'></i>
+          <span class="font-medium">Kategori Buku</span>
+        </a>
+        <a href="#" class="flex items-center space-x-3 p-3 rounded-2xl text-gray-700 hover:bg-emerald-50 transition group">
+          <i class='bx bxs-user text-xl group-hover:text-emerald-600'></i>
+          <span class="font-medium">Anggota</span>
+        </a>
+        <a href="#" class="flex items-center space-x-3 p-3 rounded-2xl text-gray-700 hover:bg-emerald-50 transition group">
+          <i class='bx bx-history text-xl group-hover:text-emerald-600'></i>
+          <span class="font-medium">Peminjaman</span>
+        </a>
+      </nav>
 
-        <!-- Main Content Area -->
-        <main class="p-6">
-            <!-- Section 1: Kiri - Tabel Kategori, Kanan - Form Tambah Buku -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                <!-- Kiri: Tabel Kategori -->
-                <div class="lg:col-span-1">
-                    <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-right">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-bold text-emerald-900">Daftar Kategori</h3>
-                            <button class="px-3 py-1 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors text-sm flex items-center" id="add-category-btn">
-                                <i class='bx bx-plus mr-1'></i> Tambah
-                            </button>
-                        </div>
+      <!-- Logout -->
+      <button onclick="logout()" class="mt-auto p-3 rounded-2xl bg-red-50 hover:bg-red-100 text-red-600 flex items-center space-x-3 transition">
+        <i class='bx bx-log-out text-xl'></i>
+        <span class="font-medium">Keluar</span>
+      </button>
+    </div>
+  </aside>
 
-                        <div class="overflow-x-auto">
-                            <table class="w-full">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah</th>
-                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200" id="categories-table-body">
-                                    <!-- Categories will be dynamically added here -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+  <!-- Main Content -->
+  <div class="lg:ml-80 p-6 lg:p-10">
+    <header class="mb-8" data-aos="fade-down">
+      <h2 class="text-3xl font-bold text-gray-800">Manajemen Kategori</h2>
+      <p class="text-gray-600">Atur kategori buku perpustakaan</p>
+    </header>
 
-                <!-- Kanan: Form Tambah Buku -->
-                <div class="lg:col-span-2">
-                    <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-left">
-                        <h3 class="text-lg font-bold text-emerald-900 mb-4">Tambah Buku Baru</h3>
-                        <form id="add-book-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Judul Buku *</label>
-                                    <input type="text" name="book-title" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" placeholder="Masukkan judul buku">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Penulis *</label>
-                                    <input type="text" name="book-author" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" placeholder="Nama penulis">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Kategori *</label>
-                                    <select name="book-category" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" id="category-select">
-                                        <!-- Categories will be dynamically populated -->
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">ISBN</label>
-                                    <input type="text" name="book-isbn" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" placeholder="Nomor ISBN">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Lokasi Rak *</label>
-                                    <input type="text" name="book-location" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" placeholder="Contoh: Rak A-12">
-                                </div>
-                                <div class="flex items-end">
-                                    <button type="submit" class="w-full px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium">
-                                        <i class='bx bx-save mr-2'></i>Simpan Buku
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section 2: 2 Card di atas tabel buku -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <!-- Card 1: Statistik Buku -->
-                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-600">Total Buku</p>
-                            <p class="text-3xl font-bold text-emerald-900" id="total-books">0</p>
-                            <p class="text-sm text-emerald-600 flex items-center">
-                                <i class='bx bx-book mr-1'></i>Dalam koleksi
-                            </p>
-                        </div>
-                        <div class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
-                            <i class='bx bx-library text-2xl text-emerald-600'></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 2: Statistik Kategori -->
-                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up" data-aos-delay="100">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-600">Total Kategori</p>
-                            <p class="text-3xl font-bold text-emerald-900" id="total-categories">0</p>
-                            <p class="text-sm text-emerald-600 flex items-center">
-                                <i class='bx bx-category mr-1'></i>Kategori aktif
-                            </p>
-                        </div>
-                        <div class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
-                            <i class='bx bx-bookmark text-2xl text-emerald-600'></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section 3: Tabel Buku dengan Search -->
-            <div class="bg-white rounded-2xl shadow-sm overflow-hidden" data-aos="fade-up">
-                <!-- Search and Filters -->
-                <div class="px-6 py-4 border-b border-gray-200">
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
-                        <div class="flex-1">
-                            <div class="relative max-w-md">
-                                <input type="text" id="search-books" placeholder="Cari judul, penulis, atau ISBN..."
-                                       class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
-                                <i class='bx bx-search absolute left-3 top-2.5 text-gray-400'></i>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-4">
-                            <select id="category-filter" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500">
-                                <option value="">Semua Kategori</option>
-                                <!-- Categories will be dynamically populated -->
-                            </select>
-                            <select id="status-filter" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500">
-                                <option value="">Semua Status</option>
-                                <option value="Tersedia">Tersedia</option>
-                                <option value="Dipinjam">Dipinjam</option>
-                                <option value="Perbaikan">Perbaikan</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Table -->
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Buku</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Penulis</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ISBN</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lokasi</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200" id="books-table-body">
-                            <!-- Books will be dynamically added here -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Table Footer -->
-                <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
-                    <div class="text-sm text-gray-700">
-                        Menampilkan <span class="font-medium" id="showing-count">0</span> dari <span class="font-medium" id="total-count">0</span> buku
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <button class="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors" id="prev-page">
-                            Sebelumnya
-                        </button>
-                        <button class="px-3 py-1 bg-emerald-600 text-white rounded-lg text-sm hover:bg-emerald-700 transition-colors" id="current-page">
-                            1
-                        </button>
-                        <button class="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors" id="next-page">
-                            Selanjutnya
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </main>
+    <!-- Controls -->
+    <div class="bg-white rounded-2xl shadow-md p-6 mb-6 flex justify-between items-center" data-aos="fade-up">
+      <div>
+        <p class="text-sm text-gray-600">Total: <span id="totalCategories" class="font-bold text-emerald-600">0</span> Kategori</p>
+      </div>
+      <button onclick="openAddModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl flex items-center space-x-2">
+        <i class='bx bx-plus'></i> <span>Tambah Kategori</span>
+      </button>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
-    <script>
-        // Initialize AOS
-        AOS.init({
-            duration: 800,
-            once: true,
-            offset: 100
+    <!-- Tabel Kategori -->
+    <div class="bg-white rounded-2xl shadow-md overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+      <div class="overflow-x-auto">
+        <table class="w-full" id="categoryTable">
+          <thead class="bg-emerald-50">
+            <tr>
+              <th class="px-6 py-4 text-left text-xs font-medium text-emerald-800 uppercase tracking-wider">No</th>
+              <th class="px-6 py-4 text-left text-xs font-medium text-emerald-800 uppercase tracking-wider">Nama Kategori</th>
+              <th class="px-6 py-4 text-xs font-medium text-emerald-800 uppercase tracking-wider text-center">Jumlah Buku</th>
+              <th class="px-6 py-4 text-xs font-medium text-emerald-800 uppercase tracking-wider text-center">Aksi</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200" id="categoryBody">
+            <!-- JS akan isi -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Tambah/Edit Kategori -->
+  <div id="categoryModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md" data-aos="zoom-in">
+      <div class="flex justify-between items-center mb-6">
+        <h3 id="modalTitle" class="text-2xl font-bold">Tambah Kategori</h3>
+        <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+          <i class='bx bx-x text-2xl'></i>
+        </button>
+      </div>
+      <form id="categoryForm" class="space-y-5">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Nama Kategori</label>
+          <input type="text" name="nama" required class="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="Contoh: Fiksi">
+        </div>
+        <div class="flex space-x-3">
+          <button type="submit" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl">Simpan</button>
+          <button type="button" onclick="closeModal()" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 py-3 rounded-xl">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    AOS.init({ once: true });
+
+    // Data Dummy Kategori + Jumlah Buku
+    let categories = [
+      { id: 1, nama: "Fiksi", jumlahBuku: 145 },
+      { id: 2, nama: "Non-Fiksi", jumlahBuku: 98 },
+      { id: 3, nama: "Sains", jumlahBuku: 67 },
+      { id: 4, nama: "Sejarah", jumlahBuku: 54 },
+    ];
+
+    // Render Tabel
+    function renderTable() {
+      const tbody = document.getElementById('categoryBody');
+      tbody.innerHTML = '';
+      categories.forEach((cat, index) => {
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-gray-50 transition';
+        row.innerHTML = `
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">${index + 1}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${cat.nama}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-center">
+            <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-medium">${cat.jumlahBuku}</span>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-center text-sm">
+            <button onclick="editCategory(${cat.id})" class="text-yellow-600 hover:text-yellow-800 mr-3"><i class='bx bx-edit'></i></button>
+            <button onclick="deleteCategory(${cat.id})" class="text-red-600 hover:text-red-800"><i class='bx bx-trash'></i></button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+      document.getElementById('totalCategories').textContent = categories.length;
+    }
+    renderTable();
+
+    // Modal
+    let editingId = null;
+    function openAddModal() {
+      document.getElementById('modalTitle').textContent = 'Tambah Kategori';
+      document.getElementById('categoryForm').reset();
+      editingId = null;
+      document.getElementById('categoryModal').classList.remove('hidden');
+    }
+    function closeModal() {
+      document.getElementById('categoryModal').classList.add('hidden');
+    }
+
+    // Form Submit
+    document.getElementById('categoryForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const nama = this.nama.value.trim();
+      if (!nama) return;
+
+      if (editingId) {
+        const cat = categories.find(c => c.id === editingId);
+        cat.nama = nama;
+        Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Kategori diperbarui', timer: 1500, showConfirmButton: false });
+      } else {
+        categories.push({
+          id: Date.now(),
+          nama: nama,
+          jumlahBuku: 0 // baru, belum ada buku
         });
+        Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Kategori ditambahkan', timer: 1500, showConfirmButton: false });
+      }
 
-        // Sidebar functionality
-        const sidebar = document.getElementById('sidebar');
-        const openSidebar = document.getElementById('open-sidebar');
-        const closeSidebar = document.getElementById('close-sidebar');
+      renderTable();
+      closeModal();
+    });
 
-        openSidebar.addEventListener('click', () => {
-            sidebar.classList.remove('-translate-x-full');
-        });
+    // Edit
+    function editCategory(id) {
+      const cat = categories.find(c => c.id === id);
+      document.querySelector('[name="nama"]').value = cat.nama;
+      editingId = id;
+      document.getElementById('modalTitle').textContent = 'Edit Kategori';
+      document.getElementById('categoryModal').classList.remove('hidden');
+    }
 
-        closeSidebar.addEventListener('click', () => {
-            sidebar.classList.add('-translate-x-full');
-        });
-
-        // Logout functionality
-        document.getElementById('logout-btn').addEventListener('click', () => {
-            Swal.fire({
-                title: 'Konfirmasi Logout',
-                text: 'Apakah Anda yakin ingin keluar dari panel admin?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, Logout',
-                cancelButtonText: 'Batal',
-                confirmButtonColor: '#10b981'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = 'login.html';
-                }
-            });
-        });
-
-        // Data storage
-        let categories = [
-            { id: 1, name: 'Sains & Teknologi', bookCount: 1245 },
-            { id: 2, name: 'Sastra', bookCount: 892 },
-            { id: 3, name: 'Bisnis & Ekonomi', bookCount: 756 },
-            { id: 4, name: 'Sejarah', bookCount: 634 },
-            { id: 5, name: 'Filsafat', bookCount: 512 },
-            { id: 6, name: 'Kesehatan', bookCount: 423 }
-        ];
-
-        let books = [
-            { id: 1, title: 'Sustainable Future', author: 'Dr. Michael Green', category: 'Sains & Teknologi', isbn: '978-1234567890', status: 'Tersedia', location: 'Rak A-12' },
-            { id: 2, title: 'Digital Transformation', author: 'Sarah Johnson', category: 'Bisnis & Ekonomi', isbn: '978-1234567891', status: 'Dipinjam', location: 'Rak B-05' },
-            { id: 3, title: 'Mindful Living', author: 'Emma Wilson', category: 'Kesehatan', isbn: '978-1234567892', status: 'Tersedia', location: 'Rak C-08' },
-            { id: 4, title: 'The Art of Programming', author: 'Robert Martin', category: 'Sains & Teknologi', isbn: '978-1234567893', status: 'Tersedia', location: 'Rak A-15' },
-            { id: 5, title: 'Ancient Civilizations', author: 'Prof. David Lee', category: 'Sejarah', isbn: '978-1234567894', status: 'Perbaikan', location: 'Gudang' }
-        ];
-
-        // Initialize categories table
-        function initializeCategoriesTable() {
-            const tbody = document.getElementById('categories-table-body');
-            const select = document.getElementById('category-select');
-            const filterSelect = document.getElementById('category-filter');
-
-            // Clear existing content
-            tbody.innerHTML = '';
-            select.innerHTML = '<option value="">Pilih Kategori</option>';
-            filterSelect.innerHTML = '<option value="">Semua Kategori</option>';
-
-            // Add categories to table and selects
-            categories.forEach(category => {
-                // Add to table
-                tbody.innerHTML += `
-                    <tr class="hover:bg-gray-50 transition-colors" data-category-id="${category.id}">
-                        <td class="px-4 py-3 whitespace-nowrap">
-                            <div class="text-sm font-medium text-emerald-900">${category.name}</div>
-                        </td>
-                        <td class="px-4 py-3 whitespace-nowrap">
-                            <span class="px-2 py-1 bg-emerald-100 text-emerald-800 text-xs rounded-full">${category.bookCount} buku</span>
-                        </td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm font-medium">
-                            <div class="flex items-center space-x-2">
-                                <button class="text-emerald-600 hover:text-emerald-900 edit-category" data-id="${category.id}">
-                                    <i class='bx bx-edit text-lg'></i>
-                                </button>
-                                <button class="text-red-600 hover:text-red-900 delete-category" data-id="${category.id}">
-                                    <i class='bx bx-trash text-lg'></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-
-                // Add to select dropdowns
-                select.innerHTML += `<option value="${category.id}">${category.name}</option>`;
-                filterSelect.innerHTML += `<option value="${category.name}">${category.name}</option>`;
-            });
-
-            // Update category count
-            document.getElementById('total-categories').textContent = categories.length;
+    // Hapus
+    function deleteCategory(id) {
+      const cat = categories.find(c => c.id === id);
+      Swal.fire({
+        icon: 'warning',
+        title: 'Hapus Kategori?',
+        text: `"${cat.nama}" akan dihapus. Buku di kategori ini tidak terpengaruh.`,
+        showCancelButton: true,
+        confirmButtonText: 'Hapus',
+        confirmButtonColor: '#dc2626'
+      }).then(res => {
+        if (res.isConfirmed) {
+          categories = categories.filter(c => c.id !== id);
+          renderTable();
+          Swal.fire({ icon: 'success', title: 'Terhapus!', text: 'Kategori telah dihapus', timer: 1500, showConfirmButton: false });
         }
+      });
+    }
 
-        // Initialize books table
-        function initializeBooksTable() {
-            const tbody = document.getElementById('books-table-body');
-            tbody.innerHTML = '';
-
-            books.forEach(book => {
-                const statusColor = book.status === 'Tersedia' ? 'bg-green-100 text-green-800' :
-                                 book.status === 'Dipinjam' ? 'bg-amber-100 text-amber-800' :
-                                 'bg-red-100 text-red-800';
-
-                tbody.innerHTML += `
-                    <tr class="hover:bg-gray-50 transition-colors" data-book-id="${book.id}">
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div class="w-10 h-12 bg-emerald-100 rounded flex items-center justify-center mr-3">
-                                    <i class='bx bx-book text-emerald-600'></i>
-                                </div>
-                                <div>
-                                    <div class="text-sm font-medium text-emerald-900">${book.title}</div>
-                                    <div class="text-xs text-gray-500">ID: BK-${book.id.toString().padStart(3, '0')}</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900">${book.author}</div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 py-1 bg-emerald-100 text-emerald-800 text-xs rounded-full">${book.category}</span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${book.isbn}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 py-1 ${statusColor} text-xs rounded-full">${book.status}</span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${book.location}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <div class="flex items-center space-x-2">
-                                <button class="text-emerald-600 hover:text-emerald-900 edit-book" data-id="${book.id}">
-                                    <i class='bx bx-edit text-lg'></i>
-                                </button>
-                                <button class="text-amber-600 hover:text-amber-900 view-book" data-id="${book.id}">
-                                    <i class='bx bx-show text-lg'></i>
-                                </button>
-                                <button class="text-red-600 hover:text-red-900 delete-book" data-id="${book.id}">
-                                    <i class='bx bx-trash text-lg'></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-            });
-
-            // Update book counts
-            document.getElementById('total-books').textContent = books.length;
-            document.getElementById('showing-count').textContent = books.length;
-            document.getElementById('total-count').textContent = books.length;
-        }
-
-        // Add Category Functionality
-        document.getElementById('add-category-btn').addEventListener('click', function() {
-            Swal.fire({
-                title: 'Tambah Kategori Baru',
-                html: `
-                    <div class="text-left space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Nama Kategori *</label>
-                            <input type="text" id="new-category-name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500" placeholder="Nama kategori">
-                        </div>
-                    </div>
-                `,
-                showCancelButton: true,
-                confirmButtonText: 'Simpan Kategori',
-                cancelButtonText: 'Batal',
-                confirmButtonColor: '#10b981',
-                preConfirm: () => {
-                    const name = document.getElementById('new-category-name').value;
-                    if (!name) {
-                        Swal.showValidationMessage('Nama kategori wajib diisi');
-                        return false;
-                    }
-
-                    // Check if category already exists
-                    if (categories.some(cat => cat.name.toLowerCase() === name.toLowerCase())) {
-                        Swal.showValidationMessage('Kategori dengan nama tersebut sudah ada');
-                        return false;
-                    }
-
-                    return { name: name };
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const newCategory = {
-                        id: categories.length + 1,
-                        name: result.value.name,
-                        bookCount: 0
-                    };
-
-                    categories.push(newCategory);
-                    initializeCategoriesTable();
-
-                    Swal.fire('Berhasil!', `Kategori "${newCategory.name}" berhasil ditambahkan.`, 'success');
-                }
-            });
-        });
-
-        // Add Book Form
-        document.getElementById('add-book-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const formData = new FormData(this);
-            const selectedCategory = categories.find(cat => cat.id == formData.get('book-category'));
-
-            if (!selectedCategory) {
-                Swal.fire('Error!', 'Harap pilih kategori.', 'error');
-                return;
-            }
-
-            const newBook = {
-                id: books.length + 1,
-                title: formData.get('book-title'),
-                author: formData.get('book-author'),
-                category: selectedCategory.name,
-                isbn: formData.get('book-isbn') || '-',
-                status: 'Tersedia',
-                location: formData.get('book-location')
-            };
-
-            if (!newBook.title || !newBook.author || !newBook.location) {
-                Swal.fire('Error!', 'Harap isi semua field yang wajib.', 'error');
-                return;
-            }
-
-            // Update book count in category
-            selectedCategory.bookCount++;
-
-            books.push(newBook);
-            initializeBooksTable();
-            initializeCategoriesTable(); // Refresh categories to update book counts
-            this.reset();
-
-            Swal.fire('Berhasil!', `Buku "${newBook.title}" berhasil ditambahkan.`, 'success');
-        });
-
-        // Delete Category
-        document.addEventListener('click', function(e) {
-            if (e.target.closest('.delete-category')) {
-                const categoryId = parseInt(e.target.closest('.delete-category').getAttribute('data-id'));
-                const category = categories.find(cat => cat.id === categoryId);
-
-                if (category.bookCount > 0) {
-                    Swal.fire({
-                        title: 'Tidak Dapat Dihapus',
-                        html: `Kategori <strong>"${category.name}"</strong> memiliki ${category.bookCount} buku. Pindahkan buku ke kategori lain terlebih dahulu.`,
-                        icon: 'warning',
-                        confirmButtonText: 'Mengerti',
-                        confirmButtonColor: '#10b981'
-                    });
-                    return;
-                }
-
-                Swal.fire({
-                    title: 'Hapus Kategori?',
-                    html: `Anda akan menghapus kategori: <strong>"${category.name}"</strong>`,
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonText: 'Ya, Hapus!',
-                    cancelButtonText: 'Batal',
-                    confirmButtonColor: '#d33',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        categories = categories.filter(cat => cat.id !== categoryId);
-                        initializeCategoriesTable();
-                        Swal.fire('Terhapus!', 'Kategori berhasil dihapus.', 'success');
-                    }
-                });
-            }
-        });
-
-        // Delete Book
-        document.addEventListener('click', function(e) {
-            if (e.target.closest('.delete-book')) {
-                const bookId = parseInt(e.target.closest('.delete-book').getAttribute('data-id'));
-                const book = books.find(b => b.id === bookId);
-                const category = categories.find(cat => cat.name === book.category);
-
-                Swal.fire({
-                    title: 'Hapus Buku?',
-                    html: `Anda akan menghapus buku: <strong>"${book.title}"</strong> oleh ${book.author}`,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Ya, Hapus!',
-                    cancelButtonText: 'Batal',
-                    confirmButtonColor: '#d33',
-                    reverseButtons: true,
-                    showLoaderOnConfirm: true,
-                    preConfirm: () => {
-                        return new Promise((resolve) => {
-                            setTimeout(() => {
-                                // Update category book count
-                                if (category) {
-                                    category.bookCount = Math.max(0, category.bookCount - 1);
-                                }
-
-                                // Remove book
-                                books = books.filter(b => b.id !== bookId);
-                                initializeBooksTable();
-                                initializeCategoriesTable();
-                                resolve();
-                            }, 1000);
-                        });
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        Swal.fire('Terhapus!', 'Buku berhasil dihapus.', 'success');
-                    }
-                });
-            }
-        });
-
-        // Search functionality
-        document.getElementById('search-books').addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            const rows = document.querySelectorAll('#books-table-body tr');
-
-            rows.forEach(row => {
-                const text = row.textContent.toLowerCase();
-                row.style.display = text.includes(searchTerm) ? '' : 'none';
-            });
-
-            // Update showing count
-            const visibleRows = Array.from(rows).filter(row => row.style.display !== 'none');
-            document.getElementById('showing-count').textContent = visibleRows.length;
-        });
-
-        // Filter by category
-        document.getElementById('category-filter').addEventListener('change', function(e) {
-            const selectedCategory = e.target.value;
-            const rows = document.querySelectorAll('#books-table-body tr');
-
-            rows.forEach(row => {
-                const category = row.querySelector('td:nth-child(3)').textContent;
-                if (!selectedCategory || category === selectedCategory) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-
-            // Update showing count
-            const visibleRows = Array.from(rows).filter(row => row.style.display !== 'none');
-            document.getElementById('showing-count').textContent = visibleRows.length;
-        });
-
-        // Filter by status
-        document.getElementById('status-filter').addEventListener('change', function(e) {
-            const selectedStatus = e.target.value;
-            const rows = document.querySelectorAll('#books-table-body tr');
-
-            rows.forEach(row => {
-                const status = row.querySelector('td:nth-child(5)').textContent;
-                if (!selectedStatus || status === selectedStatus) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-
-            // Update showing count
-            const visibleRows = Array.from(rows).filter(row => row.style.display !== 'none');
-            document.getElementById('showing-count').textContent = visibleRows.length;
-        });
-
-        // Add Book Button
-        document.getElementById('add-book-btn').addEventListener('click', function() {
-            document.getElementById('add-book-form').scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        });
-
-        // Initialize the page
-        initializeCategoriesTable();
-        initializeBooksTable();
-    </script>
+    // Logout
+    function logout() {
+      Swal.fire({
+        icon: 'question',
+        title: 'Keluar?',
+        showCancelButton: true,
+        confirmButtonText: 'Ya'
+      }).then(res => {
+        if (res.isConfirmed) window.location.href = '/index.html';
+      });
+    }
+  </script>
 </body>
 </html>

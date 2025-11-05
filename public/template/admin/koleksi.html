@@ -1,554 +1,372 @@
 <!DOCTYPE html>
-<html lang="id">
-
+<html lang="id" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manajemen Buku - Admin Panel</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- AOS -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <!-- Flowbite -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
-    <!-- Box Icons -->
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manajemen Buku | Perpustakaan Digital</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          animation: { 'float': 'float 3s ease-in-out infinite' },
+          keyframes: { float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } } }
+        }
+      }
+    }
+  </script>
+
+  <!-- Boxicons -->
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+  <!-- AOS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <!-- Fuse.js (Realtime Search) -->
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
+
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- Inter Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
+<body class="bg-gray-50 min-h-screen font-sans">
 
-<body class="bg-emerald-50 font-sans">
-    <!-- ===== SIDEBAR ===== -->
-    <aside id="sidebar"
-        class="fixed inset-y-0 left-0 z-50 w-64 bg-emerald-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
-        <div class="flex items-center justify-between p-4 border-b border-emerald-700">
-            <div class="flex items-center space-x-2">
-                <i class='bx bx-book-open text-2xl text-emerald-300'></i>
-                <span class="text-xl font-bold text-white">Admin Panel</span>
-            </div>
-            <button id="close-sidebar" class="lg:hidden text-emerald-300 hover:text-white">
-                <i class='bx bx-x text-2xl'></i>
-            </button>
+  <!-- Sidebar Unik: Glassmorphism + Floating Active -->
+  <aside class="fixed left-0 top-0 h-full w-64 bg-white/80 backdrop-blur-xl shadow-2xl z-50 transition-transform duration-300" id="sidebar">
+    <div class="p-6">
+      <div class="flex items-center space-x-3 mb-10">
+        <div class="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center animate-float">
+          <i class='bx bxs-book-open text-2xl text-white'></i>
         </div>
+        <h1 class="text-xl font-bold text-gray-800">Perpustakaan</h1>
+      </div>
 
-        <nav class="p-4 space-y-2 overflow-y-auto h-[calc(100vh-150px)]">
-            <a href="#" class="flex items-center space-x-3 p-3 bg-emerald-700 text-white rounded-lg">
-                <i class='bx bx-home text-xl'></i>
-                <span>Dashboard</span>
-            </a>
-            <a href="#" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
-                <i class='bx bx-book text-xl'></i>
-                <span>Manajemen Buku</span>
-            </a>
-            <a href="#" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
-                <i class='bx bx-group text-xl'></i>
-                <span>Manajemen Anggota</span>
-            </a>
-            <a href="#" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
-                <i class='bx bx-transfer text-xl'></i>
-                <span>Peminjaman</span>
-            </a>
-            <a href="#" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
-                <i class='bx bx-chart text-xl'></i>
-                <span>Laporan</span>
-            </a>
-            <a href="#" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
-                <i class='bx bx-cog text-xl'></i>
-                <span>Pengaturan</span>
-            </a>
-        </nav>
-
-        <!-- User Section -->
-        <div class="absolute bottom-0 w-full border-t border-emerald-700 p-4">
-            <div class="flex items-center space-x-3 text-emerald-200">
-                <div class="w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center">
-                    <i class='bx bx-user text-white'></i>
-                </div>
-                <div class="flex-1">
-                    <p class="font-medium text-white">Admin User</p>
-                    <p class="text-sm text-emerald-300">Super Administrator</p>
-                </div>
-                <button id="logout-btn" class="text-emerald-300 hover:text-white">
-                    <i class='bx bx-log-out text-xl'></i>
-                </button>
-            </div>
-        </div>
-    </aside>
-
-    <!-- Main Content -->
-    <div class="lg:ml-64">
-        <!-- Top Header -->
-        <header class="bg-white shadow-sm border-b border-gray-200">
-            <div class="flex items-center justify-between p-4">
-                <div class="flex items-center space-x-4">
-                    <button class="lg:hidden text-emerald-700" id="open-sidebar">
-                        <i class='bx bx-menu text-2xl'></i>
-                    </button>
-                    <h1 class="text-2xl font-bold text-emerald-900">Manajemen Buku</h1>
-                </div>
-            </div>
-        </header>
-
-        <!-- Main Content Area -->
-        <main class="p-6">
-
-            <!-- ➕ Action Buttons Card -->
-            <div class="bg-white rounded-2xl shadow-md p-6 mb-6 border border-gray-100 transition-all hover:shadow-lg"
-                data-aos="fade-up">
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
-                    <!-- 🎚️ Kiri: Filter -->
-                    <div class="flex flex-col md:flex-row gap-3">
-                        <!-- Kategori Filter -->
-                        <select
-                            class="flex-1 px-4 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
-                            <option>Semua Kategori</option>
-                            <option>Sains & Teknologi</option>
-                            <option>Sastra</option>
-                            <option>Bisnis & Ekonomi</option>
-                            <option>Sejarah</option>
-                            <option>Filsafat</option>
-                        </select>
-
-                        <!-- Status Filter -->
-                        <select
-                            class="flex-1 px-4 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
-                            <option>Semua Status</option>
-                            <option>Tersedia</option>
-                            <option>Dipinjam</option>
-                            <option>Dalam Perbaikan</option>
-                            <option>Hilang</option>
-                        </select>
-                    </div>
-
-                    <!-- ➕ Kanan: Tombol Aksi -->
-                    <div class="flex flex-wrap gap-2 justify-start md:justify-end">
-                        <button
-                            class="px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 active:scale-[.97] transition-all text-sm flex items-center shadow-sm">
-                            <i class='bx bx-plus mr-2 text-base'></i>Tambah Buku
-                        </button>
-
-                        <button
-                            class="px-4 py-2 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-100 active:scale-[.97] transition-all text-sm flex items-center shadow-sm">
-                            <i class='bx bx-category mr-2 text-base'></i>Kategori
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Books Table -->
-            <div class="bg-white rounded-2xl shadow-sm overflow-hidden" data-aos="fade-up">
-                <!-- Table Header -->
-                <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-                    <div>
-                        <div class="relative">
-                            <i class='bx bx-search absolute left-3 top-1/2 -translate-y-1/2 text-lg text-gray-400'></i>
-                            <input type="text" placeholder="Cari buku, penulis, atau ISBN..."
-                                class="pl-10 pr-4 py-2.5 w-56 md:w-64 text-sm border border-gray-200 rounded-full bg-gray-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 placeholder-gray-400 transition-all">
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <div class="flex gap-2">
-                            <button
-                                class="px-4 py-2 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-100 active:scale-[.97] transition-all text-sm flex items-center shadow-sm">
-                                <i class='bx bx-export mr-2 text-base'></i>Export
-                            </button>
-                            <button
-                                class="px-4 py-2 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-100 active:scale-[.97] transition-all text-sm flex items-center shadow-sm">
-                                <i class='bx bx-import mr-2 text-base'></i>Import
-                            </button>
-                        </div>
-                        <select
-                            class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500">
-                            <option>10 per halaman</option>
-                            <option>25 per halaman</option>
-                            <option>50 per halaman</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Table -->
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-
-                                </th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Buku</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Penulis</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Kategori</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    ISBN</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Status</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Lokasi</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <!-- Book 1 -->
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 whitespace-nowrap">
-
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div
-                                            class="w-10 h-12 bg-emerald-100 rounded flex items-center justify-center mr-3">
-                                            <i class='bx bx-book text-emerald-600'></i>
-                                        </div>
-                                        <div>
-                                            <div class="text-sm font-medium text-emerald-900">Sustainable Future</div>
-                                            <div class="text-sm text-gray-500">Edisi 2023</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">Dr. Michael Green</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 py-1 bg-emerald-100 text-emerald-800 text-xs rounded-full">Sains &
-                                        Teknologi</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">978-1234567890</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Tersedia</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Rak A-12</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <div class="flex items-center space-x-2">
-                                        <button class="text-emerald-600 hover:text-emerald-900 edit-book" data-id="1">
-                                            <i class='bx bx-edit text-lg'></i>
-                                        </button>
-                                        <button class="text-amber-600 hover:text-amber-900">
-                                            <i class='bx bx-show text-lg'></i>
-                                        </button>
-                                        <button class="text-red-600 hover:text-red-900 delete-book" data-id="1">
-                                            <i class='bx bx-trash text-lg'></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <!-- Book 2 -->
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 whitespace-nowrap">
-
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div
-                                            class="w-10 h-12 bg-emerald-100 rounded flex items-center justify-center mr-3">
-                                            <i class='bx bx-book text-emerald-600'></i>
-                                        </div>
-                                        <div>
-                                            <div class="text-sm font-medium text-emerald-900">Digital Transformation
-                                            </div>
-                                            <div class="text-sm text-gray-500">Edisi 2022</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">Sarah Johnson</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Bisnis &
-                                        Ekonomi</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">978-1234567891</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="px-2 py-1 bg-amber-100 text-amber-800 text-xs rounded-full">Dipinjam</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Rak B-05</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <div class="flex items-center space-x-2">
-                                        <button class="text-emerald-600 hover:text-emerald-900 edit-book" data-id="2">
-                                            <i class='bx bx-edit text-lg'></i>
-                                        </button>
-                                        <button class="text-amber-600 hover:text-amber-900">
-                                            <i class='bx bx-show text-lg'></i>
-                                        </button>
-                                        <button class="text-red-600 hover:text-red-900 delete-book" data-id="2">
-                                            <i class='bx bx-trash text-lg'></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <!-- Book 3 -->
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 whitespace-nowrap">
-
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div
-                                            class="w-10 h-12 bg-emerald-100 rounded flex items-center justify-center mr-3">
-                                            <i class='bx bx-book text-emerald-600'></i>
-                                        </div>
-                                        <div>
-                                            <div class="text-sm font-medium text-emerald-900">Mindful Living</div>
-                                            <div class="text-sm text-gray-500">Edisi 2023</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">Emma Wilson</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">Kesehatan</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">978-1234567892</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">Dalam
-                                        Perbaikan</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Gudang</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <div class="flex items-center space-x-2">
-                                        <button class="text-emerald-600 hover:text-emerald-900 edit-book" data-id="3">
-                                            <i class='bx bx-edit text-lg'></i>
-                                        </button>
-                                        <button class="text-amber-600 hover:text-amber-900">
-                                            <i class='bx bx-show text-lg'></i>
-                                        </button>
-                                        <button class="text-red-600 hover:text-red-900 delete-book" data-id="3">
-                                            <i class='bx bx-trash text-lg'></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <!-- Add more books as needed -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Table Footer -->
-                <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
-                    <div class="text-sm text-gray-700">
-                        Menampilkan <span class="font-medium">1</span> sampai <span class="font-medium">10</span> dari
-                        <span class="font-medium">1,248</span> hasil
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <button
-                            class="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors">
-                            Sebelumnya
-                        </button>
-                        <button
-                            class="px-3 py-1 bg-emerald-600 text-white rounded-lg text-sm hover:bg-emerald-700 transition-colors">
-                            1
-                        </button>
-                        <button
-                            class="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors">
-                            2
-                        </button>
-                        <button
-                            class="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors">
-                            3
-                        </button>
-                        <button
-                            class="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors">
-                            Selanjutnya
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </main>
+      <nav class="space-y-2">
+        <a href="/admin/dashboard" class="flex items-center space-x-3 p-3 rounded-xl text-gray-700 hover:bg-emerald-100 transition group">
+          <i class='bx bx-home-alt text-xl'></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="/admin/buku" class="flex items-center space-x-3 p-3 rounded-xl bg-emerald-600 text-white shadow-lg scale-105 transform transition">
+          <i class='bx bxs-book text-xl'></i>
+          <span>Manajemen Buku</span>
+          <div class="ml-auto w-2 h-2 bg-white rounded-full animate-pulse"></div>
+        </a>
+        <a href="#" class="flex items-center space-x-3 p-3 rounded-xl text-gray-700 hover:bg-emerald-100 transition group">
+          <i class='bx bxs-user text-xl'></i>
+          <span>Anggota</span>
+        </a>
+        <a href="#" class="flex items-center space-x-3 p-3 rounded-xl text-gray-700 hover:bg-emerald-100 transition group">
+          <i class='bx bx-history text-xl'></i>
+          <span>Peminjaman</span>
+        </a>
+      </nav>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
-    <script>
-        // Initialize AOS
-        AOS.init({
-            duration: 800,
-            once: true,
-            offset: 100
-        });
+    <div class="absolute bottom-6 left-6 right-6">
+      <button onclick="logout()" class="w-full py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl flex items-center justify-center space-x-2 transition">
+        <i class='bx bx-log-out'></i> <span>Keluar</span>
+      </button>
+    </div>
+  </aside>
 
-        // Sidebar functionality
-        const sidebar = document.getElementById('sidebar');
-        const openSidebar = document.getElementById('open-sidebar');
-        const closeSidebar = document.getElementById('close-sidebar');
+  <!-- Main Content -->
+  <div class="lg:ml-64 p-6 lg:p-10">
+    <header class="mb-8" data-aos="fade-down">
+      <h2 class="text-3xl font-bold text-gray-800">Manajemen Buku</h2>
+      <p class="text-gray-600">Kelola koleksi buku perpustakaan</p>
+    </header>
 
-        openSidebar.addEventListener('click', () => {
-            sidebar.classList.remove('-translate-x-full');
-        });
+    <!-- Controls -->
+    <div class="bg-white rounded-xl shadow-md p-6 mb-6 flex flex-col lg:flex-row gap-4" data-aos="fade-up">
+      <div class="flex-1">
+        <div class="relative">
+          <i class='bx bx-search absolute left-3 top-3.5 text-gray-500'></i>
+          <input type="text" id="searchInput" placeholder="Cari judul, penulis, ISBN..." class="w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none">
+        </div>
+      </div>
+      <select id="categoryFilter" class="px-4 py-3 border rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none">
+        <option value="">Semua Kategori</option>
+        <option>Fiksi</option>
+        <option>Non-Fiksi</option>
+        <option>Sains</option>
+        <option>Sejarah</option>
+      </select>
+      <select id="sortSelect" class="px-4 py-3 border rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none">
+        <option value="stok-desc">Stok ↓</option>
+        <option value="stok-asc">Stok ↑</option>
+        <option value="tanggal-desc">Terbaru</option>
+      </select>
+      <button onclick="openAddModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl flex items-center space-x-2">
+        <i class='bx bx-plus'></i> <span>Tambah Buku</span>
+      </button>
+    </div>
 
-        closeSidebar.addEventListener('click', () => {
-            sidebar.classList.add('-translate-x-full');
-        });
+    <!-- Tabel Buku -->
+    <div class="bg-white rounded-xl shadow-md overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+      <div class="overflow-x-auto">
+        <table class="w-full" id="bookTable">
+          <thead class="bg-emerald-50">
+            <tr>
+              <th class="px-6 py-4 text-left text-xs font-medium text-emerald-800 uppercase tracking-wider">Judul</th>
+              <th class="px-6 py-4 text-left text-xs font-medium text-emerald-800 uppercase tracking-wider">Penulis</th>
+              <th class="px-6 py-4 text-xs font-medium text-emerald-800 uppercase tracking-wider">Kategori</th>
+              <th class="px-6 py-4 text-xs font-medium text-emerald-800 uppercase tracking-wider">ISBN</th>
+              <th class="px-6 py-4 text-xs font-medium text-emerald-800 uppercase tracking-wider">Stok</th>
+              <th class="px-6 py-4 text-xs font-medium text-emerald-800 uppercase tracking-wider text-center">Aksi</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200" id="bookBody">
+            <!-- Data diisi via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
-        // Logout functionality
-        document.getElementById('logout-btn').addEventListener('click', () => {
-            Swal.fire({
-                title: 'Konfirmasi Logout',
-                text: 'Apakah Anda yakin ingin keluar dari panel admin?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, Logout',
-                cancelButtonText: 'Batal',
-                confirmButtonColor: '#10b981'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = 'login.html';
-                }
-            });
-        });
+  <!-- Modal Tambah/Edit Buku -->
+  <div id="bookModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-2xl max-h-screen overflow-y-auto" data-aos="zoom-in">
+      <div class="flex justify-between items-center mb-6">
+        <h3 id="modalTitle" class="text-2xl font-bold">Tambah Buku</h3>
+        <button onclick="closeModal('bookModal')" class="text-gray-500 hover:text-gray-700">
+          <i class='bx bx-x text-2xl'></i>
+        </button>
+      </div>
+      <form id="bookForm" class="space-y-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Judul Buku</label>
+            <input type="text" name="judul" required class="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Penulis</label>
+            <input type="text" name="penulis" required class="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
+            <select name="kategori" required class="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none">
+              <option>Fiksi</option>
+              <option>Non-Fiksi</option>
+              <option>Sains</option>
+              <option>Sejarah</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">ISBN</label>
+            <input type="text" name="isbn" required class="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Stok</label>
+            <input type="number" name="stok" min="0" required class="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Upload Cover</label>
+            <input type="file" name="cover" accept="image/*" class="w-full px-4 py-3 border rounded-xl">
+          </div>
+        </div>
+        <div class="flex space-x-3">
+          <button type="submit" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl">Simpan</button>
+          <button type="button" onclick="closeModal('bookModal')" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 py-3 rounded-xl">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-        // Add Book Modal
-        document.getElementById('add-book-btn').addEventListener('click', () => {
-            Swal.fire({
-                title: 'Tambah Buku Baru',
-                html: `
-                    <div class="text-left space-y-4">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Judul Buku</label>
-                                <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500" placeholder="Judul buku">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Penulis</label>
-                                <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500" placeholder="Nama penulis">
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">ISBN</label>
-                                <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500" placeholder="Nomor ISBN">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
-                                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
-                                    <option>Pilih Kategori</option>
-                                    <option>Sains & Teknologi</option>
-                                    <option>Sastra</option>
-                                    <option>Bisnis & Ekonomi</option>
-                                    <option>Sejarah</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi</label>
-                            <textarea class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500" rows="3" placeholder="Deskripsi buku"></textarea>
-                        </div>
-                    </div>
-                `,
-                showCancelButton: true,
-                confirmButtonText: 'Simpan Buku',
-                cancelButtonText: 'Batal',
-                confirmButtonColor: '#10b981',
-                preConfirm: () => {
-                    // Validation logic here
-                    return true;
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire('Berhasil!', 'Buku baru telah ditambahkan.', 'success');
-                }
-            });
-        });
+  <!-- Modal Detail Buku -->
+  <div id="detailModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-4xl max-h-screen overflow-y-auto" data-aos="zoom-in">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-2xl font-bold">Detail Buku</h3>
+        <button onclick="closeModal('detailModal')" class="text-gray-500 hover:text-gray-700">
+          <i class='bx bx-x text-2xl'></i>
+        </button>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="md:col-span-1">
+          <img id="detailCover" src="" alt="Cover" class="w-full rounded-xl shadow-lg">
+        </div>
+        <div class="md:col-span-2 space-y-4">
+          <h4 id="detailJudul" class="text-2xl font-bold text-emerald-700"></h4>
+          <p><strong>Penulis:</strong> <span id="detailPenulis"></span></p>
+          <p><strong>Kategori:</strong> <span id="detailKategori" class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-sm"></span></p>
+          <p><strong>ISBN:</strong> <span id="detailIsbn"></span></p>
+          <p><strong>Stok:</strong> <span id="detailStok" class="font-bold text-emerald-600"></span></p>
+          <div class="mt-6">
+            <h5 class="font-semibold mb-2">Riwayat Peminjaman (3 terakhir)</h5>
+            <ul class="text-sm space-y-2">
+              <li class="flex justify-between"><span>Budi S.</span> <span class="text-gray-500">28 Okt → 04 Nov</span></li>
+              <li class="flex justify-between"><span>Siti A.</span> <span class="text-gray-500">15 Okt → 22 Okt</span></li>
+              <li class="flex justify-between"><span>Ahmad R.</span> <span class="text-red-600">01 Okt → <em>Terlambat</em></span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        // Edit Book
-        document.querySelectorAll('.edit-book').forEach(button => {
-            button.addEventListener('click', function () {
-                const bookId = this.getAttribute('data-id');
-                Swal.fire({
-                    title: 'Edit Data Buku',
-                    html: `
-                        <div class="text-left space-y-4">
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Judul Buku</label>
-                                    <input type="text" value="Sustainable Future" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Penulis</label>
-                                    <input type="text" value="Dr. Michael Green" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                                    <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
-                                        <option>Tersedia</option>
-                                        <option>Dipinjam</option>
-                                        <option>Dalam Perbaikan</option>
-                                        <option>Hilang</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Lokasi</label>
-                                    <input type="text" value="Rak A-12" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
-                                </div>
-                            </div>
-                        </div>
-                    `,
-                    showCancelButton: true,
-                    confirmButtonText: 'Update Buku',
-                    cancelButtonText: 'Batal',
-                    confirmButtonColor: '#10b981'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        Swal.fire('Berhasil!', 'Data buku telah diperbarui.', 'success');
-                    }
-                });
-            });
-        });
+  <!-- JavaScript -->
+  <script>
+    AOS.init({ once: true });
 
-        // Delete Book
-        document.querySelectorAll('.delete-book').forEach(button => {
-            button.addEventListener('click', function () {
-                const bookId = this.getAttribute('data-id');
-                Swal.fire({
-                    title: 'Hapus Buku?',
-                    text: "Data buku akan dihapus permanen dari sistem.",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Ya, Hapus!',
-                    cancelButtonText: 'Batal',
-                    confirmButtonColor: '#d33',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        Swal.fire('Terhapus!', 'Buku telah berhasil dihapus.', 'success');
-                    }
-                });
-            });
-        });
+    // Data Dummy Buku
+    let books = [
+      { id: 1, judul: "Algoritma dan Pemrograman", penulis: "Rinaldi Munir", kategori: "Sains", isbn: "978-602-1234-56-7", stok: 12, tanggal: "2025-10-01", cover: "https://via.placeholder.com/300x400.png?text=Algoritma" },
+      { id: 2, judul: "Sejarah Indonesia Modern", penulis: "M.C. Ricklefs", kategori: "Sejarah", isbn: "978-979-1234-56-7", stok: 8, tanggal: "2025-09-15", cover: "https://via.placeholder.com/300x400.png?text=Sejarah" },
+      { id: 3, judul: "Laskar Pelangi", penulis: "Andrea Hirata", kategori: "Fiksi", isbn: "978-979-3062-79-2", stok: 25, tanggal: "2025-08-20", cover: "https://via.placeholder.com/300x400.png?text=Laskar+Pelangi" },
+    ];
 
-        // Search functionality
-        const searchInput = document.querySelector('input[type="text"]');
-        searchInput.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                Swal.fire({
-                    title: 'Mencari...',
-                    text: `Menampilkan hasil untuk "${this.value}"`,
-                    timer: 1500,
-                    showConfirmButton: false
-                });
-            }
-        });
-    </script>
+    let fuse;
+    function initFuse() {
+      fuse = new Fuse(books, {
+        keys: ['judul', 'penulis', 'isbn'],
+        threshold: 0.3
+      });
+    }
+    initFuse();
+
+    // Render Tabel
+    function renderTable(data = books) {
+      const tbody = document.getElementById('bookBody');
+      tbody.innerHTML = '';
+      data.forEach(book => {
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-gray-50 transition';
+        row.innerHTML = `
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${book.judul}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">${book.penulis}</td>
+          <td class="px-6 py-4 whitespace-nowrap"><span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs">${book.kategori}</span></td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">${book.isbn}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-bold ${book.stok < 5 ? 'text-red-600' : 'text-emerald-600'}">${book.stok}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-center text-sm">
+            <button onclick="viewDetail(${book.id})" class="text-blue-600 hover:text-blue-800 mr-3"><i class='bx bx-show'></i></button>
+            <button onclick="editBook(${book.id})" class="text-yellow-600 hover:text-yellow-800 mr-3"><i class='bx bx-edit'></i></button>
+            <button onclick="deleteBook(${book.id})" class="text-red-600 hover:text-red-800"><i class='bx bx-trash'></i></button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+    renderTable();
+
+    // Search
+    document.getElementById('searchInput').addEventListener('input', function() {
+      const query = this.value;
+      const result = query ? fuse.search(query).map(x => x.item) : books;
+      applyFilters(result);
+    });
+
+    // Filter & Sort
+    function applyFilters(data = books) {
+      let filtered = [...data];
+      const kategori = document.getElementById('categoryFilter').value;
+      if (kategori) filtered = filtered.filter(b => b.kategori === kategori);
+
+      const sort = document.getElementById('sortSelect').value;
+      if (sort === 'stok-desc') filtered.sort((a,b) => b.stok - a.stok);
+      if (sort === 'stok-asc') filtered.sort((a,b) => a.stok - b.stok);
+      if (sort === 'tanggal-desc') filtered.sort((a,b) => new Date(b.tanggal) - new Date(a.tanggal));
+
+      renderTable(filtered);
+    }
+    document.getElementById('categoryFilter').addEventListener('change', () => applyFilters());
+    document.getElementById('sortSelect').addEventListener('change', () => applyFilters());
+
+    // Modal
+    function openAddModal() {
+      document.getElementById('modalTitle').textContent = 'Tambah Buku';
+      document.getElementById('bookForm').reset();
+      document.getElementById('bookModal').classList.remove('hidden');
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    // Tambah/Edit
+    let editingId = null;
+    document.getElementById('bookForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const newBook = {
+        id: editingId || Date.now(),
+        judul: formData.get('judul'),
+        penulis: formData.get('penulis'),
+        kategori: formData.get('kategori'),
+        isbn: formData.get('isbn'),
+        stok: parseInt(formData.get('stok')),
+        tanggal: new Date().toISOString().split('T')[0],
+        cover: "https://via.placeholder.com/300x400.png?text=" + encodeURIComponent(formData.get('judul').substring(0,20))
+      };
+
+      if (editingId) {
+        const idx = books.findIndex(b => b.id === editingId);
+        books[idx] = newBook;
+      } else {
+        books.push(newBook);
+      }
+      initFuse();
+      renderTable();
+      closeModal('bookModal');
+      Swal.fire({ icon: 'success', title: 'Berhasil!', text: editingId ? 'Buku diperbarui' : 'Buku ditambahkan' });
+      editingId = null;
+    });
+
+    function editBook(id) {
+      const book = books.find(b => b.id === id);
+      document.querySelector('[name="judul"]').value = book.judul;
+      document.querySelector('[name="penulis"]').value = book.penulis;
+      document.querySelector('[name="kategori"]').value = book.kategori;
+      document.querySelector('[name="isbn"]').value = book.isbn;
+      document.querySelector('[name="stok"]').value = book.stok;
+      editingId = id;
+      document.getElementById('modalTitle').textContent = 'Edit Buku';
+      document.getElementById('bookModal').classList.remove('hidden');
+    }
+
+    function deleteBook(id) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Hapus Buku?',
+        text: 'Data akan dihapus permanen',
+        showCancelButton: true,
+        confirmButtonText: 'Hapus',
+        confirmButtonColor: '#dc2626'
+      }).then(res => {
+        if (res.isConfirmed) {
+          books = books.filter(b => b.id !== id);
+          initFuse();
+          renderTable();
+          Swal.fire('Terhapus!', '', 'success');
+        }
+      });
+    }
+
+    function viewDetail(id) {
+      const book = books.find(b => b.id === id);
+      document.getElementById('detailJudul').textContent = book.judul;
+      document.getElementById('detailPenulis').textContent = book.penulis;
+      document.getElementById('detailKategori').textContent = book.kategori;
+      document.getElementById('detailIsbn').textContent = book.isbn;
+      document.getElementById('detailStok').textContent = book.stok;
+      document.getElementById('detailCover').src = book.cover;
+      document.getElementById('detailModal').classList.remove('hidden');
+    }
+
+    function logout() {
+      Swal.fire({
+        icon: 'question',
+        title: 'Keluar?',
+        showCancelButton: true,
+        confirmButtonText: 'Ya'
+      }).then(res => {
+        if (res.isConfirmed) window.location.href = '/index.html';
+      });
+    }
+  </script>
 </body>
-
 </html>

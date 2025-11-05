@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Anggota;
+use App\Models\DetailPeminjaman;
 use Illuminate\Http\Request;
 
-class AnggotaController extends Controller
+class DetailPeminjamanController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $anggota = Anggota::all();
-        return view('admin.anggota',compact('anggota'));
+        //
     }
 
     /**
@@ -29,20 +28,13 @@ class AnggotaController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'nama' => 'required|string',
-            'telepon' => 'required|string',
-            'alamat' => 'required|string',
-        ]);
-
-        Anggota::create($request->all());
-        return redirect()->back()->with('success','Berhasil Tambah Anggota');
+        //
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Anggota $anggota)
+    public function show(DetailPeminjaman $detailPeminjaman)
     {
         //
     }
@@ -50,7 +42,7 @@ class AnggotaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Anggota $anggota)
+    public function edit(DetailPeminjaman $detailPeminjaman)
     {
         //
     }
@@ -58,7 +50,7 @@ class AnggotaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Anggota $anggota)
+    public function update(Request $request, DetailPeminjaman $detailPeminjaman)
     {
         //
     }
@@ -66,7 +58,7 @@ class AnggotaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Anggota $anggota)
+    public function destroy(DetailPeminjaman $detailPeminjaman)
     {
         //
     }

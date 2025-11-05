@@ -22,7 +22,14 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'alamat',
+        'telepon',
     ];
+
+    public function peminjaman()
+    {
+        return $this->hasMany(Peminjaman::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.

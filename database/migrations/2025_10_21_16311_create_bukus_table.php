@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('buku', function (Blueprint $table) {
             $table->id();
-            $table->string ('judul');
-            $table->string ('penulis');
-            $table->string ('isbn')->unique();
             $table->foreignId('kategori_id')->constrained('kategori')->onDelete('cascade');
+            $table->string('judul');
+            $table->string('penulis');
+            $table->string('penerbit')->nullable();
+            $table->string('isbn')->unique();
+            $table->string('cover')->nullable();
             $table->timestamps();
         });
     }

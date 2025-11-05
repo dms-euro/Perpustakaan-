@@ -18,6 +18,7 @@ Route::get('/login', function () {
     return redirect()->route('auth.index');
 })->name('login');
 
+Route::get('Anggota', [AuthController::class, 'anggota'])->name('anggota');
 Route::post('Auth/Login', [AuthController::class, 'login'])->name('auth.login');
 Route::get('Auth/Register', [AuthController::class, 'register'])->name('auth.register');
 
@@ -33,9 +34,6 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('Admin/Kategori',[KategoriController::class, 'store'])->name('kategori.store');
     Route::delete('Admin/Kategori/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
-
-    Route::get('Admin/ManajemenAnggota', [AnggotaController::class, 'index'])->name('anggota.index');
-    Route::post('Admin/TambahAnggota', [AnggotaController::class, 'store'])->name('anggota.store');
 
     Route::get('Admin/Peminjaman', [PeminjamanController::class, 'index'])->name('peminjaman.index');
 

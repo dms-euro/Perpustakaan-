@@ -7,15 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 class Buku extends Model
 {
     use Searchable;
+
     protected $table = 'buku';
     protected $fillable = [
-        'judul',
-        'penulis',
-        'isbn',
-        'kategori_id',
+        'kategori_id', 'judul', 'penulis', 'penerbit', 'isbn', 'cover'
     ];
+
     public function kategori()
     {
-        return $this->belongsTo(Kategori::class, 'kategori_id');
+        return $this->belongsTo(Kategori::class);
+    }
+
+    public function detailPeminjaman()
+    {
+        return $this->hasMany(DetailPeminjaman::class);
     }
 }

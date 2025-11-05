@@ -5,12 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Buku;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BukuController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $buku = Buku::with('kategori')->get();
@@ -18,33 +16,35 @@ class BukuController extends Controller
         return view('admin.buku', compact('kategori', 'buku'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
-            'judul' => 'required|string',
-            'penulis' => 'required|string',
-            'isbn' => 'required|string',
-            'kategori_id' => 'required|exists:kategori,id',
+            'judul' => 'required',
+            'penulis' => 'required',
+            'penerbit' => 'required',
+            'kategori_id' => 'required',
+            'isbn' => 'required|unique:buku',
+            'cover' => 'image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
-        Buku::create($request->all());
-        return redirect()->back()->with('success', 'Buku berhasil ditambahkan.');
+        $coverPath = null;
+
+        if ($request->file('cover')) {
+            $coverPath = $request->file('cover')->store('covers', 'public');
+        }
+
+        Buku::create([
+            'judul' => $request->judul,
+            'penulis' => $request->penulis,
+            'penerbit' => $request->penerbit,
+            'kategori_id' => $request->kategori_id,
+            'isbn' => $request->isbn,
+            'cover' => $coverPath
+        ]);
+
+        return back()->with('success', 'Buku berhasil ditambahkan');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show($id)
     {
         $buku = Buku::findOrFail($id);
@@ -52,37 +52,53 @@ class BukuController extends Controller
         return view('admin.show-buku', compact('buku', 'kategori'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
         $buku = Buku::findOrFail($id);
-        $kategori = Kategori::all(); // kalau kamu punya tabel kategori
+        $kategori = Kategori::all();
         return view('admin.edit-buku', compact('buku', 'kategori'));
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'judul' => 'required|string',
-            'penulis' => 'required|string',
-            'isbn' => 'required|string',
-            'kategori_id' => 'required|exists:kategori,id',
+            'judul' => 'required',
+            'penulis' => 'required',
+            'penerbit' => 'required',
+            'kategori_id' => 'required',
+            'isbn' => 'required',
+            'cover' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
         $buku = Buku::findOrFail($id);
-        $buku->update($request->all());
-        return redirect()->route('buku.index')->with('success', 'Buku berhasil diperbarui.');
+
+        $coverPath = $buku->cover;
+        if ($request->file('cover')) {
+            if ($buku->cover && file_exists(storage_path('app/public/' . $buku->cover))) {
+                unlink(storage_path('app/public/' . $buku->cover));
+            }
+            $coverPath = $request->file('cover')->store('covers', 'public');
+        }
+
+        $buku->update([
+            'judul' => $request->judul,
+            'penulis' => $request->penulis,
+            'penerbit' => $request->penerbit,
+            'kategori_id' => $request->kategori_id,
+            'isbn' => $request->isbn,
+            'cover' => $coverPath
+        ]);
+
+        return redirect()->route('buku.index')->with('success', 'Buku berhasil diperbarui');
     }
 
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Buku $id)
+    public function destroy(Buku $buku)
     {
-        $id->delete();
+        if ($buku->cover && Storage::disk('public')->exists($buku->cover)) {
+            Storage::disk('public')->delete($buku->cover);
+        }
+        $buku->delete();
+
         return redirect()->back()->with('success', 'Buku berhasil dihapus.');
     }
 }

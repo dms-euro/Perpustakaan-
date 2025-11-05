@@ -7,11 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Kategori extends Model
 {
     protected $table = 'kategori';
-    protected $fillable = [
-        'kategori',
-    ];
-    public function bukus()
+    protected $fillable = ['kategori'];
+
+    public function buku()
     {
-        return $this->hasMany(Buku::class, 'kategori_id');
+        return $this->hasMany(Buku::class);
     }
 }

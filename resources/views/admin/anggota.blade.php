@@ -10,7 +10,6 @@
                     </button>
                     <h1 class="text-2xl font-bold text-emerald-900">Manajemen Anggota</h1>
                 </div>
-
                 <div class="flex items-center space-x-4">
                 </div>
             </div>
@@ -76,7 +75,7 @@
             </div>
             <div class="bg-white rounded-2xl shadow-sm p-6 mb-3" data-aos="fade-up">
                 <h3 class=" text-lg font-bold text-emerald-900 mb-4">Tambah Anggota</h3>
-                <form action="{{ route('anggota.store') }}" method="POST" id="add-book-form"
+                <form action="#" method="POST" id="add-book-form"
                     class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="space-y-4">
                         @csrf
@@ -171,7 +170,6 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            @foreach ($anggota as $a)
                                 <tr class="hover:bg-gray-50 transition-colors">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <input type="checkbox"
@@ -184,12 +182,12 @@
                                                 <i class='bx bx-user text-emerald-600'></i>
                                             </div>
                                             <div>
-                                                <div class="text-sm font-medium text-emerald-900">{{ $a->nama }}</div>
+                                                <div class="text-sm font-medium text-emerald-900">nama</div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-500">{{ $a->telepone }}</div>
+                                        <div class="text-sm text-gray-500">yelepone</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         15 Jan 2023
@@ -222,7 +220,6 @@
                                         </div>
                                     </td>
                                 </tr>
-                            @endforeach
                         </tbody>
                     </table>
                 </div>

@@ -1,167 +1,130 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="lg:ml-64">
-        <main class="p-6">
-            <!-- Book Information -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Left Column - Book Cover & Basic Info -->
-                <div class="lg:col-span-1">
+    <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-2xl p-8 border border-gray-100">
 
-                    <!-- Quick Stats -->
-                    <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-right" data-aos-delay="100">
-                        <h3 class="text-lg font-bold text-emerald-900 mb-4">Statistik</h3>
-                        <div class="space-y-4">
-                            <div class="flex justify-between items-center">
-                                <span class="text-sm text-gray-600">Total Peminjaman</span>
-                                <span class="font-bold text-emerald-900">24 kali</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-sm text-gray-600">Rating</span>
-                                <div class="flex items-center">
-                                    <i class='bx bxs-star text-amber-400 mr-1'></i>
-                                    <span class="font-bold text-emerald-900">4.8/5</span>
-                                </div>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-sm text-gray-600">Ditambahkan</span>
-                                <span class="font-bold text-emerald-900">15 Jan 2023</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-sm text-gray-600">Terakhir Diupdate</span>
-                                <span class="font-bold text-emerald-900">20 Des 2023</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        {{-- Header Section --}}
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Detail Buku</h1>
+            <div class="w-20 h-1 bg-emerald-500 mx-auto rounded-full"></div>
+        </div>
 
-                <!-- Right Column - Detailed Information -->
-                <div class="lg:col-span-2">
-                    <!-- Basic Information -->
-                    <div class="bg-white rounded-2xl shadow-sm p-6 mb-6" data-aos="fade-left">
-                        <h3 class="text-lg font-bold text-emerald-900 mb-4 flex items-center">
-                            <i class='bx bx-info-circle mr-2'></i>Informasi Dasar
-                        </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Judul Buku</label>
-                                    <div class="text-lg font-bold text-emerald-900" id="book-title">Sustainable Future</div>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Penulis</label>
-                                    <div class="text-lg text-gray-900" id="book-author">Dr. Michael Green</div>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">ISBN</label>
-                                    <div class="text-lg text-gray-900" id="book-isbn">978-1234567890</div>
-                                </div>
-                            </div>
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
-                                    <div class="flex items-center">
-                                        <span
-                                            class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-sm font-medium"
-                                            id="book-category">Sains & Teknologi</span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">ID Kategori</label>
-                                    <div class="text-lg text-gray-900" id="book-category-id">CAT-001</div>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium"
-                                        id="book-status">Tersedia</span>
-                                </div>
-                            </div>
+        <div class="flex flex-col lg:flex-row gap-8">
+
+            {{-- Cover Buku Section --}}
+            <div class="w-full lg:w-2/5">
+                <div class="sticky top-6">
+                    @if ($buku->cover)
+                        <img src="{{ asset('storage/' . $buku->cover) }}"
+                            class="w-full h-80 object-cover rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-shadow duration-300"
+                            alt="Cover Buku">
+                    @else
+                        <div class="w-full h-80 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-300">
+                            <i class='bx bx-image text-5xl mb-3'></i>
+                            <p class="text-sm font-medium">Tidak ada cover</p>
                         </div>
+                    @endif
+
+                    {{-- Status Badge --}}
+                    <div class="mt-4 flex justify-center">
+                        <span class="px-4 py-2 bg-emerald-100 text-emerald-800 rounded-full text-sm font-semibold">
+                            <i class='bx bx-book-open mr-1'></i>
+                            Buku Tersedia
+                        </span>
                     </div>
                 </div>
             </div>
 
-            <!-- Loan History -->
-            <div class="bg-white rounded-2xl shadow-sm p-6 mt-6" data-aos="fade-up">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-bold text-emerald-900">Riwayat Peminjaman Terbaru</h3>
-                </div>
+            {{-- Detail Buku Section --}}
+            <div class="flex-1">
+                <div class="bg-gray-50 rounded-2xl p-6 border border-gray-200">
+                    {{-- Judul Buku --}}
+                    <div class="mb-6 pb-4 border-b border-gray-200">
+                        <h2 class="text-2xl font-bold text-gray-800 leading-tight">{{ $buku->judul }}</h2>
+                        <p class="text-gray-600 mt-2 flex items-center gap-1">
+                            <i class='bx bx-user text-emerald-600'></i>
+                            Karya {{ $buku->penulis }}
+                        </p>
+                    </div>
 
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Peminjam</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Tanggal Pinjam</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Jatuh Tempo</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Tanggal Kembali</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Status</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div
-                                            class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center mr-3">
-                                            <i class='bx bx-user text-emerald-600 text-sm'></i>
-                                        </div>
-                                        <div>
-                                            <div class="text-sm font-medium text-emerald-900">Ahmad Rizki</div>
-                                            <div class="text-xs text-gray-500">MEM-8542</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">15 Des 2023</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">29 Des 2023</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">28 Des 2023</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Dikembalikan</span>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div
-                                            class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center mr-3">
-                                            <i class='bx bx-user text-emerald-600 text-sm'></i>
-                                        </div>
-                                        <div>
-                                            <div class="text-sm font-medium text-emerald-900">Sari Dewi</div>
-                                            <div class="text-xs text-gray-500">MEM-8541</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">10 Des 2023</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">24 Des 2023</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">-</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="px-2 py-1 bg-amber-100 text-amber-800 text-xs rounded-full">Dipinjam</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    {{-- Grid Informasi --}}
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {{-- Kategori --}}
+                            <div class="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <i class='bx bx-category text-emerald-600 text-lg'></i>
+                                    <p class="text-sm font-medium text-gray-500">Kategori</p>
+                                </div>
+                                <h4 class="font-semibold text-gray-800 text-lg">{{ $buku->kategori->kategori ?? '-' }}</h4>
+                            </div>
+
+                            {{-- Penerbit --}}
+                            <div class="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <i class='bx bx-building text-emerald-600 text-lg'></i>
+                                    <p class="text-sm font-medium text-gray-500">Penerbit</p>
+                                </div>
+                                <h4 class="font-semibold text-gray-800 text-lg">{{ $buku->penerbit }}</h4>
+                            </div>
+
+                            {{-- ISBN --}}
+                            <div class="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <i class='bx bx-barcode text-emerald-600 text-lg'></i>
+                                    <p class="text-sm font-medium text-gray-500">ISBN</p>
+                                </div>
+                                <h4 class="font-semibold text-gray-800 text-lg font-mono">{{ $buku->isbn }}</h4>
+                            </div>
+
+                            {{-- Tahun Terbit --}}
+                            <div class="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <i class='bx bx-user text-emerald-600 text-lg'></i>
+                                    <p class="text-sm font-medium text-gray-500">Penulis</p>
+                                </div>
+                                <h4 class="font-semibold text-gray-800 text-lg">{{ $buku->penulis }}</h4>
+                            </div>
+                        </div>
+
+                        {{-- Timeline --}}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                            <div class="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <i class='bx bx-plus-circle text-blue-600 text-lg'></i>
+                                    <p class="text-sm font-medium text-gray-500">Dibuat</p>
+                                </div>
+                                <h4 class="font-semibold text-gray-800">{{ $buku->created_at->format('d M Y, H:i') }}</h4>
+                            </div>
+
+                            <div class="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <i class='bx bx-edit text-orange-600 text-lg'></i>
+                                    <p class="text-sm font-medium text-gray-500">Diperbarui</p>
+                                </div>
+                                <h4 class="font-semibold text-gray-800">{{ $buku->updated_at->format('d M Y, H:i') }}</h4>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Action Buttons -->
-            <div class="mt-6 flex justify-end space-x-4">
-                <a href="books.html"
-                    class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium">
-                    Kembali ke Daftar
-                </a>
-                <a href="edit-book.html"
-                    class="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium flex items-center">
-                    <i class='bx bx-edit mr-2'></i>Edit Buku
-                </a>
-            </div>
-        </main>
+        {{-- Action Buttons --}}
+        <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-end">
+            <a href="{{ route('buku.index') }}"
+                class="px-6 py-3 bg-gray-600 text-white rounded-xl hover:bg-gray-700 transition duration-200 text-sm font-semibold flex items-center gap-2 justify-center">
+                <i class='bx bx-arrow-back text-base'></i>
+                Kembali ke Daftar
+            </a>
+
+            <a href="{{ route('buku.edit', $buku->id) }}"
+                class="px-6 py-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition duration-200 text-sm font-semibold flex items-center gap-2 justify-center shadow-lg shadow-emerald-200">
+                <i class='bx bx-edit text-base'></i>
+                Edit Buku
+            </a>
+        </div>
+
     </div>
 @endsection
+

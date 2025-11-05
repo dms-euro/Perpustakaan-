@@ -54,48 +54,60 @@
                             <h3 class="text-lg font-bold text-emerald-900"><i class="bx bx-category"></i> Daftar Kategori
                             </h3>
                             <button data-modal-target="modalTambahKategori" data-modal-toggle="modalTambahKategori"
-                                class="px-3 py-1 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors text-sm flex items-center">
+                                class="px-3 py-1 border border-emerald-500 text-emerald-600 rounded-full transition-all text-sm flex items-center hover:text-white hover:bg-gradient-to-r hover:from-emerald-500 hover:to-emerald-700">
                                 <i class='bx bx-plus mr-1'></i> Tambah
                             </button>
                         </div>
-                        <div class="overflow-hidden rounded-2xl shadow-sm border border-gray-100 bg-white">
+                        <div class="rounded-2xl shadow-sm border border-gray-100 bg-white overflow-hidden">
                             <div
-                                class="max-h-[240px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-emerald-400 transition-all">
+                                class="max-h-[420px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-emerald-400 transition-all">
                                 <table class="w-full text-sm text-gray-700">
-                                    <thead class="bg-gray-50 text-xs uppercase text-gray-500 sticky top-0 z-10">
+                                    <thead
+                                        class="bg-gradient-to-r from-emerald-50 to-green-50 text-xs uppercase text-emerald-700 sticky top-0 z-10">
                                         <tr>
-                                            <th class="px-6 py-3 text-left font-semibold tracking-wide bg-gray-50">Kategori
-                                            </th>
-                                            <th class="px-6 py-3 text-left font-semibold tracking-wide bg-gray-50 w-24">Aksi
-                                            </th>
+                                            <th class="px-6 py-3 text-left font-bold tracking-wide">Kategori</th>
+                                            <th class="px-6 py-3 text-center font-bold tracking-wide w-28">Aksi</th>
                                         </tr>
                                     </thead>
-
-                                    <tbody class="divide-y divide-gray-200">
+                                    <tbody class="divide-y divide-gray-100">
                                         @forelse ($kategori as $k)
-                                            <tr class="hover:bg-emerald-50 transition-colors">
-                                                <td class="px-6 py-4 flex items-center gap-2">
-                                                    <i class='bx bx-collection text-emerald-500 text-xl'></i>
-                                                    <span class="font-medium text-emerald-900">{{ $k->kategori }}</span>
+                                            <tr
+                                                class="hover:bg-gradient-to-r hover:from-emerald-50/50 hover:to-green-50/50 transition-all duration-200 group">
+                                                <td class="px-6 py-4">
+                                                    <div class="flex items-center gap-3">
+                                                        <div
+                                                            class="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-emerald-100 to-green-100 text-emerald-600 group-hover:from-emerald-200 group-hover:to-green-200 transition-colors">
+                                                            <i class='bx bx-collection text-base'></i>
+                                                        </div>
+                                                        <span
+                                                            class="font-medium text-emerald-900">{{ $k->kategori }}</span>
+                                                    </div>
                                                 </td>
                                                 <td class="px-6 py-4">
-                                                    <form id="form-delete-{{ $k->id }}"
-                                                        action="{{ route('kategori.destroy', $k->id) }}" method="POST"
-                                                        class="inline">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="button" onclick="hapus({{ $k->id }})"
-                                                            class="inline-flex items-center px-2 py-1 text-red-600 rounded-md transition hover:bg-red-100">
-                                                            <i class='bx bx-trash text-base'></i>
-                                                        </button>
-                                                    </form>
+                                                    <div class="flex justify-center">
+                                                        <form id="form-delete-{{ $k->id }}"
+                                                            action="{{ route('kategori.destroy', $k->id) }}" method="POST"
+                                                            class="inline">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="button" onclick="hapus({{ $k->id }})"
+                                                                class="inline-flex items-center justify-center w-8 h-8 text-red-500 rounded-full transition-all hover:bg-red-50 hover:scale-105 active:scale-95">
+                                                                <i class='bx bx-trash text-base'></i>
+                                                            </button>
+                                                        </form>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="2" class="text-center py-5 text-gray-400">
-                                                    <i class='bx bx-folder-open text-2xl mb-1'></i><br>
-                                                    Belum ada kategori
+                                                <td colspan="2" class="text-center py-8 text-gray-400">
+                                                    <div class="flex flex-col items-center justify-center">
+                                                        <div
+                                                            class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-2">
+                                                            <i class='bx bx-folder-open text-xl'></i>
+                                                        </div>
+                                                        <span class="text-sm">Belum ada kategori</span>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         @endforelse
@@ -105,55 +117,111 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="lg:col-span-2">
-                    <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-left">
-                        <h3 class="text-lg font-bold text-emerald-900 mb-4">Tambah Buku Baru</h3>
-                        <form action="{{ route('buku.store') }}" method="POST"
-                            class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-white rounded-2xl shadow-sm p-6 space-y-4" data-aos="fade-left">
+                        <h3 class="text-lg font-bold text-emerald-900">Tambah Buku Baru</h3>
+                        <form action="{{ route('buku.store') }}" method="POST" enctype="multipart/form-data"
+                            class="p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
                             @csrf
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Judul Buku</label>
-                                    <input type="text" name="judul" required
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                        placeholder="Masukkan judul buku">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
-                                    <select name="kategori_id" required
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                        id="category-select">
-                                        <option value="" disabled selected>Pilih kategori</option>
-                                        @foreach ($kategori as $k)
-                                            <option value="{{ $k->id }}">{{ $k->kategori }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="flex items-end">
-                                    <button type="button" onclick="history.back()"
-                                        class="w-full px-6 py-3 bg-gray-800 text-white rounded-xl hover:bg-gray-900 transition-all duration-300 font-medium shadow-lg hover:shadow-xl flex items-center justify-center group">
+                            <div class="space-y-5">
+                                <div class="group">
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
+                                        <i class='bx bx-book text-emerald-600'></i>
+                                        Judul Buku
+                                    </label>
+                                    <div class="relative">
+                                        <input type="text" name="judul" required
+                                            class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition duration-300 bg-white hover:border-emerald-300 group-hover:shadow-sm"
+                                            placeholder="Masukkan judul buku">
                                         <i
-                                            class='bx bx-x-circle text-xl mr-2 group-hover:rotate-90 transition-transform duration-300'></i>Batalkan
-                                    </button>
+                                            class='bx bx-edit absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 group-hover:text-emerald-500 transition-colors'></i>
+                                    </div>
+                                </div>
+                                <div class="group">
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
+                                        <i class='bx bx-user text-emerald-600'></i>
+                                        Penulis
+                                    </label>
+                                    <div class="relative">
+                                        <input type="text" name="penulis" required
+                                            class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition duration-300 bg-white hover:border-emerald-300 group-hover:shadow-sm"
+                                            placeholder="Nama penulis buku">
+                                        <i
+                                            class='bx bx-pencil absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 group-hover:text-emerald-500 transition-colors'></i>
+                                    </div>
+                                </div>
+                                <div class="group">
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
+                                        <i class='bx bx-category text-emerald-600'></i>
+                                        Kategori
+                                    </label>
+                                    <div class="relative">
+                                        <select name="kategori_id" id="category-select" required
+                                            class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-xl bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition duration-300 hover:border-emerald-300 group-hover:shadow-sm appearance-none">
+                                            <option value="" disabled selected>Pilih kategori</option>
+                                            @foreach ($kategori as $k)
+                                                <option value="{{ $k->id }}">{{ $k->kategori }}</option>
+                                            @endforeach
+                                        </select>
+                                        <i
+                                            class='bx bx-category absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 group-hover:text-emerald-500 transition-colors'></i>
+                                        <i
+                                            class='bx bx-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none'></i>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">ISBN</label>
-                                    <input type="text" name="isbn"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                        placeholder="Nomor ISBN">
+
+                            <div class="space-y-5">
+                                <div class="group">
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
+                                        <i class='bx bx-barcode text-emerald-600'></i>
+                                        ISBN
+                                    </label>
+                                    <div class="relative">
+                                        <input type="text" name="isbn"
+                                            class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition duration-300 bg-white hover:border-emerald-300 group-hover:shadow-sm"
+                                            placeholder="Nomor ISBN (opsional)">
+                                        <i
+                                            class='bx bx-barcode absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 group-hover:text-emerald-500 transition-colors'></i>
+                                    </div>
                                 </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Penulis</label>
-                                    <input type="text" name="penulis" required
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                        placeholder="Nama penulis">
+                                <div class="group">
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
+                                        <i class='bx bx-building text-emerald-600'></i>
+                                        Penerbit
+                                    </label>
+                                    <div class="relative">
+                                        <input type="text" name="penerbit" required
+                                            class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition duration-300 bg-white hover:border-emerald-300 group-hover:shadow-sm"
+                                            placeholder="Nama penerbit">
+                                        <i
+                                            class='bx bx-building-house absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 group-hover:text-emerald-500 transition-colors'></i>
+                                    </div>
                                 </div>
-                                <div class="flex items-end">
+                                <div class="group">
+                                    <label class="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                                        <i class='bx bx-image-add text-emerald-600 text-lg'></i>
+                                        Cover Buku
+                                    </label>
+                                    <input type="file" name="cover" id="coverInput"
+                                        class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition-colors duration-200"
+                                        accept="image/*">
+                                </div>
+                            </div>
+
+                            <div class="lg:col-span-2 pt-4 border-t border-gray-100">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <button type="submit"
-                                        class="w-full px-6 py-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-all duration-300 font-medium shadow-lg hover:shadow-emerald-200 hover:shadow-2xl flex items-center justify-center group">
-                                        <i class='bx bx-save mr-2 group-hover:animate-bounce'></i>Simpan Buku
+                                        class="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-green-500 text-white rounded-xl font-semibold shadow-md hover:from-emerald-600 hover:to-green-600 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center space-x-2 group">
+                                        <i class='bx bx-save text-xl group-hover:scale-110 transition-transform'></i>
+                                        <span>Simpan Buku</span>
+                                    </button>
+                                    <button type="button" onclick="clearInputs()"
+                                        class="w-full py-3.5 bg-gradient-to-r from-gray-600 to-gray-700 text-white rounded-xl font-semibold shadow-md hover:from-gray-700 hover:to-gray-800 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center space-x-2 group">
+                                        <i
+                                            class='bx bx-refresh text-xl group-hover:rotate-180 transition-transform duration-500'></i>
+                                        <span>Reset Form</span>
                                     </button>
                                 </div>
                             </div>
@@ -161,106 +229,118 @@
                     </div>
                 </div>
             </div>
+
             <div class="bg-white rounded-2xl shadow-sm overflow-hidden" data-aos="fade-up">
-                <div class="px-6 py-4 border-b border-gray-200">
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
-                        <div class="relative max-w-md mb-4">
-                            <input type="text" id="search-books" placeholder="Cari judul, penulis, atau ISBN..."
-                                class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
-                            <i class='bx bx-search absolute left-3 top-2.5 text-gray-400'></i>
-                        </div>
-                        <div class="flex items-center space-x-4">
-                            <select id="category-filter"
-                                class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500">
-                                <option value="" disabled selected>Semua Kategori</option>
-                                @foreach ($kategori as $k)
-                                    <option value="{{ $k->kategori }}">{{ $k->kategori }}</option>
-                                @endforeach
-                            </select>
-                            <select id="status-filter"
-                                class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500">
-                                <option value="">Semua Status</option>
-                                <option value="Tersedia">Tersedia</option>
-                                <option value="Dipinjam">Dipinjam</option>
-                                <option value="Perbaikan">Perbaikan</option>
-                            </select>
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100" data-aos="fade-up">
+                    <div class="px-6 py-5 border-b border-gray-200">
+                        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                            <div class="relative max-w-md w-full">
+                                <input type="text" id="search-books" placeholder="Cari judul, penulis, ISBN..."
+                                    class="w-full px-4 py-2.5 pl-10 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition text-sm">
+                                <i
+                                    class='bx bx-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400'></i>
+                            </div>
+
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <select id="category-filter"
+                                    class="px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none">
+                                    <option value="" selected>Semua Kategori</option>
+                                    @foreach ($kategori as $k)
+                                        <option value="{{ $k->id }}">{{ $k->kategori }}</option>
+                                    @endforeach
+                                </select>
+                                <select id="status-filter"
+                                    class="px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none">
+                                    <option value="" selected>Semua Status</option>
+                                    <option value="Tersedia">Tersedia</option>
+                                    <option value="Dipinjam">Dipinjam</option>
+                                    <option value="Perbaikan">Perbaikan</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Table -->
-                <div class="overflow-x-auto rounded-2xl shadow-lg border border-gray-100 bg-white">
-                    <table class="w-full border border-gray-200 rounded-lg overflow-hidden">
-                        <thead class="bg-emerald-600 text-white text-sm uppercase">
-                            <tr>
-                                <th class="px-4 py-2 text-left">Judul</th>
-                                <th class="px-4 py-2 text-left">Penulis</th>
-                                <th class="px-4 py-2 text-left">Kategori</th>
-                                <th class="px-4 py-2 text-left">ISBN</th>
-                                <th class="px-4 py-2 text-center">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="books-table-body">
-                            @foreach ($buku as $b)
-                                <tr class="hover:bg-emerald-50 transition">
-                                    <td class="px-4 py-2">{{ $b->judul }}</td>
-                                    <td class="px-4 py-2">{{ $b->penulis }}</td>
-                                    <td class="px-4 py-2">{{ $b->kategori->kategori }}</td>
-                                    <td class="px-4 py-2">{{ $b->isbn }}</td>
-                                    <td class="px-4 py-2 text-center">
-                                        <a href="{{ route('buku.show', $b->id) }}"
-                                            class="text-blue-500 hover:text-blue-700 mx-1"><i class='bx bx-show'></i></a>
-                                        <a href="{{ route('buku.edit', $b->id) }}"
-                                            class="text-emerald-500 hover:text-emerald-700 mx-1"><i
-                                                class='bx bx-edit'></i></a>
-                                        <form action="{{ route('buku.destroy', $b->id) }}" method="POST"
-                                            class="inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button onclick="return confirm('Yakin hapus buku ini?')"
-                                                class="text-red-500 hover:text-red-700 mx-1">
-                                                <i class='bx bx-trash'></i>
-                                            </button>
-                                        </form>
-                                    </td>
+                    <div class="overflow-x-auto">
+                        <table id="table-buku" class="w-full text-sm text-gray-700">
+                            <thead class="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white uppercase text-xs">
+                                <tr>
+                                    <th class="px-5 py-3 text-left font-medium">Cover</th>
+                                    <th class="px-5 py-3 text-left font-medium">Judul</th>
+                                    <th class="px-5 py-3 text-left font-medium">Penulis</th>
+                                    <th class="px-5 py-3 text-left font-medium">Penerbit</th>
+                                    <th class="px-5 py-3 text-left font-medium">Kategori</th>
+                                    <th class="px-5 py-3 text-left font-medium">ISBN</th>
+                                    <th class="px-5 py-3 text-center font-medium w-28">Aksi</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Table Footer -->
-                <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
-                    <div class="text-sm text-gray-700">
-                        Menampilkan <span class="font-medium" id="showing-count">0</span> dari <span class="font-medium"
-                            id="total-count">0</span> buku
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <button
-                            class="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors"
-                            id="prev-page">
-                            Sebelumnya
-                        </button>
-                        <button
-                            class="px-3 py-1 bg-emerald-600 text-white rounded-lg text-sm hover:bg-emerald-700 transition-colors"
-                            id="current-page">
-                            1
-                        </button>
-                        <button
-                            class="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors"
-                            id="next-page">
-                            Selanjutnya
-                        </button>
+                            </thead>
+                            <tbody id="books-table" class="divide-y divide-gray-100">
+                                @forelse ($buku as $b)
+                                    <tr class="hover:bg-emerald-50 transition-colors duration-200 group">
+                                        <td class="px-5 py-3">
+                                            @if ($b->cover)
+                                                <img src="{{ asset('storage/' . $b->cover) }}" width="80">
+                                            @else
+                                                <div
+                                                    class="w-12 h-16 bg-gray-200 border-2 border-dashed rounded-lg flex items-center justify-center">
+                                                    <i class='bx bx-image text-gray-400 text-xl'></i>
+                                                </div>
+                                            @endif
+                                        </td>
+                                        <td class="px-5 py-3 font-medium text-gray-900">{{ Str::limit($b->judul, 30) }}
+                                        </td>
+                                        <td class="px-5 py-3 text-gray-700">{{ $b->penulis }}</td>
+                                        <td class="px-5 py-3 text-gray-700">{{ $b->penerbit }}</td>
+                                        <td class="px-5 py-3">
+                                            <span
+                                                class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
+                                                {{ $b->kategori->kategori }}
+                                            </span>
+                                        </td>
+                                        <td class="px-5 py-3 font-mono text-xs text-gray-600">{{ $b->isbn ?? '-' }}</td>
+                                        <td class="px-5 py-3 text-center">
+                                            <div class="flex items-center justify-center gap-1.5">
+                                                <a href="{{ route('buku.show', $b->id) }}"
+                                                    class="text-blue-600 hover:text-blue-800 transition" title="Lihat">
+                                                    <i class='bx bx-show text-lg'></i>
+                                                </a>
+                                                <a href="{{ route('buku.edit', $b->id) }}"
+                                                    class="text-emerald-600 hover:text-emerald-800 transition"
+                                                    title="Edit">
+                                                    <i class='bx bx-edit text-lg'></i>
+                                                </a>
+                                                <form id="form-delete-{{ $b->id }}"
+                                                    action="{{ route('buku.destroy', $b->id) }}" method="POST"
+                                                    class="inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button" onclick="hapus({{ $b->id }})"
+                                                        class="text-red-600 hover:text-red-800 transition">
+                                                        <i class='bx bx-trash text-lg'></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="text-center py-10 text-gray-500">
+                                            <i class='bx bx-book-open text-4xl mb-2 block'></i>
+                                            <p class="font-medium">Belum ada buku</p>
+                                            <p class="text-sm">Tambahkan buku pertama Anda!</p>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </main>
     </div>
+
     <div id="modalTambahKategori" tabindex="-1" aria-hidden="true"
         class="hidden fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto h-[calc(100%)] max-h-full flex justify-center items-center bg-black/40">
-
         <div class="relative bg-white rounded-2xl shadow-lg w-full max-w-md p-6">
-            <!-- Header -->
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-semibold text-gray-800">Tambah Kategori</h3>
                 <button type="button" data-modal-hide="modalTambahKategori"
@@ -268,8 +348,6 @@
                     &times;
                 </button>
             </div>
-
-            <!-- Form -->
             <form action="{{ route('kategori.store') }}" method="POST">
                 @csrf
                 <div class="mb-4">
@@ -277,38 +355,85 @@
                     <input type="text" id="kategori" name="kategori" required
                         class="w-full px-4 py-2.5 border border-gray-200 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
                 </div>
-
                 <div class="flex justify-end gap-2">
-                    <button type="button" data-modal-hide="modalTambahKategori"
-                        class="px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-100 transition-all">Batal</button>
                     <button type="submit"
-                        class="px-4 py-2 text-sm bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-all">Simpan</button>
+                        class="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-green-500 text-white rounded-xl font-semibold shadow-md hover:from-emerald-600 hover:to-green-600 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center space-x-2 group">
+                        <i class='bx bx-save text-xl group-hover:scale-110 transition-transform'></i>
+                        <span>Simpan Buku</span>
+                    </button>
+                    <button type="button" onclick="clearInputs()"
+                        class="w-full py-3.5 bg-gradient-to-r from-gray-600 to-gray-700 text-white rounded-xl font-semibold shadow-md hover:from-gray-700 hover:to-gray-800 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center space-x-2 group">
+                        <i class='bx bx-refresh text-xl group-hover:rotate-180 transition-transform duration-500'></i>
+                        <span>Reset Form</span>
+                    </button>
                 </div>
             </form>
         </div>
     </div>
-    <script>
-        const books = @json($buku);
-        const fuse = new Fuse(books, {
-            keys: ['judul', 'penulis', 'isbn', 'kategori.kategori'],
-            threshold: 0.3
-        });
-        const tbody = document.getElementById('books-table-body');
 
-        document.getElementById('search-books').addEventListener('input', e => {
-            const list = e.target.value ? fuse.search(e.target.value).map(r => r.item) : books;
-            tbody.innerHTML = list.map(b => `
-        <tr class="hover:bg-emerald-50 transition">
-            <td class="px-4 py-2">${b.judul}</td>
-            <td class="px-4 py-2">${b.penulis}</td>
-            <td class="px-4 py-2">${b.kategori?.kategori||'-'}</td>
-            <td class="px-4 py-2">${b.isbn}</td>
-            <td class="px-4 py-2">
-                <button class="px-3 py-1 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 text-sm">Edit</button>
-                <button class="px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm">Hapus</button>
-            </td>
-        </tr>
-    `).join('') || `<tr><td colspan="5" class="text-center text-gray-400 py-4">Tidak ada hasil</td></tr>`;
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let table = $('#table-buku').DataTable({
+                language: {
+                    search: "Cari Buku:",
+                    lengthMenu: "Tampilkan _MENU_",
+                    zeroRecords: "Tidak ada data",
+                    info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+                    paginate: {
+                        first: "Awal",
+                        last: "Akhir",
+                        next: "›",
+                        previous: "‹"
+                    }
+                }
+            });
+
+            // search input
+            $('#search-books').on('keyup', function() {
+                table.search(this.value).draw();
+            });
+
+            // filter kategori (kolom ke-5 index 4)
+            $('#category-filter').on('change', function() {
+                table.column(4).search(this.value).draw();
+            });
+
+            // filter status (kalau nanti kolom status sudah ada)
+            $('#status-filter').on('change', function() {
+                table.column(6).search(this.value).draw();
+            });
         });
+    </script>
+
+
+    <script>
+        FilePond.registerPlugin(
+            FilePondPluginImagePreview,
+            FilePondPluginFileValidateType,
+            FilePondPluginFileEncode
+        );
+        const pond = FilePond.create(document.getElementById('cover'), {
+            acceptedFileTypes: ['image/*'],
+            allowImagePreview: true,
+            allowFileEncode: true,
+            labelIdle: 'Klik atau seret gambar ke sini',
+            stylePanelAspectRatio: '1 / 1'
+        });
+
+        function clearInputs() {
+            const inputs = document.querySelectorAll('form input[type="text"], form select');
+            inputs.forEach(input => {
+                if (input.tagName === 'SELECT') {
+                    input.selectedIndex = 0;
+                } else {
+                    input.value = '';
+                }
+            });
+            const fileInput = document.getElementById('coverInput');
+            fileInput.value = '';
+            const newFile = fileInput.cloneNode(true);
+            fileInput.parentNode.replaceChild(newFile, fileInput);
+        }
     </script>
 @endsection

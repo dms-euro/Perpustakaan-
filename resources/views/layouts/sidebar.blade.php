@@ -1,6 +1,6 @@
 <aside id="sidebar"
-    class="fixed inset-y-0 left-0 z-50 w-64 bg-emerald-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
-    <div class="flex items-center justify-between p-4 border-b border-emerald-700">
+    class="fixed rounded-r-3xl inset-y-0 left-0 z-50 w-64 bg-emerald-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+    <div class="flex items-center justify-between p-4 border-b border-white">
         <div class="flex items-center space-x-2">
             <i class='bx bx-book-open text-2xl text-emerald-300'></i>
             <span class="text-xl font-bold text-white">Admin Panel</span>
@@ -13,7 +13,7 @@
     <nav class="p-4 space-y-2 overflow-y-auto h-[calc(100vh-150px)]">
 
         <a href="{{ route('dashboard.index') }}"
-            class="flex items-center space-x-3 p-3 rounded-lg transition-all
+            class="flex items-center space-x-3 p-3 rounded-full transition-all
     {{ Request::routeIs('dashboard.*') ? 'bg-emerald-700 text-white' : 'text-emerald-200 hover:bg-emerald-700 hover:text-white' }}">
             <i class='bx bx-home text-xl'></i>
             <span>Dashboard</span>
@@ -22,15 +22,15 @@
 
         <!-- Buku -->
         <a href="{{ route('buku.index') }}"
-            class="flex items-center space-x-3 p-3 rounded-lg transition-all
+            class="flex items-center space-x-3 p-3 rounded-full transition-all
         {{ Request::routeIs('buku.*') ? 'bg-emerald-700 text-white' : 'text-emerald-200 hover:bg-emerald-700 hover:text-white' }}">
             <i class='bx bx-book text-xl'></i>
             <span>Manajemen Buku</span>
         </a>
 
         <!-- Anggota -->
-        <a href="{{ route('anggota.index') }}"
-            class="flex items-center space-x-3 p-3 rounded-lg transition-all
+        <a href="{{ route('anggota') }}"
+            class="flex items-center space-x-3 p-3 rounded-full transition-all
         {{ Request::routeIs('anggota.*') ? 'bg-emerald-700 text-white' : 'text-emerald-200 hover:bg-emerald-700 hover:text-white' }}">
             <i class='bx bx-group text-xl'></i>
             <span>Manajemen Anggota</span>
@@ -38,7 +38,7 @@
 
         <!-- Peminjaman -->
         <a href="{{ route('peminjaman.index') }}"
-            class="flex items-center space-x-3 p-3 rounded-lg transition-all
+            class="flex items-center space-x-3 p-3 rounded-full transition-all
         {{ Request::routeIs('peminjaman.*') ? 'bg-emerald-700 text-white' : 'text-emerald-200 hover:bg-emerald-700 hover:text-white' }}">
             <i class='bx bx-transfer text-xl'></i>
             <span>Peminjaman</span>
@@ -46,7 +46,7 @@
 
         <!-- Laporan -->
         <a href="#"
-            class="flex items-center space-x-3 p-3 rounded-lg transition-all
+            class="flex items-center space-x-3 p-3 rounded-full transition-all
         {{ Request::routeIs('laporan.*') ? 'bg-emerald-700 text-white' : 'text-emerald-200 hover:bg-emerald-700 hover:text-white' }}">
             <i class='bx bx-chart text-xl'></i>
             <span>Laporan</span>
@@ -54,7 +54,7 @@
 
         <!-- Pengaturan -->
         <a href="#"
-            class="flex items-center space-x-3 p-3 rounded-lg transition-all
+            class="flex items-center space-x-3 p-3 rounded-full transition-all
         {{ Request::routeIs('pengaturan.*') ? 'bg-emerald-700 text-white' : 'text-emerald-200 hover:bg-emerald-700 hover:text-white' }}">
             <i class='bx bx-cog text-xl'></i>
             <span>Pengaturan</span>
