@@ -232,34 +232,34 @@
 
             <div class="bg-white rounded-2xl shadow-sm overflow-hidden" data-aos="fade-up">
                 <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100" data-aos="fade-up">
-                    <div class="px-6 py-5 border-b border-gray-200">
-                        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                            <div class="relative max-w-md w-full">
-                                <input type="text" id="search-books" placeholder="Cari judul, penulis, ISBN..."
-                                    class="w-full px-4 py-2.5 pl-10 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition text-sm">
-                                <i
-                                    class='bx bx-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400'></i>
-                            </div>
-
-                            <div class="flex flex-col sm:flex-row gap-3">
-                                <select id="category-filter"
-                                    class="px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none">
-                                    <option value="" selected>Semua Kategori</option>
-                                    @foreach ($kategori as $k)
-                                        <option value="{{ $k->id }}">{{ $k->kategori }}</option>
-                                    @endforeach
-                                </select>
-                                <select id="status-filter"
-                                    class="px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none">
-                                    <option value="" selected>Semua Status</option>
-                                    <option value="Tersedia">Tersedia</option>
-                                    <option value="Dipinjam">Dipinjam</option>
-                                    <option value="Perbaikan">Perbaikan</option>
-                                </select>
+                    <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                        <div>
+                            <div class="relative">
+                                <i class='bx bx-search absolute left-3 top-1/2 -translate-y-1/2 text-lg text-gray-400'></i>
+                                <input type="text" id="search-books" placeholder="Cari buku, penulis, atau ISBN..."
+                                    class="pl-10 pr-4 py-2.5 w-56 md:w-64 text-sm border border-gray-200 rounded-full bg-gray-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 placeholder-gray-400 transition-all">
                             </div>
                         </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="flex gap-2">
+                                <button
+                                    class="px-4 py-2 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-100 active:scale-[.97] transition-all text-sm flex items-center shadow-sm">
+                                    <i class='bx bx-export mr-2 text-base'></i>Export
+                                </button>
+                                <button
+                                    class="px-4 py-2 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-100 active:scale-[.97] transition-all text-sm flex items-center shadow-sm">
+                                    <i class='bx bx-import mr-2 text-base'></i>Import
+                                </button>
+                            </div>
+                            <select id="category-filter"
+                                class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500">
+                                <option value="">Semua Kategori</option>
+                                @foreach ($kategori as $k)
+                                    <option value="{{ $k->kategori }}">{{ $k->kategori }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
-
                     <div class="overflow-x-auto">
                         <table id="table-buku" class="w-full text-sm text-gray-700">
                             <thead class="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white uppercase text-xs">
@@ -274,7 +274,7 @@
                                 </tr>
                             </thead>
                             <tbody id="books-table" class="divide-y divide-gray-100">
-                                @forelse ($buku as $b)
+                                @foreach ($buku as $b)
                                     <tr class="hover:bg-emerald-50 transition-colors duration-200 group">
                                         <td class="px-5 py-3">
                                             @if ($b->cover)
@@ -321,17 +321,22 @@
                                             </div>
                                         </td>
                                     </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="7" class="text-center py-10 text-gray-500">
-                                            <i class='bx bx-book-open text-4xl mb-2 block'></i>
-                                            <p class="font-medium">Belum ada buku</p>
-                                            <p class="text-sm">Tambahkan buku pertama Anda!</p>
-                                        </td>
-                                    </tr>
-                                @endforelse
+                                @endforeach
                             </tbody>
                         </table>
+                        <div id="custom-pagination"
+                            class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+                            <div class="text-sm text-gray-700" id="custom-info"></div>
+                            <div class="flex items-center space-x-2" id="custom-buttons"></div>
+                        </div>
+
+                        @if ($buku->isEmpty())
+                            <div class="text-center py-10 text-gray-500">
+                                <i class='bx bx-book-open text-4xl mb-2 block'></i>
+                                <p class="font-medium">Belum ada buku</p>
+                                <p class="text-sm">Tambahkan buku pertama Anda!</p>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -370,43 +375,6 @@
             </form>
         </div>
     </div>
-
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let table = $('#table-buku').DataTable({
-                language: {
-                    search: "Cari Buku:",
-                    lengthMenu: "Tampilkan _MENU_",
-                    zeroRecords: "Tidak ada data",
-                    info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
-                    paginate: {
-                        first: "Awal",
-                        last: "Akhir",
-                        next: "›",
-                        previous: "‹"
-                    }
-                }
-            });
-
-            // search input
-            $('#search-books').on('keyup', function() {
-                table.search(this.value).draw();
-            });
-
-            // filter kategori (kolom ke-5 index 4)
-            $('#category-filter').on('change', function() {
-                table.column(4).search(this.value).draw();
-            });
-
-            // filter status (kalau nanti kolom status sudah ada)
-            $('#status-filter').on('change', function() {
-                table.column(6).search(this.value).draw();
-            });
-        });
-    </script>
-
-
     <script>
         FilePond.registerPlugin(
             FilePondPluginImagePreview,
@@ -435,5 +403,82 @@
             const newFile = fileInput.cloneNode(true);
             fileInput.parentNode.replaceChild(newFile, fileInput);
         }
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const hasBooks = {{ $buku->count() > 0 ? 'true' : 'false' }};
+            if (!hasBooks) return;
+
+            let table = $('#table-buku').DataTable({
+                language: {
+                    search: "Cari Buku:",
+                    lengthMenu: "Tampilkan _MENU_",
+                    zeroRecords: "Tidak ada data",
+                    info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+                },
+                dom: 't',
+                pageLength: 10,
+            });
+
+            function updatePagination() {
+                let info = table.page.info();
+                let totalPages = info.pages;
+                let currentPage = info.page + 1;
+
+                $('#custom-info').html(
+                    `Menampilkan <span class="font-medium">${info.start + 1}</span> sampai <span class="font-medium">${info.end}</span> dari <span class="font-medium">${info.recordsDisplay}</span> hasil`
+                );
+
+                let buttons = '';
+
+                buttons +=
+                    `<button class="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors" ${currentPage === 1 ? 'disabled' : ''} data-page="${currentPage - 2}">Sebelumnya</button>`;
+
+                let start = Math.max(1, currentPage - 1);
+                let end = Math.min(totalPages, currentPage + 1);
+
+                if (start > 2) {
+                    buttons +=
+                        `<button class="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors" data-page="0">1</button>`;
+                    buttons += `<span class="text-gray-400 px-1">...</span>`;
+                }
+
+                for (let i = start; i <= end; i++) {
+                    buttons +=
+                        `<button class="px-3 py-1 ${i === currentPage ? 'bg-emerald-600 text-white' : 'border border-gray-300'} rounded-lg text-sm hover:bg-gray-50 transition-colors" data-page="${i - 1}">${i}</button>`;
+                }
+
+                if (end < totalPages - 1) {
+                    buttons += `<span class="text-gray-400 px-1">...</span>`;
+                    buttons +=
+                        `<button class="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors" data-page="${totalPages - 1}">${totalPages}</button>`;
+                } else if (end === totalPages - 1) {
+                    buttons +=
+                        `<button class="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors" data-page="${totalPages - 1}">${totalPages}</button>`;
+                }
+
+                buttons +=
+                    `<button class="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors" ${currentPage === totalPages ? 'disabled' : ''} data-page="${currentPage}">Selanjutnya</button>`;
+
+                $('#custom-buttons').html(buttons);
+            }
+
+            $('#custom-buttons').on('click', 'button[data-page]', function() {
+                let page = $(this).data('page');
+                table.page(page).draw('page');
+            });
+
+            table.on('draw', updatePagination);
+            updatePagination();
+
+            $('#search-books').on('keyup', function() {
+                table.search(this.value).draw();
+            });
+
+            $('#category-filter').on('change', function() {
+                table.column(4).search(this.value).draw();
+            });
+        });
     </script>
 @endsection

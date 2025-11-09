@@ -18,12 +18,12 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'nama',
-        'email',
-        'password',
-        'role',
-        'alamat',
-        'telepon',
+    'nama',
+    'email',
+    'password',
+    'role',
+    'alamat',
+    'telepon',
     ];
 
     public function peminjaman()

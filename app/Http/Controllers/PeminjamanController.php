@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Buku;
 use App\Models\Peminjaman;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PeminjamanController extends Controller
@@ -11,9 +13,14 @@ class PeminjamanController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        //
-    }
+{
+    $anggota = User::where('role', 'anggota')->get();
+    $buku = Buku::all();
+    $peminjaman = Peminjaman::with('user', 'buku')->get();
+
+    return view('admin.peminjaman', compact('anggota', 'buku', 'peminjaman'));
+}
+
 
     /**
      * Show the form for creating a new resource.
@@ -28,7 +35,16 @@ class PeminjamanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'user_id' => 'required',
+            'buku_id' => 'required',
+            'tanggal_pinjam' => 'required',
+            'tanggal_kembali' => 'required',
+            'status' => 'required',
+        ]);
+
+        Peminjaman::create($request->all());
+        return redirect()->back()->with('success', 'Peminjaman berhasil ditambahkan.');
     }
 
     /**

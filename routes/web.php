@@ -18,7 +18,14 @@ Route::get('/login', function () {
     return redirect()->route('auth.index');
 })->name('login');
 
-Route::get('Anggota', [AuthController::class, 'anggota'])->name('anggota');
+Route::get('Anggota', [AnggotaController::class, 'index'])->name('anggota.index');
+Route::post('Anggota/Tambah', [AnggotaController::class, 'store'])->name('anggota.store');
+Route::get('Admin/Anggota/{id}/edit', [anggotaController::class, 'edit'])->name('anggota.edit');
+Route::put('Admin/Anggota/{id}', [anggotaController::class, 'update'])->name('anggota.update');
+Route::get('Admin/Anggota/{id}/show', [anggotaController::class, 'show'])->name('anggota.show');
+Route::delete('Admin/Anggota/{id}', [anggotaController::class, 'destroy'])->name('anggota.destroy');
+
+
 Route::post('Auth/Login', [AuthController::class, 'login'])->name('auth.login');
 Route::get('Auth/Register', [AuthController::class, 'register'])->name('auth.register');
 
@@ -32,10 +39,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Admin/Buku/{id}/show', [BukuController::class, 'show'])->name('buku.show');
     Route::delete('Admin/Buku/{id}', [BukuController::class, 'destroy'])->name('buku.destroy');
 
-    Route::post('Admin/Kategori',[KategoriController::class, 'store'])->name('kategori.store');
+    Route::post('Admin/Kategori', [KategoriController::class, 'store'])->name('kategori.store');
     Route::delete('Admin/Kategori/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
 
     Route::get('Admin/Peminjaman', [PeminjamanController::class, 'index'])->name('peminjaman.index');
+    Route::post('Admin/Peminjaman', [PeminjamanController::class, 'store'])->name('peminjaman.store');
 
 
     Route::post('Auth/Logout', [AuthController::class, 'logout'])->name('auth.logout');

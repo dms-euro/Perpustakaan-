@@ -1,8 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-2xl p-8 border border-gray-100">
-
+<div class="lg:ml-64">
         {{-- Header Section --}}
         <div class="text-center mb-8">
             <h1 class="text-3xl font-bold text-gray-800 mb-2">Detail Buku</h1>

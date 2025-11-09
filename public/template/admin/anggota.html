@@ -1,362 +1,765 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Manajemen Anggota | Admin</title>
-
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            emerald: {
-              50: '#ecfdf5',
-              100: '#d1fae5',
-              200: '#a7f3d0',
-              300: '#6ee7b7',
-              400: '#34d399',
-              500: '#10b981',
-              600: '#059669',
-              700: '#047857',
-              800: '#065f46',
-              900: '#064e3b',
-            }
-          }
-        }
-      }
-    }
-  </script>
-
-  <!-- AOS Animation -->
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-
-  <!-- Boxicons -->
-  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
-  <!-- SweetAlert2 -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Anggota - Admin Panel</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Flowbite -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
+    <!-- Box Icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-<body class="bg-gray-50 text-gray-800">
-
-  <!-- Header -->
-  <header class="bg-white shadow-sm border-b border-gray-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-      <h1 class="text-2xl font-bold text-emerald-700">Manajemen Anggota</h1>
-      <button id="addMemberBtn" class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-lg transition">
-        <i class='bx bx-plus text-xl'></i>
-        <span class="hidden sm:inline">Tambah Anggota</span>
-      </button>
-    </div>
-  </header>
-
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
-    <!-- Search & Stats -->
-    <div class="mb-6 flex flex-col sm:flex-row gap-4" data-aos="fade-up">
-      <div class="flex-1">
-        <div class="relative">
-          <i class='bx bx-search absolute left-3 top-1/2 transform -translate-y-1/2 text-emerald-600'></i>
-          <input type="text" id="searchInput" placeholder="Cari nama atau email..."
-                 class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
+<body class="bg-emerald-50 font-sans">
+    <aside id="sidebar"
+    class="fixed inset-y-0 left-0 z-50 w-64 bg-emerald-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+    <div class="flex items-center justify-between p-4 border-b border-emerald-700">
+        <div class="flex items-center space-x-2">
+            <i class='bx bx-book-open text-2xl text-emerald-300'></i>
+            <span class="text-xl font-bold text-white">Admin Panel</span>
         </div>
-      </div>
-      <div class="bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-2 flex items-center gap-2 text-emerald-800">
-        <i class='bx bx-book-open'></i>
-        <span class="font-medium">Pinjaman Aktif: <span id="activeLoansCount">0</span></span>
-      </div>
-    </div>
-
-    <!-- Table -->
-    <div class="bg-white rounded-lg shadow overflow-hidden" data-aos="fade-up" data-aos-delay="100">
-      <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-emerald-50">
-            <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-emerald-800 uppercase tracking-wider">Nama</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-emerald-800 uppercase tracking-wider">Email</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-emerald-800 uppercase tracking-wider hidden sm:table-cell">Telepon</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-emerald-800 uppercase tracking-wider">Status</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-emerald-800 uppercase tracking-wider">Aksi</th>
-            </tr>
-          </thead>
-          <tbody id="membersTableBody" class="bg-white divide-y divide-gray-200">
-            <!-- Data akan diisi via JS -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </main>
-
-  <!-- Modal Tambah/Edit Anggota -->
-  <div id="memberModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-lg shadow-xl w-full max-w-md transform transition-all" data-aos="zoom-in" data-aos-duration="300">
-      <div class="flex justify-between items-center p-6 border-b border-gray-200">
-        <h3 id="modalTitle" class="text-xl font-semibold text-emerald-800">Tambah Anggota</h3>
-        <button id="closeModal" class="text-gray-400 hover:text-gray-600">
-          <i class='bx bx-x text-2xl'></i>
+        <button id="close-sidebar" class="lg:hidden text-emerald-300 hover:text-white">
+            <i class='bx bx-x text-2xl'></i>
         </button>
-      </div>
-      <form id="memberForm" class="p-6 space-y-4">
-        <input type="hidden" id="memberId">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
-          <input type="text" id="name" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500">
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-          <input type="email" id="email" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500">
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Telepon</label>
-          <input type="tel" id="phone" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500">
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-          <select id="status" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500">
-            <option value="Aktif">Aktif</option>
-            <option value="Nonaktif">Nonaktif</option>
-          </select>
-        </div>
-        <div class="flex justify-end gap-3 pt-4">
-          <button type="button" id="cancelBtn" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Batal</button>
-          <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md font-medium">Simpan</button>
-        </div>
-      </form>
     </div>
-  </div>
 
-  <!-- Modal Detail Profil & Pinjaman -->
-  <div id="detailModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-screen overflow-y-auto transform transition-all" data-aos="zoom-in" data-aos-duration="300">
-      <div class="flex justify-between items-center p-6 border-b border-gray-200 sticky top-0 bg-white">
-        <h3 class="text-xl font-semibold text-emerald-800">Detail Anggota</h3>
-        <button id="closeDetailModal" class="text-gray-400 hover:text-gray-600">
-          <i class='bx bx-x text-2xl'></i>
-        </button>
-      </div>
-      <div class="p-6 space-y-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <p class="text-sm text-gray-600">Nama</p>
-            <p id="detailName" class="font-medium text-gray-900">-</p>
-          </div>
-          <div>
-            <p class="text-sm text-gray-600">Email</p>
-            <p id="detailEmail" class="font-medium text-gray-900">-</p>
-          </div>
-          <div>
-            <p class="text-sm text-gray-600">Telepon</p>
-            <p id="detailPhone" class="font-medium text-gray-900">-</p>
-          </div>
-          <div>
-            <p class="text-sm text-gray-600">Status</p>
-            <p id="detailStatus" class="font-medium">
-              <span class="px-2 py-1 text-xs rounded-full" id="statusBadge">-</span>
-            </p>
-          </div>
-        </div>
+    <nav class="p-4 space-y-2 overflow-y-auto h-[calc(100vh-150px)]">
+        <a href="#" class="flex items-center space-x-3 p-3 bg-emerald-700 text-white rounded-lg">
+            <i class='bx bx-home text-xl'></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="#" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
+            <i class='bx bx-book text-xl'></i>
+            <span>Manajemen Buku</span>
+        </a>
+        <a href="#" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
+            <i class='bx bx-group text-xl'></i>
+            <span>Manajemen Anggota</span>
+        </a>
+        <a href="#" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
+            <i class='bx bx-transfer text-xl'></i>
+            <span>Peminjaman</span>
+        </a>
+        <a href="#" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
+            <i class='bx bx-chart text-xl'></i>
+            <span>Laporan</span>
+        </a>
+        <a href="#" class="flex items-center space-x-3 p-3 text-emerald-200 hover:bg-emerald-700 rounded-lg">
+            <i class='bx bx-cog text-xl'></i>
+            <span>Pengaturan</span>
+        </a>
+    </nav>
 
-        <div>
-          <h4 class="font-semibold text-emerald-800 mb-3 flex items-center gap-2">
-            <i class='bx bx-book-open'></i>
-            Riwayat Pinjaman Aktif
-          </h4>
-          <div id="loanList" class="space-y-3">
-            <!-- Daftar pinjaman akan diisi via JS -->
-          </div>
+    <!-- User Section -->
+    <div class="absolute bottom-0 w-full border-t border-emerald-700 p-4">
+        <div class="flex items-center space-x-3 text-emerald-200">
+            <div class="w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center">
+                <i class='bx bx-user text-white'></i>
+            </div>
+            <div class="flex-1">
+                <p class="font-medium text-white">Admin User</p>
+                <p class="text-sm text-emerald-300">Super Administrator</p>
+            </div>
+            <button id="logout-btn" class="text-emerald-300 hover:text-white">
+                <i class='bx bx-log-out text-xl'></i>
+            </button>
         </div>
-      </div>
     </div>
-  </div>
+</aside>
 
-  <!-- Scripts -->
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script>
-    AOS.init({ once: true });
 
-    // Dummy data anggota
-    let members = [
-      { id: 1, name: "Ahmad Fauzi", email: "ahmad@example.com", phone: "08123456789", status: "Aktif", activeLoans: 2 },
-      { id: 2, name: "Siti Nurhaliza", email: "siti@example.com", phone: "08567891234", status: "Aktif", activeLoans: 1 },
-      { id: 3, name: "Budi Santoso", email: "budi@example.com", phone: "08987654321", status: "Nonaktif", activeLoans: 0 },
-    ];
+    <!-- Main Content -->
+    <div class="lg:ml-64">
+        <!-- Top Header -->
+        <header class="bg-white shadow-sm border-b border-gray-200">
+            <div class="flex items-center justify-between p-4">
+                <div class="flex items-center space-x-4">
+                    <button class="lg:hidden text-emerald-700" id="open-sidebar">
+                        <i class='bx bx-menu text-2xl'></i>
+                    </button>
+                    <h1 class="text-2xl font-bold text-emerald-900">Manajemen Anggota</h1>
+                </div>
 
-    // Dummy pinjaman per anggota
-    const loans = {
-      1: [
-        { title: "Dasar-Dasar Pemrograman Web", borrowDate: "2025-10-20", dueDate: "2025-11-20" },
-        { title: "Algoritma dan Struktur Data", borrowDate: "2025-10-25", dueDate: "2025-11-25" }
-      ],
-      2: [
-        { title: "Manajemen Proyek IT", borrowDate: "2025-10-28", dueDate: "2025-11-28" }
-      ],
-      3: []
-    };
+                <div class="flex items-center space-x-4">
+                    <!-- Add Member Button -->
+                    <button class="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium flex items-center" id="add-member-btn">
+                        <i class='bx bx-user-plus mr-2'></i>Tambah Anggota
+                    </button>
+                </div>
+            </div>
+        </header>
 
-    const tableBody = document.getElementById('membersTableBody');
-    const searchInput = document.getElementById('searchInput');
-    const activeLoansCount = document.getElementById('activeLoansCount');
-    const memberModal = document.getElementById('memberModal');
-    const detailModal = document.getElementById('detailModal');
-    const addMemberBtn = document.getElementById('addMemberBtn');
-    const closeModal = document.getElementById('closeModal');
-    const cancelBtn = document.getElementById('cancelBtn');
-    const memberForm = document.getElementById('memberForm');
-    const modalTitle = document.getElementById('modalTitle');
+        <!-- Main Content Area -->
+        <main class="p-6">
+            <!-- Stats Overview -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Total Anggota</p>
+                            <p class="text-3xl font-bold text-emerald-900">8,542</p>
+                            <p class="text-sm text-emerald-600 flex items-center">
+                                <i class='bx bx-up-arrow-alt mr-1'></i>+128 bulan ini
+                            </p>
+                        </div>
+                        <div class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
+                            <i class='bx bx-group text-2xl text-emerald-600'></i>
+                        </div>
+                    </div>
+                </div>
 
-    // Render tabel
-    function renderTable(data = members) {
-      tableBody.innerHTML = '';
-      let totalActive = 0;
-      data.forEach(member => {
-        totalActive += member.activeLoans;
-        const row = `
-          <tr class="hover:bg-gray-50 transition">
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${member.name}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">${member.email}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 hidden sm:table-cell">${member.phone}</td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <span class="px-2 py-1 text-xs rounded-full font-medium ${member.status === 'Aktif' ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-800'}">
-                ${member.status}
-              </span>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-              <button onclick="openDetail(${member.id})" class="text-emerald-600 hover:text-emerald-800">
-                <i class='bx bx-clipboard'></i>
-              </button>
-              <button onclick="editMember(${member.id})" class="text-emerald-600 hover:text-emerald-800">
-                <i class='bx bx-edit'></i>
-              </button>
-              <button onclick="deleteMember(${member.id})" class="text-red-600 hover:text-red-800">
-                <i class='bx bx-trash'></i>
-              </button>
-            </td>
-          </tr>`;
-        tableBody.innerHTML += row;
-      });
-      activeLoansCount.textContent = totalActive;
-    }
+                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Aktif</p>
+                            <p class="text-3xl font-bold text-emerald-900">7,215</p>
+                            <p class="text-sm text-emerald-600">84.5% dari total</p>
+                        </div>
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class='bx bx-check-circle text-2xl text-green-600'></i>
+                        </div>
+                    </div>
+                </div>
 
-    // Search
-    searchInput.addEventListener('input', (e) => {
-      const term = e.target.value.toLowerCase();
-      const filtered = members.filter(m =>
-        m.name.toLowerCase().includes(term) ||
-        m.email.toLowerCase().includes(term)
-      );
-      renderTable(filtered);
-    });
+                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Tidak Aktif</p>
+                            <p class="text-3xl font-bold text-amber-900">1,327</p>
+                            <p class="text-sm text-amber-600">Perlu verifikasi</p>
+                        </div>
+                        <div class="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
+                            <i class='bx bx-time text-2xl text-amber-600'></i>
+                        </div>
+                    </div>
+                </div>
 
-    // Tambah anggota
-    addMemberBtn.addEventListener('click', () => {
-      modalTitle.textContent = 'Tambah Anggota';
-      memberForm.reset();
-      document.getElementById('memberId').value = '';
-      memberModal.classList.remove('hidden');
-    });
+                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Diblokir</p>
+                            <p class="text-3xl font-bold text-red-900">84</p>
+                            <p class="text-sm text-red-600">Pelanggaran aturan</p>
+                        </div>
+                        <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                            <i class='bx bx-block text-2xl text-red-600'></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    // Edit anggota
-    window.editMember = (id) => {
-      const member = members.find(m => m.id === id);
-      modalTitle.textContent = 'Edit Anggota';
-      document.getElementById('memberId').value = member.id;
-      document.getElementById('name').value = member.name;
-      document.getElementById('email').value = member.email;
-      document.getElementById('phone').value = member.phone;
-      document.getElementById('status').value = member.status;
-      memberModal.classList.remove('hidden');
-    };
+            <!-- Filters and Search -->
+            <div class="bg-white rounded-2xl shadow-sm p-6 mb-6" data-aos="fade-up">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <!-- Search -->
+                    <div class="md:col-span-2">
+                        <div class="relative">
+                            <input type="text" placeholder="Cari nama, email, atau ID anggota..."
+                                   class="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                            <i class='bx bx-search absolute left-4 top-3 text-xl text-gray-400'></i>
+                        </div>
+                    </div>
 
-    // Hapus anggota
-    window.deleteMember = (id) => {
-      Swal.fire({
-        title: 'Hapus anggota?',
-        text: "Data akan dihapus permanen!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#10b981',
-        cancelButtonColor: '#6b7280',
-        confirmButtonText: 'Ya, hapus!',
-        cancelButtonText: 'Batal'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          members = members.filter(m => m.id !== id);
-          renderTable();
-          Swal.fire('Terhapus!', 'Anggota telah dihapus.', 'success');
-        }
-      });
-    };
+                    <!-- Status Filter -->
+                    <div>
+                        <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                            <option>Semua Status</option>
+                            <option>Aktif</option>
+                            <option>Tidak Aktif</option>
+                            <option>Diblokir</option>
+                            <option>Menunggu Verifikasi</option>
+                        </select>
+                    </div>
 
-    // Simpan form
-    memberForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const id = document.getElementById('memberId').value;
-      const newMember = {
-        id: id ? parseInt(id) : Date.now(),
-        name: document.getElementById('name').value,
-        email: document.getElementById('email').value,
-        phone: document.getElementById('phone').value,
-        status: document.getElementById('status').value,
-        activeLoans: id ? members.find(m => m.id == id).activeLoans : 0
-      };
+                    <!-- Membership Type -->
+                    <div>
+                        <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                            <option>Semua Tipe</option>
+                            <option>Reguler</option>
+                            <option>Premium</option>
+                            <option>Pelajar</option>
+                            <option>Senior</option>
+                        </select>
+                    </div>
+                </div>
 
-      if (id) {
-        const index = members.findIndex(m => m.id == id);
-        members[index] = { ...members[index], ...newMember };
-      } else {
-        members.push(newMember);
-      }
+                <!-- Advanced Filters -->
+                <div class="mt-4 flex flex-wrap gap-4">
+                    <button class="px-4 py-2 border border-emerald-600 text-emerald-700 rounded-lg hover:bg-emerald-50 transition-colors text-sm">
+                        <i class='bx bx-filter-alt mr-2'></i>Filter Lanjutan
+                    </button>
+                    <button class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm">
+                        <i class='bx bx-export mr-2'></i>Export Data
+                    </button>
+                    <button class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm">
+                        <i class='bx bx-envelope mr-2'></i>Kirim Email Massal
+                    </button>
+                </div>
+            </div>
 
-      renderTable();
-      memberModal.classList.add('hidden');
-      Swal.fire('Sukses!', id ? 'Anggota diperbarui.' : 'Anggota ditambahkan.', 'success');
-    });
+            <!-- Members Table -->
+            <div class="bg-white rounded-2xl shadow-sm overflow-hidden" data-aos="fade-up">
+                <!-- Table Header -->
+                <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-emerald-900">Daftar Anggota</h3>
+                        <p class="text-sm text-gray-600">Menampilkan 1-10 dari 8,542 anggota</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <select class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500">
+                            <option>10 per halaman</option>
+                            <option>25 per halaman</option>
+                            <option>50 per halaman</option>
+                        </select>
+                    </div>
+                </div>
 
-    // Tutup modal
-    closeModal.addEventListener('click', () => memberModal.classList.add('hidden'));
-    cancelBtn.addEventListener('click', () => memberModal.classList.add('hidden'));
-    document.getElementById('closeDetailModal').addEventListener('click', () => detailModal.classList.add('hidden'));
+                <!-- Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <input type="checkbox" class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Anggota</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kontak</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bergabung</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipe</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Buku Dipinjam</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <!-- Member 1 -->
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <input type="checkbox" class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center mr-3">
+                                            <i class='bx bx-user text-emerald-600'></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-medium text-emerald-900">Ahmad Rizki</div>
+                                            <div class="text-sm text-gray-500">ID: MEM-8542</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">ahmad.rizki@email.com</div>
+                                    <div class="text-sm text-gray-500">+62 812-3456-7890</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    15 Jan 2023
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Aktif</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Premium</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">3 buku</div>
+                                    <div class="text-xs text-amber-600">1 hampir jatuh tempo</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <div class="flex items-center space-x-2">
+                                        <button class="text-emerald-600 hover:text-emerald-900 edit-member" data-id="1">
+                                            <i class='bx bx-edit text-lg'></i>
+                                        </button>
+                                        <button class="text-amber-600 hover:text-amber-900 view-member" data-id="1">
+                                            <i class='bx bx-show text-lg'></i>
+                                        </button>
+                                        <button class="text-red-600 hover:text-red-900 delete-member" data-id="1">
+                                            <i class='bx bx-trash text-lg'></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
 
-    // Buka detail
-    window.openDetail = (id) => {
-      const member = members.find(m => m.id === id);
-      document.getElementById('detailName').textContent = member.name;
-      document.getElementById('detailEmail').textContent = member.email;
-      document.getElementById('detailPhone').textContent = member.phone;
-      const statusBadge = document.getElementById('statusBadge');
-      statusBadge.textContent = member.status;
-      statusBadge.className = `px-2 py-1 text-xs rounded-full font-medium ${member.status === 'Aktif' ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-800'}`;
+                            <!-- Member 2 -->
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <input type="checkbox" class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center mr-3">
+                                            <i class='bx bx-user text-emerald-600'></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-medium text-emerald-900">Sari Dewi</div>
+                                            <div class="text-sm text-gray-500">ID: MEM-8541</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">sari.dewi@email.com</div>
+                                    <div class="text-sm text-gray-500">+62 813-9876-5432</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    20 Mar 2023
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Aktif</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 py-1 bg-emerald-100 text-emerald-800 text-xs rounded-full">Reguler</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">0 buku</div>
+                                    <div class="text-xs text-gray-500">Tidak ada peminjaman</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <div class="flex items-center space-x-2">
+                                        <button class="text-emerald-600 hover:text-emerald-900 edit-member" data-id="2">
+                                            <i class='bx bx-edit text-lg'></i>
+                                        </button>
+                                        <button class="text-amber-600 hover:text-amber-900 view-member" data-id="2">
+                                            <i class='bx bx-show text-lg'></i>
+                                        </button>
+                                        <button class="text-red-600 hover:text-red-900 delete-member" data-id="2">
+                                            <i class='bx bx-trash text-lg'></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
 
-      const loanList = document.getElementById('loanList');
-      loanList.innerHTML = '';
-      const memberLoans = loans[id] || [];
-      if (memberLoans.length === 0) {
-        loanList.innerHTML = '<p class="text-gray-500 italic">Tidak ada pinjaman aktif.</p>';
-      } else {
-        memberLoans.forEach(loan => {
-          const item = `
-            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
-              <p class="font-medium text-gray-900">${loan.title}</p>
-              <p class="text-sm text-gray-600">Dipinjam: ${loan.borrowDate} | Jatuh tempo: ${loan.dueDate}</p>
-            </div>`;
-          loanList.innerHTML += item;
+                            <!-- Member 3 -->
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <input type="checkbox" class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center mr-3">
+                                            <i class='bx bx-user text-amber-600'></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-medium text-emerald-900">Budi Santoso</div>
+                                            <div class="text-sm text-gray-500">ID: MEM-8540</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">budi.santoso@email.com</div>
+                                    <div class="text-sm text-gray-500">+62 811-2233-4455</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    05 Feb 2023
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 py-1 bg-amber-100 text-amber-800 text-xs rounded-full">Menunggu</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">Pelajar</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">-</div>
+                                    <div class="text-xs text-gray-500">Belum terverifikasi</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <div class="flex items-center space-x-2">
+                                        <button class="text-emerald-600 hover:text-emerald-900 verify-member" data-id="3">
+                                            <i class='bx bx-check-circle text-lg'></i>
+                                        </button>
+                                        <button class="text-amber-600 hover:text-amber-900 view-member" data-id="3">
+                                            <i class='bx bx-show text-lg'></i>
+                                        </button>
+                                        <button class="text-red-600 hover:text-red-900 delete-member" data-id="3">
+                                            <i class='bx bx-trash text-lg'></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- Member 4 -->
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <input type="checkbox" class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-3">
+                                            <i class='bx bx-user text-red-600'></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-medium text-emerald-900">Citra Lestari</div>
+                                            <div class="text-sm text-gray-500">ID: MEM-8539</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">citra.lestari@email.com</div>
+                                    <div class="text-sm text-gray-500">+62 817-5566-7788</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    12 Des 2022
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">Diblokir</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 py-1 bg-emerald-100 text-emerald-800 text-xs rounded-full">Reguler</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">0 buku</div>
+                                    <div class="text-xs text-red-600">Akses ditangguhkan</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <div class="flex items-center space-x-2">
+                                        <button class="text-emerald-600 hover:text-emerald-900 unblock-member" data-id="4">
+                                            <i class='bx bx-lock-open text-lg'></i>
+                                        </button>
+                                        <button class="text-amber-600 hover:text-amber-900 view-member" data-id="4">
+                                            <i class='bx bx-show text-lg'></i>
+                                        </button>
+                                        <button class="text-red-600 hover:text-red-900 delete-member" data-id="4">
+                                            <i class='bx bx-trash text-lg'></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Table Footer -->
+                <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+                    <div class="text-sm text-gray-700">
+                        Menampilkan <span class="font-medium">1</span> sampai <span class="font-medium">4</span> dari <span class="font-medium">8,542</span> hasil
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button class="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors">
+                            Sebelumnya
+                        </button>
+                        <button class="px-3 py-1 bg-emerald-600 text-white rounded-lg text-sm hover:bg-emerald-700 transition-colors">
+                            1
+                        </button>
+                        <button class="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors">
+                            2
+                        </button>
+                        <button class="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors">
+                            3
+                        </button>
+                        <button class="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors">
+                            Selanjutnya
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bulk Actions -->
+            <div class="mt-6 flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
+                        <option>Aksi Massal</option>
+                        <option>Aktifkan Anggota</option>
+                        <option>Nonaktifkan Anggota</option>
+                        <option>Kirim Email</option>
+                        <option>Hapus Anggota</option>
+                    </select>
+                    <button class="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors text-sm">
+                        Terapkan
+                    </button>
+                </div>
+
+                <div class="text-sm text-gray-600">
+                    <i class='bx bx-info-circle mr-1'></i>
+                    <span>8,542 anggota terdaftar dalam sistem</span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
         });
-      }
-      detailModal.classList.remove('hidden');
-    };
 
-    // Tutup modal saat klik luar
-    [memberModal, detailModal].forEach(modal => {
-      modal.addEventListener('click', (e) => {
-        if (e.target === modal) modal.classList.add('hidden');
-      });
-    });
+        // Sidebar functionality
+        const sidebar = document.getElementById('sidebar');
+        const openSidebar = document.getElementById('open-sidebar');
+        const closeSidebar = document.getElementById('close-sidebar');
 
-    // Inisialisasi
-    renderTable();
-  </script>
+        openSidebar.addEventListener('click', () => {
+            sidebar.classList.remove('-translate-x-full');
+        });
+
+        closeSidebar.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+        });
+
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            Swal.fire({
+                title: 'Konfirmasi Logout',
+                text: 'Apakah Anda yakin ingin keluar dari panel admin?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Logout',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#10b981'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'login.html';
+                }
+            });
+        });
+
+        // Add Member Modal
+        document.getElementById('add-member-btn').addEventListener('click', () => {
+            Swal.fire({
+                title: 'Tambah Anggota Baru',
+                html: `
+                    <div class="text-left space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
+                                <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500" placeholder="Nama lengkap">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                <input type="email" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500" placeholder="email@contoh.com">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Telepon</label>
+                                <input type="tel" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500" placeholder="+62 812-3456-7890">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tipe Keanggotaan</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
+                                    <option>Reguler</option>
+                                    <option>Premium</option>
+                                    <option>Pelajar</option>
+                                    <option>Senior</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Alamat</label>
+                            <textarea class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500" rows="2" placeholder="Alamat lengkap"></textarea>
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Simpan Anggota',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#10b981',
+                preConfirm: () => {
+                    // Validation logic here
+                    return true;
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire('Berhasil!', 'Anggota baru telah ditambahkan.', 'success');
+                }
+            });
+        });
+
+        // Edit Member
+        document.querySelectorAll('.edit-member').forEach(button => {
+            button.addEventListener('click', function() {
+                const memberId = this.getAttribute('data-id');
+                Swal.fire({
+                    title: 'Edit Data Anggota',
+                    html: `
+                        <div class="text-left space-y-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
+                                    <input type="text" value="Ahmad Rizki" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                                    <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
+                                        <option>Aktif</option>
+                                        <option>Tidak Aktif</option>
+                                        <option>Diblokir</option>
+                                        <option>Menunggu Verifikasi</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Tipe Keanggotaan</label>
+                                    <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
+                                        <option>Reguler</option>
+                                        <option selected>Premium</option>
+                                        <option>Pelajar</option>
+                                        <option>Senior</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Kedaluarsa</label>
+                                    <input type="date" value="2024-12-31" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
+                                </div>
+                            </div>
+                        </div>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: 'Update Data',
+                    cancelButtonText: 'Batal',
+                    confirmButtonColor: '#10b981'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire('Berhasil!', 'Data anggota telah diperbarui.', 'success');
+                    }
+                });
+            });
+        });
+
+        // View Member Details
+        document.querySelectorAll('.view-member').forEach(button => {
+            button.addEventListener('click', function() {
+                const memberId = this.getAttribute('data-id');
+                Swal.fire({
+                    title: 'Detail Anggota',
+                    html: `
+                        <div class="text-left space-y-4">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center">
+                                    <i class='bx bx-user text-2xl text-emerald-600'></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg text-emerald-900">Ahmad Rizki</h3>
+                                    <p class="text-gray-600">ID: MEM-8542</p>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <p class="font-medium text-gray-700">Email</p>
+                                    <p class="text-gray-900">ahmad.rizki@email.com</p>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-700">Telepon</p>
+                                    <p class="text-gray-900">+62 812-3456-7890</p>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-700">Bergabung</p>
+                                    <p class="text-gray-900">15 Januari 2023</p>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-700">Status</p>
+                                    <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Aktif</span>
+                                </div>
+                            </div>
+
+                            <div class="border-t pt-4">
+                                <h4 class="font-medium text-gray-700 mb-2">Riwayat Peminjaman</h4>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between text-sm">
+                                        <span>Buku sedang dipinjam</span>
+                                        <span class="font-medium">3 buku</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm">
+                                        <span>Total peminjaman</span>
+                                        <span class="font-medium">24 buku</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm">
+                                        <span>Keterlambatan</span>
+                                        <span class="text-red-600 font-medium">2 kali</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `,
+                    confirmButtonText: 'Tutup',
+                    confirmButtonColor: '#10b981'
+                });
+            });
+        });
+
+        // Verify Member
+        document.querySelectorAll('.verify-member').forEach(button => {
+            button.addEventListener('click', function() {
+                const memberId = this.getAttribute('data-id');
+                Swal.fire({
+                    title: 'Verifikasi Anggota?',
+                    text: "Anggota akan diaktifkan dan dapat meminjam buku.",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, Verifikasi',
+                    cancelButtonText: 'Batal',
+                    confirmButtonColor: '#10b981'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire('Terverifikasi!', 'Anggota telah berhasil diverifikasi.', 'success');
+                    }
+                });
+            });
+        });
+
+        // Unblock Member
+        document.querySelectorAll('.unblock-member').forEach(button => {
+            button.addEventListener('click', function() {
+                const memberId = this.getAttribute('data-id');
+                Swal.fire({
+                    title: 'Buka Blokir Anggota?',
+                    text: "Anggota akan dapat mengakses layanan kembali.",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, Buka Blokir',
+                    cancelButtonText: 'Batal',
+                    confirmButtonColor: '#10b981'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire('Berhasil!', 'Anggota telah berhasil dibuka blokirnya.', 'success');
+                    }
+                });
+            });
+        });
+
+        // Delete Member
+        document.querySelectorAll('.delete-member').forEach(button => {
+            button.addEventListener('click', function() {
+                const memberId = this.getAttribute('data-id');
+                Swal.fire({
+                    title: 'Hapus Anggota?',
+                    text: "Data anggota akan dihapus permanen dari sistem.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, Hapus!',
+                    cancelButtonText: 'Batal',
+                    confirmButtonColor: '#d33',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire('Terhapus!', 'Anggota telah berhasil dihapus.', 'success');
+                    }
+                });
+            });
+        });
+
+        // Search functionality
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                Swal.fire({
+                    title: 'Mencari...',
+                    text: `Menampilkan hasil untuk "${this.value}"`,
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            }
+        });
+    </script>
 </body>
 </html>
