@@ -43,39 +43,22 @@
             <i class='bx bx-transfer text-xl'></i>
             <span>Peminjaman</span>
         </a>
-
-        <!-- Laporan -->
-        <a href="#"
-            class="flex items-center space-x-3 p-3 rounded-full transition-all
-        {{ Request::routeIs('laporan.*') ? 'bg-emerald-700 text-white' : 'text-emerald-200 hover:bg-emerald-700 hover:text-white' }}">
-            <i class='bx bx-chart text-xl'></i>
-            <span>Laporan</span>
-        </a>
-
-        <!-- Pengaturan -->
-        <a href="#"
-            class="flex items-center space-x-3 p-3 rounded-full transition-all
-        {{ Request::routeIs('pengaturan.*') ? 'bg-emerald-700 text-white' : 'text-emerald-200 hover:bg-emerald-700 hover:text-white' }}">
-            <i class='bx bx-cog text-xl'></i>
-            <span>Pengaturan</span>
-        </a>
-
     </nav>
 
-
-    <!-- User Section -->
     <div class="absolute bottom-0 w-full border-t border-emerald-700 p-4">
         <div class="flex items-center space-x-3 text-emerald-200">
-            <div class="w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center">
-                <i class='bx bx-user text-white'></i>
-            </div>
-            <div class="flex-1">
-                <p class="font-medium text-white">{{ Auth::user()->nama ?? 'Administrator' }}</p>
-                <p class="text-sm text-emerald-300">{{ Auth::user()->role ?? 'Super Admin' }}</p>
-            </div>
-            <a href="{{ route('auth.logout') }}" id="logout-btn" class="text-emerald-300 hover:text-white">
-                <i class='bx bx-log-out text-xl'></i>
+            <a href="{{ route('profile.index') }}" class="flex items-center space-x-3 text-emerald-200">
+                <div class="w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center">
+                    <i class='bx bx-user text-white'></i>
+                </div>
+                <div class="flex-1">
+                    <p class="font-medium text-white">{{ Auth::user()->nama ?? 'Administrator' }}</p>
+                    <p class="text-sm text-emerald-300">{{ Auth::user()->role ?? 'Super Admin' }}</p>
+                </div>
             </a>
+                <a href="{{ route('auth.logout') }}" id="logout-btn" class="text-emerald-300 hover:text-white">
+                    <i class='bx bx-log-out text-xl'></i>
+                </a>
         </div>
     </div>
 </aside>

@@ -86,10 +86,7 @@
                     <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
                         <div>
                             <h3 class="text-lg font-bold text-emerald-900">Daftar Peminjaman</h3>
-                            <button data-modal-target="modalTambahPeminjaman" data-modal-toggle="modalTambahPeminjaman"
-                                class="px-3 py-1 border border-emerald-500 text-emerald-600 rounded-full transition-all text-sm flex items-center hover:text-white hover:bg-gradient-to-r hover:from-emerald-500 hover:to-emerald-700">
-                                <i class='bx bx-plus mr-1'></i> Tambah Peminjaman
-                            </button>
+                            <p class="text-sm text-gray-600 mt-1">Kelola data peminjaman buku perpustakaan</p>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 ">
                             <!-- Search -->
@@ -115,17 +112,10 @@
                                 </select>
                             </div>
 
-                            <!-- Date Filter -->
-                            <div>
-                                <select
-                                    class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50 hover:bg-white transition-all duration-200 text-sm text-gray-700">
-                                    <option selected>Semua Waktu</option>
-                                    <option>Hari Ini</option>
-                                    <option>Minggu Ini</option>
-                                    <option>Bulan Ini</option>
-                                    <option>3 Bulan Terakhir</option>
-                                </select>
-                            </div>
+                            <button data-modal-target="modalTambahPeminjaman" data-modal-toggle="modalTambahPeminjaman"
+                                class="px-3 py-1 border border-emerald-500 text-emerald-600 rounded-full transition-all text-sm flex items-center hover:text-white hover:bg-gradient-to-r hover:from-emerald-500 hover:to-emerald-700">
+                                <i class='bx bx-plus mr-1'></i> Tambah Peminjaman
+                            </button>
                         </div>
                     </div>
 
@@ -162,9 +152,8 @@
                                 @foreach ($peminjaman as $p)
                                     @php
 
-
-                                        $tglKembali =  Carbon\Carbon::parse($p->tanggal_kembali)->startOfDay();
-                                        $tglSekarang =  Carbon\Carbon::now()->startOfDay();
+                                        $tglKembali = Carbon\Carbon::parse($p->tanggal_kembali)->startOfDay();
+                                        $tglSekarang = Carbon\Carbon::now()->startOfDay();
 
                                         $hariTerlambat = 0;
                                         $hariSisa = 0;
@@ -253,15 +242,18 @@
                                         <!-- Aksi -->
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <div class="flex items-center space-x-2">
-                                                <button class="text-emerald-600 hover:text-emerald-900">
-                                                    <i class='bx bx-check-circle text-lg'></i>
-                                                </button>
-                                                <button class="text-amber-600 hover:text-amber-900">
-                                                    <i class='bx bx-time text-lg'></i>
-                                                </button>
-                                                <button class="text-blue-600 hover:text-blue-900">
+                                                <form action="{{ route('peminjaman.kembalikan', $p->id) }}" method="POST"
+                                                    class="inline kembalikan-form">
+                                                    @csrf
+                                                    <button type="submit"
+                                                        class="text-emerald-600 hover:text-emerald-900">
+                                                        <i class='bx bx-check-circle text-lg'></i>
+                                                    </button>
+                                                </form>
+                                                <a href="{{ route('peminjaman.show', $p->id) }}"
+                                                    class="text-blue-600 hover:text-blue-800 transition" title="Lihat">
                                                     <i class='bx bx-show text-lg'></i>
-                                                </button>
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>
@@ -424,6 +416,27 @@
 
                 new TomSelect("#user_id", options);
                 new TomSelect("#buku_id", options);
+            });
+        </script>
+        <script>
+            document.querySelectorAll('.kembalikan-form').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Kembalikan Buku?',
+                        text: 'Apakah kamu yakin buku ini sudah dikembalikan?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#10B981',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, kembalikan!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
             });
         </script>
     @endsection

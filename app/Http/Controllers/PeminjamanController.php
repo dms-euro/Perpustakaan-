@@ -6,6 +6,7 @@ use App\Models\Buku;
 use App\Models\Peminjaman;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class PeminjamanController extends Controller
 {
@@ -13,21 +14,20 @@ class PeminjamanController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-{
-    $anggota = User::where('role', 'anggota')->get();
-    $buku = Buku::all();
-    $peminjaman = Peminjaman::with('user', 'buku')->get();
-
-    return view('admin.peminjaman', compact('anggota', 'buku', 'peminjaman'));
-}
-
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
     {
-        //
+        $anggota = User::where('role', 'anggota')->get();
+        $buku = Buku::all();
+        $peminjaman = Peminjaman::with('user', 'buku')->where('status', '!=', 'Dikembalikan')->get();
+        return view('admin.peminjaman', compact('anggota', 'buku', 'peminjaman'));
+    }
+
+    public function kembalikan($id)
+    {
+        $peminjaman = Peminjaman::findOrFail($id);
+        $peminjaman->status = 'Dikembalikan';
+        $peminjaman->save();
+
+        return redirect()->route('peminjaman.index')->with('success', 'Buku berhasil dikembalikan!');
     }
 
     /**
@@ -50,10 +50,24 @@ class PeminjamanController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Peminjaman $peminjaman)
+    public function show($id)
     {
-        //
+        $peminjaman = Peminjaman::with('user', 'buku')->findOrFail($id);
+
+        // Hitung denda & keterlambatan
+        $tglSekarang = Carbon::now()->startOfDay();
+        $tglKembali = Carbon::parse($peminjaman->tanggal_kembali);
+        $hariTerlambat = 0;
+        $denda = 0;
+
+        if ($tglSekarang->gt($tglKembali)) {
+            $hariTerlambat = $tglSekarang->diffInDays($tglKembali);
+            $denda = $hariTerlambat * 5000;
+        }
+
+        return view('admin.show-peminjaman', compact('peminjaman', 'hariTerlambat', 'denda'));
     }
+
 
     /**
      * Show the form for editing the specified resource.

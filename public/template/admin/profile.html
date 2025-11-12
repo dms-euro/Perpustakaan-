@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Admin</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .profile-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .form-input:focus {
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+        .profile-image-container {
+            position: relative;
+            display: inline-block;
+        }
+        .profile-image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            cursor: pointer;
+        }
+        .profile-image-container:hover .profile-image-overlay {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-indigo-700">Admin Dashboard</h1>
+            <div class="flex items-center space-x-4">
+                <span class="text-gray-700">Admin</span>
+                <div class="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2" data-aos="fade-right">Profil Admin</h1>
+            <p class="text-gray-600 mb-8" data-aos="fade-right" data-aos-delay="100">Kelola informasi profil dan akun Anda</p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Sidebar Profil -->
+                <div class="lg:col-span-1" data-aos="fade-right" data-aos-delay="200">
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <div class="flex flex-col items-center">
+                            <!-- Foto Profil -->
+                            <div class="profile-image-container mb-4">
+                                <img id="profileImage" src="https://via.placeholder.com/150" alt="Foto Profil" class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg">
+                                <div class="profile-image-overlay">
+                                    <i class="fas fa-camera text-white text-xl"></i>
+                                </div>
+                            </div>
+                            <input type="file" id="imageUpload" class="hidden" accept="image/*">
+
+                            <h2 class="text-xl font-semibold text-gray-800" id="displayName">Admin User</h2>
+                            <p class="text-gray-600" id="displayEmail">admin@example.com</p>
+
+                            <div class="mt-6 w-full">
+                                <div class="flex items-center text-gray-700 mb-3">
+                                    <i class="fas fa-envelope mr-3 text-indigo-500"></i>
+                                    <span>admin@example.com</span>
+                                </div>
+                                <div class="flex items-center text-gray-700">
+                                    <i class="fas fa-phone mr-3 text-indigo-500"></i>
+                                    <span>+62 812-3456-7890</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Profil -->
+                <div class="lg:col-span-2" data-aos="fade-left" data-aos-delay="300">
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                        <!-- Tab Navigation -->
+                        <div class="flex border-b">
+                            <button id="dataTab" class="tab-button flex-1 py-4 px-6 text-center font-medium text-gray-700 border-b-2 border-indigo-500 text-indigo-600">
+                                <i class="fas fa-user-edit mr-2"></i>Data Pribadi
+                            </button>
+                            <button id="passwordTab" class="tab-button flex-1 py-4 px-6 text-center font-medium text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-key mr-2"></i>Ganti Password
+                            </button>
+                        </div>
+
+                        <!-- Tab Content -->
+                        <div class="p-6">
+                            <!-- Form Data Pribadi -->
+                            <form id="profileForm" class="space-y-6">
+                                <div>
+                                    <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
+                                    <input type="text" id="name" name="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent form-input" value="Admin User">
+                                </div>
+
+                                <div>
+                                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                    <input type="email" id="email" name="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent form-input" value="admin@example.com">
+                                </div>
+
+                                <div>
+                                    <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Nomor Telepon</label>
+                                    <input type="tel" id="phone" name="phone" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent form-input" value="+62 812-3456-7890">
+                                </div>
+
+                                <div class="pt-4">
+                                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center">
+                                        <i class="fas fa-save mr-2"></i> Simpan Perubahan
+                                    </button>
+                                </div>
+                            </form>
+
+                            <!-- Form Ganti Password -->
+                            <form id="passwordForm" class="space-y-6 hidden">
+                                <div>
+                                    <label for="currentPassword" class="block text-sm font-medium text-gray-700 mb-1">Password Saat Ini</label>
+                                    <div class="relative">
+                                        <input type="password" id="currentPassword" name="currentPassword" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent form-input">
+                                        <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" onclick="togglePassword('currentPassword')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label for="newPassword" class="block text-sm font-medium text-gray-700 mb-1">Password Baru</label>
+                                    <div class="relative">
+                                        <input type="password" id="newPassword" name="newPassword" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent form-input">
+                                        <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" onclick="togglePassword('newPassword')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">Konfirmasi Password Baru</label>
+                                    <div class="relative">
+                                        <input type="password" id="confirmPassword" name="confirmPassword" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent form-input">
+                                        <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" onclick="togglePassword('confirmPassword')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="pt-4">
+                                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center">
+                                        <i class="fas fa-key mr-2"></i> Ganti Password
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        // Inisialisasi AOS
+        AOS.init({
+            duration: 800,
+            once: true
+        });
+
+        // Fungsi untuk toggle password visibility
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.nextElementSibling.querySelector('i');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Fungsi untuk menangani tab navigation
+        document.getElementById('dataTab').addEventListener('click', function() {
+            document.getElementById('profileForm').classList.remove('hidden');
+            document.getElementById('passwordForm').classList.add('hidden');
+
+            document.getElementById('dataTab').classList.add('border-indigo-500', 'text-indigo-600');
+            document.getElementById('dataTab').classList.remove('text-gray-500');
+
+            document.getElementById('passwordTab').classList.remove('border-indigo-500', 'text-indigo-600');
+            document.getElementById('passwordTab').classList.add('text-gray-500');
+        });
+
+        document.getElementById('passwordTab').addEventListener('click', function() {
+            document.getElementById('profileForm').classList.add('hidden');
+            document.getElementById('passwordForm').classList.remove('hidden');
+
+            document.getElementById('passwordTab').classList.add('border-indigo-500', 'text-indigo-600');
+            document.getElementById('passwordTab').classList.remove('text-gray-500');
+
+            document.getElementById('dataTab').classList.remove('border-indigo-500', 'text-indigo-600');
+            document.getElementById('dataTab').classList.add('text-gray-500');
+        });
+
+        // Fungsi untuk menangani upload gambar
+        document.querySelector('.profile-image-container').addEventListener('click', function() {
+            document.getElementById('imageUpload').click();
+        });
+
+        document.getElementById('imageUpload').addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    document.getElementById('profileImage').src = e.target.result;
+                }
+
+                reader.readAsDataURL(e.target.files[0]);
+
+                // Tampilkan notifikasi sukses
+                Swal.fire({
+                    title: 'Berhasil!',
+                    text: 'Foto profil berhasil diubah',
+                    icon: 'success',
+                    confirmButtonColor: '#6366f1',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+
+        // Fungsi untuk menangani form data pribadi
+        document.getElementById('profileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Update data di sidebar
+            document.getElementById('displayName').textContent = document.getElementById('name').value;
+            document.getElementById('displayEmail').textContent = document.getElementById('email').value;
+
+            // Tampilkan notifikasi sukses
+            Swal.fire({
+                title: 'Berhasil!',
+                text: 'Profil berhasil diperbarui',
+                icon: 'success',
+                confirmButtonColor: '#6366f1',
+                confirmButtonText: 'OK'
+            });
+        });
+
+        // Fungsi untuk menangani form ganti password
+        document.getElementById('passwordForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // Validasi sederhana
+            if (newPassword !== confirmPassword) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Password baru dan konfirmasi password tidak cocok',
+                    icon: 'error',
+                    confirmButtonColor: '#6366f1',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+
+            if (newPassword.length < 6) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Password baru harus minimal 6 karakter',
+                    icon: 'error',
+                    confirmButtonColor: '#6366f1',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+
+            // Reset form
+            document.getElementById('passwordForm').reset();
+
+            // Tampilkan notifikasi sukses
+            Swal.fire({
+                title: 'Berhasil!',
+                text: 'Password berhasil diubah',
+                icon: 'success',
+                confirmButtonColor: '#6366f1',
+                confirmButtonText: 'OK'
+            });
+        });
+    </script>
+</body>
+</html>
