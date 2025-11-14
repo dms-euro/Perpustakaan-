@@ -1,20 +1,7 @@
 @extends('layouts.app')
+@section('page-title', 'Manajemen Buku & Kategori')
 @section('content')
-    <div class="lg:ml-64">
-        <header class="bg-white shadow-sm border-b border-gray-200">
-            <div class="flex items-center justify-between p-4">
-                <div class="flex items-center space-x-4">
-                    <button class="lg:hidden text-emerald-700" id="open-sidebar">
-                        <i class='bx bx-menu text-2xl'></i>
-                    </button>
-                    <h1 class="text-2xl font-bold text-emerald-900">Manajemen Buku & Kategori</h1>
-                </div>
-
-                <div class="flex items-center space-x-4">
-                </div>
-            </div>
-        </header>
-
+    <div class="lg:ml-64 pt-24">
         <main class="p-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up" data-aos-delay="100">
@@ -242,14 +229,21 @@
                         </div>
                         <div class="flex items-center space-x-2">
                             <div class="flex gap-2">
-                                <button
-                                    class="px-4 py-2 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-100 active:scale-[.97] transition-all text-sm flex items-center shadow-sm">
-                                    <i class='bx bx-export mr-2 text-base'></i>Export
-                                </button>
-                                <button
-                                    class="px-4 py-2 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-100 active:scale-[.97] transition-all text-sm flex items-center shadow-sm">
-                                    <i class='bx bx-import mr-2 text-base'></i>Import
-                                </button>
+                                <a href="{{ route('buku.export') }}"
+                                    class="px-4 py-2 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-100 flex items-center shadow-sm">
+                                    <i class='bx bx-export mr-2'></i>Export
+                                </a>
+                                <form action="{{ route('buku.import') }}" method="POST" enctype="multipart/form-data"
+                                    class="inline">
+                                    @csrf
+                                    <input type="file" name="file" accept=".xlsx,.csv" class="hidden"
+                                        id="file-upload">
+                                    <label for="file-upload"
+                                        class="px-4 py-2 border border-gray-200 text-gray-700 rounded-lg cursor-pointer flex items-center gap-2">
+                                        <i class='bx bx-import text-base'></i> Import
+                                    </label>
+                                    <button type="submit" class="hidden" id="submit-upload"></button>
+                                </form>
                             </div>
                             <select id="category-filter"
                                 class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500">
@@ -479,6 +473,10 @@
             $('#category-filter').on('change', function() {
                 table.column(4).search(this.value).draw();
             });
+        });
+
+        document.getElementById('file-upload').addEventListener('change', function() {
+            document.getElementById('submit-upload').click();
         });
     </script>
 @endsection

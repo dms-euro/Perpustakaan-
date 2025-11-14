@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Buku;
+use App\Models\Kategori;
+use App\Models\Peminjaman;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -11,7 +16,38 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('admin.dashboard');
+        $kategori = Kategori::all();
+        $buku = Buku::all();
+        $anggota = User::where('role', 'anggota')->get();
+        $peminjaman = Peminjaman::where('status', ['meminjam', '
+terlambat'])->get();
+        $start = Carbon::now()->startOfMonth();
+        $end   = Carbon::now()->endOfMonth();
+
+        $data = Peminjaman::selectRaw('DATE(tanggal_pinjam) as tanggal, COUNT(*) as total')
+            ->whereBetween('tanggal_pinjam', [$start, $end])
+            ->groupBy('tanggal')
+            ->orderBy('tanggal')
+            ->get();
+
+        // Kirim labels & values ke chart
+        $labels = $data->pluck('tanggal')->map(fn($t) => Carbon::parse($t)->format('d M'));
+        $values = $data->pluck('total');
+        $kategoriChart = Kategori::withCount('buku')->get();
+
+        $kategoriLabels = $kategoriChart->pluck('nama');      // Nama kategori
+        $kategoriValues = $kategoriChart->pluck('buku_count'); // Jumlah buku per kategori
+
+        return view('admin.dashboard', compact(
+            'kategori',
+            'buku',
+            'anggota',
+            'peminjaman',
+            'labels',
+            'values',
+            'kategoriLabels',
+            'kategoriValues'
+        ));
     }
 
     /**

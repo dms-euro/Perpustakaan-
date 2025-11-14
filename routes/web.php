@@ -14,7 +14,7 @@ Route::get('/', function () {
     return view('homepage');
 });
 
-Route::get('Auth/Login', [AuthController::class, 'index'])->name('auth.index');
+Route::get('Auth/Login', [AuthController::class, 'index'])->name('login');
 
 Route::post('Auth/Login', [AuthController::class, 'login'])->name('auth.login');
 Route::get('Auth/Register', [AuthController::class, 'register'])->name('auth.register');
@@ -27,6 +27,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Admin/Buku/{id}/edit', [BukuController::class, 'edit'])->name('buku.edit');
     Route::put('Admin/Buku/{id}', [BukuController::class, 'update'])->name('buku.update');
     Route::get('Admin/Buku/{id}/show', [BukuController::class, 'show'])->name('buku.show');
+    Route::get('Admin/Buku/export', [BukuController::class, 'export'])->name('buku.export');
+    Route::post('/buku/import', [BukuController::class, 'import'])->name('buku.import');
     Route::delete('Admin/Buku/{id}', [BukuController::class, 'destroy'])->name('buku.destroy');
 
     Route::post('Admin/Kategori', [KategoriController::class, 'store'])->name('kategori.store');
@@ -47,5 +49,5 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('Admin/Profil', [ProfileController::class,'index'])->name('profile.index');
 
-    Route::post('Auth/Logout', [AuthController::class, 'logout'])->name('auth.logout');
+    Route::post('/Auth/Logout', [AuthController::class, 'logout'])->name('auth.logout');
 });

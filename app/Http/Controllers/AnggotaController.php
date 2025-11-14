@@ -13,7 +13,8 @@ class AnggotaController extends Controller
     public function index()
     {
         $anggota = User::where('role', 'anggota')->get();
-        return view('admin.anggota', compact('anggota'));
+        $petugas = user::where('role', 'petugas')->get();
+        return view('admin.anggota', compact('anggota','petugas'));
     }
 
     /**

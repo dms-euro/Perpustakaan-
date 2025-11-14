@@ -1,7 +1,7 @@
 @extends('layouts.app')
-
+@section('page-title', 'Manajemen Peminjaman Buku')
 @section('content')
-    <div class="lg:ml-64">
+ <div class="lg:ml-64 pt-24">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
             {{-- Header Section --}}

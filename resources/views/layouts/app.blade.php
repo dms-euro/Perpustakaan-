@@ -10,10 +10,11 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://unpkg.com/filepond/dist/filepond.min.css" rel="stylesheet" />
-    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css"rel="stylesheet" />
+    <link
+        href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css"rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
@@ -49,7 +50,7 @@
             background-color: #4b5563 !important;
         }
     </style>
-    
+
 </head>
 
 <body class="bg-emerald-50 font-sans">
@@ -66,7 +67,8 @@
 
     <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
     <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
-    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.min.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.min.js">
+    </script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -146,92 +148,22 @@
         closeSidebar.addEventListener('click', () => {
             sidebar.classList.add('-translate-x-full');
         });
+        document.getElementById('btnLogout').addEventListener('click', function(e) {
+            e.preventDefault();
 
-        // Logout functionality
-        document.getElementById('logout-btn').addEventListener('click', () => {
             Swal.fire({
-                title: 'Konfirmasi Logout',
-                text: 'Apakah Anda yakin ingin keluar dari panel admin?',
-                icon: 'question',
+                title: "Keluar?",
+                text: "Kamu yakin mau logout?",
+                icon: "warning",
                 showCancelButton: true,
-                confirmButtonText: 'Ya, Logout',
-                cancelButtonText: 'Batal',
-                confirmButtonColor: '#10b981'
+                confirmButtonText: "Ya, logout",
+                cancelButtonText: "Batal",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = 'login.html';
+                    document.getElementById('logout-form').submit();
                 }
             });
         });
-
-        // Charts initialization
-        const loansChart = new Chart(
-            document.getElementById('loansChart'), {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
-                    datasets: [{
-                        label: 'Peminjaman',
-                        data: [1200, 1900, 1500, 2200, 1800, 2500, 2300, 2100, 2400, 2600, 2800, 3000],
-                        borderColor: '#10b981',
-                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                        tension: 0.4,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.1)'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        }
-                    }
-                }
-            }
-        );
-
-        const categoriesChart = new Chart(
-            document.getElementById('categoriesChart'), {
-                type: 'doughnut',
-                data: {
-                    labels: ['Sains & Teknologi', 'Sastra', 'Bisnis', 'Sejarah', 'Lainnya'],
-                    datasets: [{
-                        data: [35, 25, 20, 15, 5],
-                        backgroundColor: [
-                            '#10b981',
-                            '#059669',
-                            '#047857',
-                            '#065f46',
-                            '#064e3b'
-                        ],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }
-            }
-        );
 
         setInterval(() => {
             const stats = document.querySelectorAll('.text-3xl.font-bold');

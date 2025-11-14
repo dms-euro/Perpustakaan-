@@ -1,19 +1,8 @@
 @extends('layouts.app')
-
+@section('page-title', 'Manajemen Buku & Kategori')
 @section('content')
-    <div class="lg:ml-64" data-aos="fade-up">
-        <header class="bg-white shadow-sm border-b border-gray-200 p-4 flex justify-between items-center">
-            <div>
-                <h1 class="text-2xl font-bold text-emerald-900">Edit Buku</h1>
-                <p class="text-sm text-gray-600">Perbarui informasi buku di koleksi</p>
-            </div>
-            <a href="{{ route('buku.index') }}"
-                class="px-4 py-2 border border-emerald-600 text-emerald-700 rounded-lg hover:bg-emerald-50 transition">
-                <i class='bx bx-arrow-back mr-2'></i>Kembali
-            </a>
-        </header>
-
-        <main class="p-6">
+   <div class="lg:ml-64 pt-20">
+        <main class="p-2">
                 <form action="{{ route('buku.update', $buku->id) }}" method="POST" enctype="multipart/form-data"
                     class="bg-white p-6 rounded-2xl shadow-lg space-y-6 border border-gray-100">
                     @csrf

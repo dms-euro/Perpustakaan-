@@ -1,9 +1,9 @@
 @extends('layouts.app')
-
+@section('page-title', 'Profile ')
 @section('content')
-<div class="min-h-screen bg-gray-50 py-8">
-    <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
 
+<div class="lg:ml-64 pt-24">
+    <div class="p-4">
         {{-- Header --}}
         <div class="text-center mb-8">
             <div class="inline-flex items-center gap-3 mb-4">
@@ -26,7 +26,7 @@
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
 
             {{-- Profile Section --}}
-            <div class="p-6 border-b border-gray-200">
+            <div class="p-6 border-b p-4 border-gray-200">
                 <div class="flex items-center justify-between mb-6">
                     <h2 class="text-lg font-semibold text-gray-900">Informasi Profil</h2>
                     <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">

@@ -1,7 +1,7 @@
 @extends('layouts.app')
-
+@section('page-title', 'Manajemen User & Anggota')
 @section('content')
-<div class="lg:ml-64">
+<div class="lg:ml-64 pt-24">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {{-- Header dengan Glass Effect --}}

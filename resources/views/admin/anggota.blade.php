@@ -1,29 +1,16 @@
 @extends('layouts.app')
+@section('page-title', 'Manajemen  & Anggota')
 @section('content')
-    <div class="lg:ml-64">
-        <!-- Top Header -->
-        <header class="bg-white shadow-sm border-b border-gray-200">
-            <div class="flex items-center justify-between p-4">
-                <div class="flex items-center space-x-4">
-                    <button class="lg:hidden text-emerald-700" id="open-sidebar">
-                        <i class='bx bx-menu text-2xl'></i>
-                    </button>
-                    <h1 class="text-2xl font-bold text-emerald-900">Manajemen Anggota</h1>
-                </div>
-                <div class="flex items-center space-x-4">
-                </div>
-            </div>
-        </header>
-
+    <div class="lg:ml-64 pt-24">
         <!-- Main Content Area -->
         <main class="p-6">
             <!-- Stats Overview -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm text-gray-600">Total Anggota</p>
-                            <p class="text-3xl font-bold text-emerald-900">8,542</p>
+                            <p class="text-3xl font-bold text-emerald-900">{{ $anggota->count() }}</p>
                             <p class="text-sm text-emerald-600 flex items-center">
                                 <i class='bx bx-up-arrow-alt mr-1'></i>+128 bulan ini
                             </p>
@@ -37,38 +24,12 @@
                 <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up" data-aos-delay="100">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm text-gray-600">Aktif</p>
-                            <p class="text-3xl font-bold text-emerald-900">7,215</p>
+                            <p class="text-sm text-gray-600">Petugas</p>
+                            <p class="text-3xl font-bold text-emerald-900">{{ $petugas->count() }}</p>
                             <p class="text-sm text-emerald-600">84.5% dari total</p>
                         </div>
                         <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
                             <i class='bx bx-check-circle text-2xl text-green-600'></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up" data-aos-delay="200">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-600">Tidak Aktif</p>
-                            <p class="text-3xl font-bold text-amber-900">1,327</p>
-                            <p class="text-sm text-amber-600">Perlu verifikasi</p>
-                        </div>
-                        <div class="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
-                            <i class='bx bx-time text-2xl text-amber-600'></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-2xl shadow-sm p-6" data-aos="fade-up" data-aos-delay="300">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-600">Diblokir</p>
-                            <p class="text-3xl font-bold text-red-900">84</p>
-                            <p class="text-sm text-red-600">Pelanggaran aturan</p>
-                        </div>
-                        <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                            <i class='bx bx-block text-2xl text-red-600'></i>
                         </div>
                     </div>
                 </div>
@@ -87,11 +48,11 @@
                         <!-- Search Bar -->
                         <div class="relative">
                             <i class='bx bx-search absolute left-3 top-1/2 -translate-y-1/2 text-lg text-gray-400'></i>
-                            <input type="text" id="search-anggota" placeholder="Cari buku, penulis, atau ISBN..."
+                            <input type="text" id="search-anggota" placeholder="Cari Nama Anggota..."
                                 class="pl-10 pr-4 py-2.5 w-56 md:w-64 text-sm border border-gray-200 rounded-full bg-gray-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 placeholder-gray-400 transition-all">
                         </div>
                         <button data-modal-target="anggotaModal" data-modal-toggle="anggotaModal"
-                            class="px-6 py-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-all duration-300 font-semibold flex items-center gap-2">
+                            class="px-6 py-3 bg-emerald-600 text-white rounded-full hover:bg-emerald-700 transition-all duration-300 font-semibold flex items-center gap-2">
                             <i class='bx bx-user-plus text-lg'></i> Tambah Anggota
                         </button>
                     </div>

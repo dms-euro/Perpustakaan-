@@ -17,7 +17,7 @@
 
             <!-- Auth Buttons -->
             <div class="md:flex items-center space-x-4">
-                <a href="{{ route('auth.index') }}"
+                <a href="{{ route('login') }}"
                     class="px-4 py-2 text-emerald-700 font-medium hover:text-emerald-500">Masuk</a>
                 <button
                     class="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors">Daftar</button>

@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\BukuExport;
+use App\Imports\BukuImport;
 use App\Models\Buku;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BukuController extends Controller
 {
@@ -90,6 +93,22 @@ class BukuController extends Controller
         ]);
 
         return redirect()->route('buku.index')->with('success', 'Buku berhasil diperbarui');
+    }
+
+    public function export()
+    {
+        return Excel::download(new BukuExport, 'buku.xlsx');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv'
+        ]);
+
+        Excel::import(new BukuImport, $request->file('file'));
+
+        return redirect()->route('buku.index')->with('success', 'Buku berhasil diimport!');
     }
 
     public function destroy(Buku $buku)

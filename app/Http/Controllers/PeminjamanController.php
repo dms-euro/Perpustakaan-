@@ -10,15 +10,29 @@ use Illuminate\Support\Carbon;
 
 class PeminjamanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $anggota = User::where('role', 'anggota')->get();
         $buku = Buku::all();
-        $peminjaman = Peminjaman::with('user', 'buku')->where('status', '!=', 'Dikembalikan')->get();
-        return view('admin.peminjaman', compact('anggota', 'buku', 'peminjaman'));
+        $peminjaman = Peminjaman::with('user', 'buku')
+            ->where('status', '!=', 'dikembalikan')
+            ->get();
+
+        // Update status & denda otomatis
+        foreach ($peminjaman as $p) {
+            $p->cekTerlambat();
+        }
+
+        // Statistik
+        $hampirJatuhTempo = Peminjaman::where('status', 'meminjam')
+            ->whereDate('tanggal_kembali', '<=', Carbon::now()->addDays(2)) // 2 hari lagi
+            ->whereDate('tanggal_kembali', '>=', Carbon::now())              // belum lewat
+            ->get();
+
+        $dipinjam = Peminjaman::where('status', 'meminjam')->count();
+        $terlambat = Peminjaman::where('status', 'terlambat')->count();
+
+        return view('admin.peminjaman', compact('hampirJatuhTempo', 'anggota', 'buku', 'peminjaman', 'dipinjam', 'terlambat'));
     }
 
     public function kembalikan($id)
@@ -30,9 +44,6 @@ class PeminjamanController extends Controller
         return redirect()->route('peminjaman.index')->with('success', 'Buku berhasil dikembalikan!');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
