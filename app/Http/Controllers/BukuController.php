@@ -27,7 +27,8 @@ class BukuController extends Controller
             'penerbit' => 'required',
             'kategori_id' => 'required',
             'isbn' => 'required|unique:buku',
-            'cover' => 'image|mimes:jpg,jpeg,png|max:2048'
+            'cover' => 'image|mimes:jpg,jpeg,png|max:2048',
+            'stock' => 'required'
         ]);
 
         $coverPath = null;
@@ -42,7 +43,8 @@ class BukuController extends Controller
             'penerbit' => $request->penerbit,
             'kategori_id' => $request->kategori_id,
             'isbn' => $request->isbn,
-            'cover' => $coverPath
+            'cover' => $coverPath,
+            'stock' => $request->stock
         ]);
 
         return back()->with('success', 'Buku berhasil ditambahkan');
@@ -70,7 +72,9 @@ class BukuController extends Controller
             'penerbit' => 'required',
             'kategori_id' => 'required',
             'isbn' => 'required',
-            'cover' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+            'cover' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'stock' => 'required'
+
         ]);
 
         $buku = Buku::findOrFail($id);
@@ -89,7 +93,9 @@ class BukuController extends Controller
             'penerbit' => $request->penerbit,
             'kategori_id' => $request->kategori_id,
             'isbn' => $request->isbn,
-            'cover' => $coverPath
+            'cover' => $coverPath,
+            'stock' => $request->stock
+
         ]);
 
         return redirect()->route('buku.index')->with('success', 'Buku berhasil diperbarui');

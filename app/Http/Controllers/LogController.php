@@ -2,18 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DetailPeminjaman;
+use App\Models\LogAktivitas;
+use App\Models\Peminjaman;
 use Illuminate\Http\Request;
 
-class DetailPeminjamanController extends Controller
+class LogController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $logs = Peminjaman::with(['user', 'buku'])
+            ->latest()
+            ->get();
+
+        return view('admin.admin_log', compact('logs'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -31,10 +37,11 @@ class DetailPeminjamanController extends Controller
         //
     }
 
+
     /**
      * Display the specified resource.
      */
-    public function show(DetailPeminjaman $detailPeminjaman)
+    public function show(string $id)
     {
         //
     }
@@ -42,7 +49,7 @@ class DetailPeminjamanController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(DetailPeminjaman $detailPeminjaman)
+    public function edit(string $id)
     {
         //
     }
@@ -50,7 +57,7 @@ class DetailPeminjamanController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, DetailPeminjaman $detailPeminjaman)
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -58,7 +65,7 @@ class DetailPeminjamanController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(DetailPeminjaman $detailPeminjaman)
+    public function destroy(string $id)
     {
         //
     }

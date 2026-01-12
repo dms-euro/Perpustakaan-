@@ -1,3 +1,6 @@
+@php
+    $role = Auth::user()->role ?? null;
+@endphp
 @extends('layouts.app')
 @section('page-title', 'Manajemen Buku & Kategori')
 @section('content')
@@ -72,16 +75,18 @@
                                                 </td>
                                                 <td class="px-6 py-4">
                                                     <div class="flex justify-center">
-                                                        <form id="form-delete-{{ $k->id }}"
-                                                            action="{{ route('kategori.destroy', $k->id) }}" method="POST"
-                                                            class="inline">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="button" onclick="hapus({{ $k->id }})"
-                                                                class="inline-flex items-center justify-center w-8 h-8 text-red-500 rounded-full transition-all hover:bg-red-50 hover:scale-105 active:scale-95">
-                                                                <i class='bx bx-trash text-base'></i>
-                                                            </button>
-                                                        </form>
+                                                        @if ($role === 'admin')
+                                                            <form id="form-delete-{{ $k->id }}"
+                                                                action="{{ route('kategori.destroy', $k->id) }}"
+                                                                method="POST" class="inline">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="button" onclick="hapus({{ $k->id }})"
+                                                                    class="inline-flex items-center justify-center w-8 h-8 text-red-500 rounded-full transition-all hover:bg-red-50 hover:scale-105 active:scale-95">
+                                                                    <i class='bx bx-trash text-base'></i>
+                                                                </button>
+                                                            </form>
+                                                        @endif
                                                     </div>
                                                 </td>
                                             </tr>
@@ -104,7 +109,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="lg:col-span-2">
                     <div class="bg-white rounded-2xl shadow-sm p-6 space-y-4" data-aos="fade-left">
                         <h3 class="text-lg font-bold text-emerald-900">Tambah Buku Baru</h3>
@@ -134,6 +138,19 @@
                                         <input type="text" name="penulis" required
                                             class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition duration-300 bg-white hover:border-emerald-300 group-hover:shadow-sm"
                                             placeholder="Nama penulis buku">
+                                        <i
+                                            class='bx bx-pencil absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 group-hover:text-emerald-500 transition-colors'></i>
+                                    </div>
+                                </div>
+                                <div class="group">
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
+                                        <i class='bx bx-list-ol text-emerald-600'></i>
+                                        Stock
+                                    </label>
+                                    <div class="relative">
+                                        <input type="number" name="stock" required
+                                            class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition duration-300 bg-white hover:border-emerald-300 group-hover:shadow-sm"
+                                            placeholder="Jumlah stock buku">
                                         <i
                                             class='bx bx-pencil absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 group-hover:text-emerald-500 transition-colors'></i>
                                     </div>
@@ -263,6 +280,7 @@
                                     <th class="px-5 py-3 text-left font-medium">Penulis</th>
                                     <th class="px-5 py-3 text-left font-medium">Penerbit</th>
                                     <th class="px-5 py-3 text-left font-medium">Kategori</th>
+                                    <th class="px-5 py-3 text-left font-medium">Stock</th>
                                     <th class="px-5 py-3 text-left font-medium">ISBN</th>
                                     <th class="px-5 py-3 text-center font-medium w-28">Aksi</th>
                                 </tr>
@@ -290,6 +308,7 @@
                                                 {{ $b->kategori->kategori }}
                                             </span>
                                         </td>
+                                        <td class="px-5 py-3 text-gray-700">{{ $b->stock }}</td>
                                         <td class="px-5 py-3 font-mono text-xs text-gray-600">{{ $b->isbn ?? '-' }}</td>
                                         <td class="px-5 py-3 text-center">
                                             <div class="flex items-center justify-center gap-1.5">
@@ -297,21 +316,23 @@
                                                     class="text-blue-600 hover:text-blue-800 transition" title="Lihat">
                                                     <i class='bx bx-show text-lg'></i>
                                                 </a>
-                                                <a href="{{ route('buku.edit', $b->id) }}"
-                                                    class="text-emerald-600 hover:text-emerald-800 transition"
-                                                    title="Edit">
-                                                    <i class='bx bx-edit text-lg'></i>
-                                                </a>
-                                                <form id="form-delete-{{ $b->id }}"
-                                                    action="{{ route('buku.destroy', $b->id) }}" method="POST"
-                                                    class="inline">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="button" onclick="hapus({{ $b->id }})"
-                                                        class="text-red-600 hover:text-red-800 transition">
-                                                        <i class='bx bx-trash text-lg'></i>
-                                                    </button>
-                                                </form>
+                                                @if ($role === 'admin')
+                                                    <a href="{{ route('buku.edit', $b->id) }}"
+                                                        class="text-emerald-600 hover:text-emerald-800 transition"
+                                                        title="Edit">
+                                                        <i class='bx bx-edit text-lg'></i>
+                                                    </a>
+                                                    <form id="form-delete-{{ $b->id }}"
+                                                        action="{{ route('buku.destroy', $b->id) }}" method="POST"
+                                                        class="inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" onclick="hapus({{ $b->id }})"
+                                                            class="text-red-600 hover:text-red-800 transition">
+                                                            <i class='bx bx-trash text-lg'></i>
+                                                        </button>
+                                                    </form>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>

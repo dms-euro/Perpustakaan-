@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('penerbit')->nullable();
             $table->string('isbn')->unique();
             $table->string('cover')->nullable();
+            $table->string('stock')->default(1);
             $table->timestamps();
         });
     }

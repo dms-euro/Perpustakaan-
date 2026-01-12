@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Peminjaman extends Model
@@ -27,18 +28,15 @@ class Peminjaman extends Model
     }
     public function cekTerlambat()
     {
-        // Cek tanggal kembali < hari ini
-        if ($this->tanggal_kembali < now()->toDateString() && $this->status != 'dikembalikan') {
+        if ($this->status == 'meminjam') {
+            $hariIni = Carbon::now()->startOfDay();
+            $jatuhTempo = Carbon::parse($this->tanggal_kembali);
 
-            // Update status jadi terlambat
-            $this->status = 'terlambat';
-
-            // Denda hanya sekali
-            if ($this->denda == 0) {
-                $this->denda = 35000;
+            if ($hariIni->gt($jatuhTempo)) {
+                $this->status = 'terlambat';
+                $this->denda = 50000;
+                $this->save();
             }
-
-            $this->save();
         }
     }
 }

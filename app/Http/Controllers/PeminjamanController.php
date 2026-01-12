@@ -18,15 +18,13 @@ class PeminjamanController extends Controller
             ->where('status', '!=', 'dikembalikan')
             ->get();
 
-        // Update status & denda otomatis
         foreach ($peminjaman as $p) {
             $p->cekTerlambat();
         }
 
-        // Statistik
         $hampirJatuhTempo = Peminjaman::where('status', 'meminjam')
-            ->whereDate('tanggal_kembali', '<=', Carbon::now()->addDays(2)) // 2 hari lagi
-            ->whereDate('tanggal_kembali', '>=', Carbon::now())              // belum lewat
+            ->whereDate('tanggal_kembali', '<=', Carbon::now()->addDays(2))
+            ->whereDate('tanggal_kembali', '>=', Carbon::now())
             ->get();
 
         $dipinjam = Peminjaman::where('status', 'meminjam')->count();
@@ -38,10 +36,16 @@ class PeminjamanController extends Controller
     public function kembalikan($id)
     {
         $peminjaman = Peminjaman::findOrFail($id);
-        $peminjaman->status = 'Dikembalikan';
+
+        if ($peminjaman->status === 'terlambat') {
+            $peminjaman->denda = 50000;
+        }
+
+        $peminjaman->status = 'dikembalikan';
         $peminjaman->save();
 
-        return redirect()->route('peminjaman.index')->with('success', 'Buku berhasil dikembalikan!');
+        return redirect()->route('peminjaman.index')
+            ->with('success', 'Buku berhasil dikembalikan');
     }
 
     public function store(Request $request)
@@ -65,7 +69,6 @@ class PeminjamanController extends Controller
     {
         $peminjaman = Peminjaman::with('user', 'buku')->findOrFail($id);
 
-        // Hitung denda & keterlambatan
         $tglSekarang = Carbon::now()->startOfDay();
         $tglKembali = Carbon::parse($peminjaman->tanggal_kembali);
         $hariTerlambat = 0;
@@ -73,7 +76,7 @@ class PeminjamanController extends Controller
 
         if ($tglSekarang->gt($tglKembali)) {
             $hariTerlambat = $tglSekarang->diffInDays($tglKembali);
-            $denda = $hariTerlambat * 5000;
+            $denda = 50000;
         }
 
         return view('admin.show-peminjaman', compact('peminjaman', 'hariTerlambat', 'denda'));

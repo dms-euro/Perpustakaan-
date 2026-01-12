@@ -57,7 +57,7 @@
 
     <main>
         @auth
-            @if (Auth::user() && Auth::user()->role === 'admin')
+            @if (in_array(Auth::user()->role, ['admin', 'petugas']))
                 @include('layouts.sidebar')
             @endif
         @endauth

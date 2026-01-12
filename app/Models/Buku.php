@@ -10,7 +10,7 @@ class Buku extends Model
 
     protected $table = 'buku';
     protected $fillable = [
-        'kategori_id', 'judul', 'penulis', 'penerbit', 'isbn', 'cover'
+        'kategori_id', 'judul', 'penulis', 'penerbit', 'isbn', 'cover', 'stock'
     ];
 
     public function kategori()

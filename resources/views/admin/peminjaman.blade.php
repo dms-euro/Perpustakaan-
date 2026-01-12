@@ -78,7 +78,7 @@
                     <!-- Table -->
                     <div class="overflow-x-auto">
                         <table id="peminjamanTable" class="w-full text-sm">
-                            <thead class="bg-gray-100">
+                            <thead class="bg-green-100">
                                 <tr>
                                     <th class="px-6 py-3 text-left font-semibold text-gray-700">Anggota</th>
                                     <th class="px-6 py-3 text-left font-semibold text-gray-700">Buku</th>
@@ -107,9 +107,8 @@
                                         <td class="px-6 py-3">
                                             <span
                                                 class="px-3 py-1 rounded-full text-xs font-medium
-                            @if ($p->status == 'meminjam') bg-emerald-100 text-emerald-700
-                            @elseif ($p->status == 'terlambat') bg-red-100 text-red-700
-                            @elseif ($p->status == 'hampir jatuh tempo') bg-amber-100 text-amber-700 @endif ">
+                                                    @if ($p->status == 'meminjam') bg-emerald-100 text-emerald-700
+                                                    @elseif ($p->status == 'terlambat') bg-red-100 text-red-700 @endif">
                                                 {{ ucfirst($p->status) }}
                                             </span>
                                         </td>
@@ -121,7 +120,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <div class="flex items-center space-x-2">
                                                 <form action="{{ route('peminjaman.kembalikan', $p->id) }}" method="POST"
-                                                    class="inline kembalikan-form">
+                                                    class="inline kembalikan-form" data-status="{{ $p->status }}">
                                                     @csrf
                                                     <button type="submit" class="text-emerald-600 hover:text-emerald-900">
                                                         <i class='bx bx-check-circle text-lg'></i>
@@ -375,20 +374,51 @@
             document.querySelectorAll('.kembalikan-form').forEach(form => {
                 form.addEventListener('submit', function(e) {
                     e.preventDefault();
-                    Swal.fire({
-                        title: 'Kembalikan Buku?',
-                        text: 'Apakah kamu yakin buku ini sudah dikembalikan?',
-                        icon: 'question',
-                        showCancelButton: true,
-                        confirmButtonColor: '#10B981',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Ya, kembalikan!',
-                        cancelButtonText: 'Batal'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            form.submit();
-                        }
-                    });
+
+                    const status = form.getAttribute('data-status');
+
+                    // Jika TERLAMBAT → wajib bayar denda
+                    if (status === 'terlambat') {
+                        Swal.fire({
+                            title: 'Bayar Denda',
+                            html: `
+                    <p class="mb-2">Denda keterlambatan: <b>Rp 50.000</b></p>
+                    <input type="number" id="bayar" class="swal2-input" placeholder="Masukkan nominal">
+                `,
+                            showCancelButton: true,
+                            confirmButtonText: 'Bayar & Kembalikan',
+                            cancelButtonText: 'Batal',
+                            preConfirm: () => {
+                                const bayar = document.getElementById('bayar').value;
+                                if (bayar < 50000) {
+                                    Swal.showValidationMessage('Minimal bayar Rp 50.000');
+                                }
+                                return bayar;
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                form.submit();
+                            }
+                        });
+
+                    }
+                    // Jika BELUM TERLAMBAT → langsung konfirmasi biasa
+                    else {
+                        Swal.fire({
+                            title: 'Kembalikan Buku?',
+                            text: 'Apakah kamu yakin buku ini sudah dikembalikan?',
+                            icon: 'question',
+                            showCancelButton: true,
+                            confirmButtonColor: '#10B981',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Ya, kembalikan!',
+                            cancelButtonText: 'Batal'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                form.submit();
+                            }
+                        });
+                    }
                 });
             });
         </script>

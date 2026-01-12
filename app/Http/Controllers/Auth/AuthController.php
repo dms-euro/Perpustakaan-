@@ -21,15 +21,28 @@ class AuthController extends Controller
     {
         $credentials = $request->validate([
             'email' => 'required|email',
-            'password' => 'required|string|min:8',
+            'password' => 'required',
         ]);
+
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->route('dashboard.index')->with('success', 'Login berhasil');
-        } else {
-            return redirect()->back()->with('error', 'Email atau Password salah');
+
+            $role = auth()->user()->role;
+
+            if ($role === 'admin') {
+                return redirect()->route('dashboard.index')
+                    ->with('success', 'Login sebagai Admin');
+            }
+
+            if ($role === 'petugas') {
+                return redirect()->route('peminjaman.index')
+                    ->with('success', 'Login sebagai Petugas');
+            }
         }
+
+        return back()->with('error', 'Email atau Password salah');
     }
+
 
     public function logout(Request $request)
     {
