@@ -155,9 +155,22 @@
                                 <div class="p-2 bg-orange-100 rounded-lg">
                                     <i class='bx bx-home-alt text-orange-600 text-xl'></i>
                                 </div>
-                                <h3 class="text-lg font-bold text-gray-800">Alamat Lengkap</h3>
+                                <h3 class="text-lg font-bold text-gray-800">Kelas & Alamat Lengkap</h3>
                             </div>
-
+                            @if ($akun->role == 'anggota')
+                                <div class="p-4 bg-gray-50 border border-gray-200 rounded-xl">
+                                    <div class="flex items-start gap-4">
+                                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mt-1">
+                                            <i class='bx bx-book text-blue-600 text-xl'></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <p class="font-semibold text-gray-800 mb-2">Kelas</p>
+                                            <p class="text-gray-600 leading-relaxed">
+                                                {{ $akun->kelas ?? 'Kelas Belum di Isi' }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                             <div class="p-4 bg-gray-50 border border-gray-200 rounded-xl">
                                 <div class="flex items-start gap-4">
                                     <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mt-1">

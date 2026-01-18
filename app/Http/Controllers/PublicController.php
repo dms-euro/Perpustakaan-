@@ -2,23 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\LogAktivitas;
-use App\Models\Peminjaman;
-use Illuminate\Http\Request;use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\LogAktivitasExport;
+use App\Models\Buku;
+use App\Models\Kategori;
+use Illuminate\Http\Request;
 
-
-class LogController extends Controller
+class PublicController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $logs = Peminjaman::with(['user', 'buku'])
-            ->latest()->paginate(15);
+        // Pagination
 
-        return view('admin.admin_log', compact('logs'));
+        $buku = Buku::latest()->paginate(10);
+
+        // Kategori + jumlah buku
+        $kategori = Kategori::withCount('buku')->get();
+
+        // Statistik
+        $totalBuku = Buku::count();
+        $tersedia  = Buku::where('stock', '>', 0)->count();
+        $dipinjam  = Buku::where('stock', 0)->count();
+
+        return view('homepage', compact(
+            'buku',
+            'kategori',
+            'totalBuku',
+            'tersedia',
+            'dipinjam'
+        ));
     }
 
 
@@ -38,27 +51,13 @@ class LogController extends Controller
         //
     }
 
-
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(string $id)
     {
-        $log = Peminjaman::with(['user', 'buku'])->findOrFail($id);
-
-        return response()->json([
-            'user' => $log->user->nama,
-            'buku' => $log->buku->judul,
-            'status' => $log->status,
-            'denda' => number_format($log->denda, 0, ',', '.')
-        ]);
+        //
     }
-
-    public function exportExcel()
-    {
-        return Excel::download(new LogAktivitasExport, 'log-aktivitas.xlsx');
-    }
-
 
     /**
      * Show the form for editing the specified resource.

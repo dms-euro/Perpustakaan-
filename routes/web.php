@@ -8,11 +8,10 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PublicController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('homepage');
-});
+Route::get('/',[PublicController::class, 'index'])->name('homepage');
 
 Route::get('Auth/Login', [AuthController::class, 'index'])->name('login');
 
@@ -26,7 +25,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/Buku/{id}', [BukuController::class, 'update'])->name('buku.update');
     Route::get('/Buku/export', [BukuController::class, 'export'])->name('buku.export');
     Route::post('/Buku/import', [BukuController::class, 'import'])->name('buku.import');
-    Route::delete('/Buku/{id}', [BukuController::class, 'destroy'])->name('buku.destroy');
+    Route::delete('/Buku/{buku}', [BukuController::class, 'destroy'])->name('buku.destroy');
 
     Route::delete('/Kategori/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
 
@@ -38,6 +37,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('/Akun/{id}/delete', [AccountController::class, 'destroy'])->name('akun.destroy');
 
     Route::get('/Aktivitas', [LogController::class, 'index'])->name('aktivitas.index');
+    Route::get('/aktivitas/{id}', [LogController::class, 'show']);
+    Route::get('/aktivitas/export/excel', [LogController::class, 'exportExcel'])->name('aktivitas.export.excel');
+
 });
 
 Route::middleware(['auth', 'role:petugas'])->group(function () {

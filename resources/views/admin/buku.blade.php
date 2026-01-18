@@ -43,10 +43,12 @@
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-lg font-bold text-emerald-900"><i class="bx bx-category"></i> Daftar Kategori
                             </h3>
-                            <button data-modal-target="modalTambahKategori" data-modal-toggle="modalTambahKategori"
-                                class="px-3 py-1 border border-emerald-500 text-emerald-600 rounded-full transition-all text-sm flex items-center hover:text-white hover:bg-gradient-to-r hover:from-emerald-500 hover:to-emerald-700">
-                                <i class='bx bx-plus mr-1'></i> Tambah
-                            </button>
+                            @if ($role === 'admin')
+                                <button data-modal-target="modalTambahKategori" data-modal-toggle="modalTambahKategori"
+                                    class="px-3 py-1 border border-emerald-500 text-emerald-600 rounded-full transition-all text-sm flex items-center hover:text-white hover:bg-gradient-to-r hover:from-emerald-500 hover:to-emerald-700">
+                                    <i class='bx bx-plus mr-1'></i> Tambah
+                                </button>
+                            @endif
                         </div>
                         <div class="rounded-2xl shadow-sm border border-gray-100 bg-white overflow-hidden">
                             <div

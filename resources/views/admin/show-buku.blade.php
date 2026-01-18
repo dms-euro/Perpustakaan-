@@ -1,7 +1,10 @@
+@php
+    $role = Auth::user()->role ?? null;
+@endphp
 @extends('layouts.app')
 @section('page-title', 'Manajemen Buku & Kategori')
 @section('content')
- <div class="lg:ml-64 pt-24">
+    <div class="lg:ml-64 pt-24">
         {{-- Header Section --}}
         <div class="text-center mb-8">
             <h1 class="text-3xl font-bold text-gray-800 mb-2">Detail Buku</h1>
@@ -18,7 +21,8 @@
                             class="w-full h-80 object-cover rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-shadow duration-300"
                             alt="Cover Buku">
                     @else
-                        <div class="w-full h-80 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-300">
+                        <div
+                            class="w-full h-80 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-300">
                             <i class='bx bx-image text-5xl mb-3'></i>
                             <p class="text-sm font-medium">Tidak ada cover</p>
                         </div>
@@ -116,14 +120,14 @@
                 <i class='bx bx-arrow-back text-base'></i>
                 Kembali ke Daftar
             </a>
-
-            <a href="{{ route('buku.edit', $buku->id) }}"
-                class="px-6 py-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition duration-200 text-sm font-semibold flex items-center gap-2 justify-center shadow-lg shadow-emerald-200">
-                <i class='bx bx-edit text-base'></i>
-                Edit Buku
-            </a>
+            @if ($role === 'admin')
+                <a href="{{ route('buku.edit', $buku->id) }}"
+                    class="px-6 py-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition duration-200 text-sm font-semibold flex items-center gap-2 justify-center shadow-lg shadow-emerald-200">
+                    <i class='bx bx-edit text-base'></i>
+                    Edit Buku
+                </a>
+            @endif
         </div>
 
     </div>
 @endsection
-

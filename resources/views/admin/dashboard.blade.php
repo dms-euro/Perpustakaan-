@@ -83,85 +83,82 @@
         </main>
     </div>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
 
-    const labels = @json($labels);
-    const values = @json($values);
+            const labels = @json($labels);
+            const values = @json($values);
 
-    const ctx = document.getElementById('loansChart').getContext('2d');
+            const ctx = document.getElementById('loansChart').getContext('2d');
 
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: "Total Peminjaman",
-                data: values,
-                borderWidth: 2,
-                backgroundColor: 'rgba(16, 185, 129, 0.5)',
-                borderColor: 'rgb(16, 185, 129)',
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    suggestedMax: Math.max(...values) + 2,
-                    ticks: {
-                        precision: 0
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Total Peminjaman",
+                        data: values,
+                        borderWidth: 2,
+                        backgroundColor: 'rgba(16, 185, 129, 0.5)',
+                        borderColor: 'rgb(16, 185, 129)',
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            suggestedMax: Math.max(...values) + 2,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
                     }
                 }
-            }
-        }
-    });
-});
-</script>
+            });
+        });
+    </script>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
 
-    // Data dari Laravel
-    const kategoriLabels = @json($kategoriLabels);
-    const kategoriValues = @json($kategoriValues);
+            // Data dari Laravel
+            const kategoriLabels = @json($kategoriLabels);
+            const kategoriValues = @json($kategoriValues);
 
-    const ctxKategori = document.getElementById("categoriesChart").getContext("2d");
+            const ctxKategori = document.getElementById("categoriesChart").getContext("2d");
 
-    new Chart(ctxKategori, {
-        type: "doughnut",
-        data: {
-            labels: kategoriLabels,
-            datasets: [{
-                data: kategoriValues,
-                borderWidth: 2,
-                backgroundColor: [
-                    "rgba(16, 185, 129, 0.7)",
-                    "rgba(59, 130, 246, 0.7)",
-                    "rgba(245, 158, 11, 0.7)",
-                    "rgba(239, 68, 68, 0.7)",
-                    "rgba(139, 92, 246, 0.7)"
-                ],
-                borderColor: "#fff",
-                hoverOffset: 10
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: "bottom",
-                    labels: {
-                        padding: 20,
-                        usePointStyle: true
+            new Chart(ctxKategori, {
+                type: "doughnut",
+                data: {
+                    labels: kategoriLabels,
+                    datasets: [{
+                        data: kategoriValues,
+                        borderWidth: 2,
+                        backgroundColor: [
+                            "rgba(16, 185, 129, 0.7)",
+                            "rgba(59, 130, 246, 0.7)",
+                            "rgba(245, 158, 11, 0.7)",
+                            "rgba(239, 68, 68, 0.7)",
+                            "rgba(139, 92, 246, 0.7)"
+                        ],
+                        borderColor: "#fff",
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: "bottom",
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true
+                            }
+                        }
                     }
                 }
-            }
-        }
-    });
+            });
 
-});
-</script>
-
-
-
+        });
+    </script>
 @endsection

@@ -157,6 +157,15 @@
                                 class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 placeholder-gray-400"
                                 placeholder="Buat password yang kuat">
                         </div>
+
+                        <div class="group">
+                            <label class="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                                <i class='bx bx-group text-emerald-600'></i> kelas
+                            </label>
+                            <input type="text" name="kelas" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 placeholder-gray-400"
+                                placeholder="XI RB">
+                        </div>
                     </div>
 
                     <!-- Kolom Kanan -->
@@ -213,80 +222,80 @@
             </div>
         </div>
     </div>
-    <script>
-        function clearInputs() {
-            const inputs = document.querySelectorAll('form input[type="text"], form select');
-            inputs.forEach(input => {
-                if (input.tagName === 'SELECT') {
-                    input.selectedIndex = 0;
-                } else {
-                    input.value = '';
+        <script>
+            function clearInputs() {
+                const inputs = document.querySelectorAll('form input[type="text"], form select');
+                inputs.forEach(input => {
+                    if (input.tagName === 'SELECT') {
+                        input.selectedIndex = 0;
+                    } else {
+                        input.value = '';
+                    }
+                });
+                const fileInput = document.getElementById('coverInput');
+                if (fileInput) {
+                    fileInput.value = '';
+                    const newFile = fileInput.cloneNode(true);
+                    fileInput.parentNode.replaceChild(newFile, fileInput);
                 }
-            });
-            const fileInput = document.getElementById('coverInput');
-            if (fileInput) {
-                fileInput.value = '';
-                const newFile = fileInput.cloneNode(true);
-                fileInput.parentNode.replaceChild(newFile, fileInput);
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const table = $('#table-user').DataTable({
-                dom: 't',
-                pageLength: 25,
-                lengthMenu: [5, 10, 25, 50],
-                ordering: true,
-                info: true,
-                language: {
-                    emptyTable: "Tidak ada data akun",
-                }
-            });
-
-            const searchInput = document.getElementById('search-akun');
-            searchInput.addEventListener('keyup', function() {
-                table.search(this.value).draw();
-            });
-
-            function updateCustomPagination() {
-                const pageInfo = table.page.info();
-                const buttonsContainer = document.getElementById('custom-buttons-user');
-                const infoContainer = document.getElementById('custom-info-user');
-                buttonsContainer.innerHTML = '';
-                infoContainer.textContent =
-                    `Menampilkan ${pageInfo.start + 1} sampai ${pageInfo.end} dari ${pageInfo.recordsDisplay} akun`;
-
-                const prevBtn = document.createElement('button');
-                prevBtn.className =
-                    `px-3 py-1 border border-gray-300 rounded-lg text-sm transition-colors ${pageInfo.page === 0 ? 'text-gray-400 cursor-not-allowed' : 'hover:bg-gray-100'}`;
-                prevBtn.textContent = 'Sebelumnya';
-                prevBtn.disabled = pageInfo.page === 0;
-                prevBtn.addEventListener('click', () => table.page('previous').draw('page'));
-                buttonsContainer.appendChild(prevBtn);
-
-                for (let i = 0; i < pageInfo.pages; i++) {
-                    const btn = document.createElement('button');
-                    btn.className =
-                        `px-3 py-1 border rounded-lg text-sm ${pageInfo.page === i
-                    ? 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700'
-                    : 'border-gray-300 hover:bg-gray-100'
-                } transition-colors`;
-                    btn.textContent = i + 1;
-                    btn.addEventListener('click', () => table.page(i).draw('page'));
-                    buttonsContainer.appendChild(btn);
-                }
-
-                const nextBtn = document.createElement('button');
-                nextBtn.className =
-                    `px-3 py-1 border border-gray-300 rounded-lg text-sm transition-colors ${pageInfo.page === pageInfo.pages - 1 ? 'text-gray-400 cursor-not-allowed' : 'hover:bg-gray-100'}`;
-                nextBtn.textContent = 'Selanjutnya';
-                nextBtn.disabled = pageInfo.page === pageInfo.pages - 1;
-                nextBtn.addEventListener('click', () => table.page('next').draw('page'));
-                buttonsContainer.appendChild(nextBtn);
             }
 
-            table.on('draw', updateCustomPagination);
-            updateCustomPagination();
-        });
-    </script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const table = $('#table-user').DataTable({
+                    dom: 't',
+                    pageLength: 25,
+                    lengthMenu: [5, 10, 25, 50],
+                    ordering: true,
+                    info: true,
+                    language: {
+                        emptyTable: "Tidak ada data akun",
+                    }
+                });
+
+                const searchInput = document.getElementById('search-akun');
+                searchInput.addEventListener('keyup', function() {
+                    table.search(this.value).draw();
+                });
+
+                function updateCustomPagination() {
+                    const pageInfo = table.page.info();
+                    const buttonsContainer = document.getElementById('custom-buttons-user');
+                    const infoContainer = document.getElementById('custom-info-user');
+                    buttonsContainer.innerHTML = '';
+                    infoContainer.textContent =
+                        `Menampilkan ${pageInfo.start + 1} sampai ${pageInfo.end} dari ${pageInfo.recordsDisplay} akun`;
+
+                    const prevBtn = document.createElement('button');
+                    prevBtn.className =
+                        `px-3 py-1 border border-gray-300 rounded-lg text-sm transition-colors ${pageInfo.page === 0 ? 'text-gray-400 cursor-not-allowed' : 'hover:bg-gray-100'}`;
+                    prevBtn.textContent = 'Sebelumnya';
+                    prevBtn.disabled = pageInfo.page === 0;
+                    prevBtn.addEventListener('click', () => table.page('previous').draw('page'));
+                    buttonsContainer.appendChild(prevBtn);
+
+                    for (let i = 0; i < pageInfo.pages; i++) {
+                        const btn = document.createElement('button');
+                        btn.className =
+                            `px-3 py-1 border rounded-lg text-sm ${pageInfo.page === i
+                        ? 'bg-emerald-600 text-white border-emerald-600 hover:bg-emerald-700'
+                        : 'border-gray-300 hover:bg-gray-100'
+                    } transition-colors`;
+                        btn.textContent = i + 1;
+                        btn.addEventListener('click', () => table.page(i).draw('page'));
+                        buttonsContainer.appendChild(btn);
+                    }
+
+                    const nextBtn = document.createElement('button');
+                    nextBtn.className =
+                        `px-3 py-1 border border-gray-300 rounded-lg text-sm transition-colors ${pageInfo.page === pageInfo.pages - 1 ? 'text-gray-400 cursor-not-allowed' : 'hover:bg-gray-100'}`;
+                    nextBtn.textContent = 'Selanjutnya';
+                    nextBtn.disabled = pageInfo.page === pageInfo.pages - 1;
+                    nextBtn.addEventListener('click', () => table.page('next').draw('page'));
+                    buttonsContainer.appendChild(nextBtn);
+                }
+
+                table.on('draw', updateCustomPagination);
+                updateCustomPagination();
+            });
+        </script>
 @endsection
